@@ -224,6 +224,39 @@ export async function executeDualTierRagSearch(
 
   try {
     const t0 = performance.now();
+
+    // Query the FastAPI backend service routed at /api/search
+    if (customRecords.length === 0) {
+      try {
+        const apiRes = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, language: lang, threshold: 0.85 })
+        });
+        if (apiRes.ok) {
+          const apiData = (await apiRes.json()) as SearchResponsePayload;
+          if (apiData && apiData.status) {
+            void logSearchToSupabase({
+              query_text: query,
+              language: lang,
+              confidence: apiData.confidence,
+              dense_score: apiData.denseScore,
+              bm25_score: apiData.bm25Score,
+              verified: apiData.verified,
+              matched_record_id: apiData.primaryRecord?.id || null,
+              execution_tier: 'SUPABASE_POSTGRES_CLUSTER'
+            });
+            return {
+              ...apiData,
+              executionTier: 'SUPABASE_POSTGRES_CLUSTER'
+            };
+          }
+        }
+      } catch {
+        // Fallback to Supabase / local edge scoring if backend service is unreachable
+      }
+    }
+
     const supabaseRecords = await fetchSupabaseArchivalRecords();
     const activeCorpus =
       supabaseRecords.length > 0

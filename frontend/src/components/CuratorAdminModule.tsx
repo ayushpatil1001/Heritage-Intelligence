@@ -141,6 +141,27 @@ export const CuratorAdminModule: React.FC<CuratorAdminModuleProps> = ({
     };
 
     onAddCustomRecord(newRecord);
+    try {
+      await fetch('/api/curator/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          category,
+          collection: newRecord.collection,
+          date: newRecord.date,
+          volume,
+          page,
+          articleRef: newRecord.articleRef,
+          keywords: kwList,
+          verbatimQuote,
+          synthesisEn,
+          synthesisMr
+        })
+      });
+    } catch {
+      // Continue with Supabase persistence if backend is offline
+    }
     await insertRecordToSupabase(newRecord);
     await loadStats();
     setIsSavingSupabase(false);

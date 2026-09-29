@@ -3,10 +3,15 @@ FastAPI Backend for Ambedkar Heritage Intelligence & Kiosk System (AHI-KS)
 SIH Problem Statement ID: 26096 | Ministry of Social Justice & Empowerment (MoSJE)
 """
 
+import os
+import sys
 from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+
+# Ensure local modules in backend/ resolve cleanly in Vercel Python serverless runtime
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from corpus_data import ARCHIVAL_CORPUS, CAD_GRAPH_DATA, KARAOKE_TRACKS, PARLIAMENTARY_LEXICON
 from rag_engine import compute_hybrid_search
