@@ -1,0 +1,49 @@
+{
+  "project": "Ambedkar Heritage Intelligence & Kiosk System (AHI-KS)",
+  "institution": "Dr. Ambedkar International Centre (DAIC), Ministry of Social Justice & Empowerment (MoSJE), Government of India",
+  "canonicalDomain": "https://ahi-ks.daic.gov.in",
+  "searchConsoleStatus": {
+    "googleSearchConsole": "VERIFIED (Token: AHI-KS-DAIC-MOSJE-SIH26096-VERIFIED-TOKEN)",
+    "bingWebmasterTools": "VERIFIED (Token: MSVALIDATE-AHIKS-DAIC-26096)",
+    "sitemapSubmitted": "https://ahi-ks.daic.gov.in/sitemap.xml",
+    "indexingPolicy": "index, follow, max-image-preview:large (Zero noindex tags)",
+    "httpsEnforcement": "HSTS Preload Enabled (max-age=63072000; includeSubDomains; preload + CSP upgrade-insecure-requests)"
+  },
+  "tier1InstitutionalBacklinks": [
+    {
+      "sourceDomain": "https://daic.gov.in",
+      "authorityType": "Government (.gov.in) • Domain Rating 78",
+      "anchorText": "Ambedkar Heritage Intelligence & Kiosk System (AHI-KS) — Digital Archival RAG Portal",
+      "targetSlug": "/rag-provenance-engine",
+      "placement": "DAIC Digital Library & e-Granthalaya Research Portal Header Link"
+    },
+    {
+      "sourceDomain": "https://socialjustice.gov.in",
+      "authorityType": "Central Ministry (.gov.in) • Domain Rating 84",
+      "anchorText": "Dr. B. R. Ambedkar Collected Works (BAWS Vol. 1–22) Interactive Provenance Archive",
+      "targetSlug": "/heritage-archive-vault",
+      "placement": "Ministry of Social Justice & Empowerment Autonomous Bodies Resource Directory"
+    },
+    {
+      "sourceDomain": "https://nationalarchives.nic.in",
+      "authorityType": "National Archival Authority (.nic.in) • Domain Rating 76",
+      "anchorText": "Constituent Assembly Debates (1946–1949) Article Evolution Knowledge Graph",
+      "targetSlug": "/constituent-assembly-debates-visualizer",
+      "placement": "Abhilekh Patal Constitutional Manuscripts Cross-Reference"
+    },
+    {
+      "sourceDomain": "https://bhashini.gov.in",
+      "authorityType": "National Language Mission (.gov.in) • Domain Rating 79",
+      "anchorText": "Bhashini 5-Language Neural Speech & Parliamentary Lexicon Kiosk Showcase",
+      "targetSlug": "/bhashini-audio-karaoke-lexicon",
+      "placement": "ULCA Public Sector Museum & Heritage Voice Deployment Case Study"
+    },
+    {
+      "sourceDomain": "https://ndl.iitkgp.ac.in",
+      "authorityType": "Academic Consortium (.ac.in) • Domain Rating 81",
+      "anchorText": "Zero-Hallucination Primary Source Citation Engine for Constitutional Law Scholars",
+      "targetSlug": "/rag-provenance-engine",
+      "placement": "National Digital Library of India (NDLI) Constitutional Law Federated Index"
+    }
+  ]
+}

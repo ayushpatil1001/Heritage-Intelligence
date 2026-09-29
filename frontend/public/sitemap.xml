@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://ahi-ks.daic.gov.in/rag-provenance-engine</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ahi-ks.daic.gov.in/rag-provenance-engine?lang=en" />
+    <xhtml:link rel="alternate" hreflang="mr" href="https://ahi-ks.daic.gov.in/rag-provenance-engine?lang=mr" />
+    <xhtml:link rel="alternate" hreflang="hi" href="https://ahi-ks.daic.gov.in/rag-provenance-engine?lang=hi" />
+    <xhtml:link rel="alternate" hreflang="ta" href="https://ahi-ks.daic.gov.in/rag-provenance-engine?lang=ta" />
+    <xhtml:link rel="alternate" hreflang="te" href="https://ahi-ks.daic.gov.in/rag-provenance-engine?lang=te" />
+    <image:image>
+      <image:loc>https://ahi-ks.daic.gov.in/og-image.png</image:loc>
+      <image:title>Ambedkar Heritage Intelligence &amp; Kiosk System (AHI-KS) — Split-Screen RAG Provenance Engine</image:title>
+      <image:caption>Zero-Hallucination Archival RAG Engine grounded in BAWS Vol. 1-22 and Constituent Assembly Debates with 600 DPI OCR Bounding-Box verification.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ahi-ks.daic.gov.in/heritage-archive-vault</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://ahi-ks.daic.gov.in/kiosk-preview-compressed.png</image:loc>
+      <image:title>DAIC Digital Heritage Vault — BAWS Vol. 1–22, Speeches, Manuscripts &amp; CAD Debates</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://ahi-ks.daic.gov.in/constituent-assembly-debates-visualizer</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://ahi-ks.daic.gov.in/bhashini-audio-karaoke-lexicon</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://ahi-ks.daic.gov.in/daic-curator-hardware-telemetry</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

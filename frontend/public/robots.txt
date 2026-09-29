@@ -1,0 +1,16 @@
+# Ambedkar Heritage Intelligence & Kiosk System (AHI-KS) — DAIC / MoSJE (SIH PS 26096)
+# Explicitly allow all search engine crawlers and AI provenance indexers (No noindex directives)
+
+User-agent: *
+Allow: /
+Allow: /rag-provenance-engine
+Allow: /heritage-archive-vault
+Allow: /constituent-assembly-debates-visualizer
+Allow: /bhashini-audio-karaoke-lexicon
+Allow: /daic-curator-hardware-telemetry
+Allow: /og-image.png
+Allow: /sitemap.xml
+Disallow: /api/private-debug/
+
+# Canonical XML Sitemap Location
+Sitemap: https://ahi-ks.daic.gov.in/sitemap.xml

@@ -1,0 +1,335 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Ambedkar Heritage Intelligence &amp; Kiosk System (AHI-KS) | DAIC</title>
+<!-- Google Fonts: Merriweather & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#faf9f6",
+            "secondary-fixed-dim": "#ffb68e",
+            "surface-container-high": "#f0ede8",
+            "on-surface-variant": "#5f6368",
+            "inverse-primary": "#b6c4ff",
+            "on-primary-fixed-variant": "#264191",
+            "on-tertiary": "#ffffff",
+            "outline": "#8a8f98",
+            "on-tertiary-fixed": "#131b2e",
+            "tertiary-fixed": "#dae2fd",
+            "surface-container-low": "#f6f5f2",
+            "error-container": "#ffdad6",
+            "on-secondary-container": "#682c00",
+            "on-secondary-fixed": "#331200",
+            "secondary-fixed": "#ffdbca",
+            "inverse-on-surface": "#f2f1ee",
+            "on-tertiary-container": "#a4acc5",
+            "on-surface": "#1a1c1e",
+            "surface-container": "#eeebe6",
+            "secondary-container": "#fd8a42",
+            "on-secondary": "#ffffff",
+            "primary": "#00236f",
+            "outline-variant": "#e2dfd9",
+            "surface-dim": "#dbdad7",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed-variant": "#763300",
+            "tertiary-fixed-dim": "#bec6e0",
+            "surface-container-highest": "#e5e2dc",
+            "on-primary-container": "#90a8ff",
+            "surface-tint": "#4059aa",
+            "surface-variant": "#eae7e1",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "on-background": "#1a1c1a",
+            "tertiary": "#1d2333",
+            "inverse-surface": "#2f312f",
+            "surface-bright": "#faf9f6",
+            "on-tertiary-fixed-variant": "#3f465c",
+            "on-primary-fixed": "#00164e",
+            "primary-fixed": "#e3e8fc",
+            "tertiary-container": "#2c344a",
+            "error": "#ba1a1a",
+            "secondary": "#9b4500",
+            "primary-container": "#152d6e",
+            "background": "#faf9f6",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#b6c4ff"
+          },
+          fontFamily: {
+            "display-lg": ["Merriweather", "serif"],
+            "headline-xl": ["Merriweather", "serif"],
+            "headline-md": ["Merriweather", "serif"],
+            "citation-editorial": ["Merriweather", "serif"],
+            "body-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+            "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Plus Jakarta Sans", "sans-serif"],
+            "label-sm": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          boxShadow: {
+            "subtle": "0 1px 3px rgba(0,0,0,0.03), 0 4px 14px rgba(0,0,0,0.04)",
+            "soft-card": "0 2px 8px -2px rgba(0,0,0,0.04), 0 10px 24px -4px rgba(0,0,0,0.05)",
+            "soft-float": "0 8px 30px rgba(0,0,0,0.06)"
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f4f3f1;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #d8d5ce;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #b5b1a8;
+    }
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.95; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.004); }
+    }
+    .amber-halo {
+      animation: gentlePulse 3.5s infinite ease-in-out;
+    }
+    .minimal-parchment {
+      background-color: #fbf9f4;
+      background-image: radial-gradient(rgba(180, 160, 135, 0.22) 0.65px, transparent 0.65px);
+      background-size: 14px 14px;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen flex flex-col justify-between font-body-md">
+<!-- TOP MINIMAL INSTITUTIONAL HEADER -->
+<header class="w-full px-8 xl:px-14 py-3.5 flex items-center justify-between z-50 fixed top-0 left-0 bg-surface/90 dark:bg-surface-container/90 border-b border-outline-variant/60 backdrop-blur-md transition-all">
+<!-- Left: DAIC State Emblem & Institutional Title -->
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center text-on-primary shadow-subtle ring-4 ring-primary/10">
+<span class="material-symbols-outlined text-2xl" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-[11px] text-secondary font-bold tracking-wider uppercase">Ministry of Social Justice &amp; Empowerment, GoI</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-medium">DAIC New Delhi</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary-fixed text-on-primary-fixed">Kiosk #DAIC-KSK-04</span>
+</div>
+<h1 class="text-xl md:text-[22px] font-headline-md text-primary dark:text-inverse-primary tracking-tight font-bold">
+          Ambedkar Heritage Intelligence &amp; Kiosk System (AHI-KS)
+        </h1>
+</div>
+</div>
+<!-- Center: Search Bar & Navigation Anchor with Pill Tabs -->
+<div class="hidden xl:flex items-center gap-6">
+<nav class="flex items-center bg-surface-container-low/70 p-1.5 rounded-full border border-outline-variant/50">
+<a class="text-on-surface-variant hover:text-on-surface px-3.5 py-1 text-label-sm font-label-sm rounded-full transition-colors" href="#vault">Heritage Vault</a>
+<a class="text-on-surface-variant hover:text-on-surface px-3.5 py-1 text-label-sm font-label-sm rounded-full transition-colors" href="#graph">Constitutional Graph</a>
+<a class="bg-primary text-on-primary font-bold px-4 py-1 text-label-sm font-label-sm rounded-full shadow-sm" href="#provenance">Provenance Intel</a>
+<a class="text-on-surface-variant hover:text-on-surface px-3.5 py-1 text-label-sm font-label-sm rounded-full transition-colors" href="#lexicon">Audio Lexicon</a>
+<a class="text-on-surface-variant hover:text-on-surface px-3.5 py-1 text-label-sm font-label-sm rounded-full transition-colors" href="#console">Curator Console</a>
+</nav>
+<!-- Rounded Pill Search Bar -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg" data-icon="search">search</span>
+<input class="w-full pl-9 pr-4 py-1.5 bg-surface-container-lowest border border-outline-variant/70 rounded-full text-body-sm font-body-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary shadow-sm" placeholder="Search 22.4K records..." type="text">
+</div>
+</div>
+<!-- Right: Multi-lingual Bhashini & Accessibility Actions -->
+<div class="flex items-center gap-3">
+<!-- Bhashini Language Switcher in Smooth Pill -->
+<div class="hidden md:flex items-center bg-surface-container-low rounded-full p-1 border border-outline-variant/60 shadow-inner">
+<button class="px-3 py-1 text-label-sm font-label-sm bg-primary text-on-primary rounded-full font-bold shadow-sm">English</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm text-on-surface hover:text-primary transition-colors rounded-full">मराठी</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm text-on-surface hover:text-primary transition-colors rounded-full">हिन्दी</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm text-on-surface hover:text-primary transition-colors rounded-full">தமிழ்</button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm text-on-surface hover:text-primary transition-colors rounded-full">తెలుగు</button>
+</div>
+<!-- Action 1: Wheelchair Reach Pill -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 bg-surface-container-lowest border border-primary/30 rounded-full text-primary text-label-sm font-label-sm hover:bg-primary-fixed/40 active:scale-[0.98] transition-all shadow-subtle" id="reachToggleBtn" title="Lower display targets for ergonomic wheelchair access">
+<span class="material-symbols-outlined text-base" data-icon="accessible">accessible</span>
+<span class="font-bold">Wheelchair Reach</span>
+</button>
+<!-- Action 2: Contrast Mode Pill -->
+<button class="flex items-center gap-1.5 px-3.5 py-1.5 bg-surface-container-lowest border border-outline-variant/80 rounded-full text-on-surface text-label-sm font-label-sm hover:bg-surface-container-high active:scale-[0.98] transition-all shadow-subtle" id="contrastToggleBtn" title="High Contrast AAA Mode">
+<span class="material-symbols-outlined text-base" data-icon="contrast">contrast</span>
+<span class="font-semibold">Contrast</span>
+</button>
+<!-- Telemetry Status Pills -->
+<div class="flex items-center gap-1 pl-2 border-l border-outline-variant/60">
+<span class="material-symbols-outlined text-primary p-1.5 rounded-full hover:bg-surface-container cursor-help transition-colors text-lg" data-icon="translate" title="Bhashini AI Speech Engine Online">translate</span>
+<span class="material-symbols-outlined text-emerald-600 p-1.5 rounded-full hover:bg-surface-container cursor-help transition-colors text-lg" data-icon="sensors" title="Ultrasonic Proximity Active (68cm)">sensors</span>
+<span class="material-symbols-outlined text-primary p-1.5 rounded-full hover:bg-surface-container cursor-help transition-colors text-lg" data-icon="hard_drive" title="NVMe Edge Failover Synced">hard_drive</span>
+<span class="material-symbols-outlined text-secondary p-1.5 rounded-full hover:bg-surface-container cursor-help transition-colors text-lg" data-icon="volume_up" title="40kHz Directional Audio Beam Live">volume_up</span>
+</div>
+</div>
+</header>
+<!-- MAIN SCROLLABLE WRAPPER -->
+<main class="pt-24 pb-28 px-6 md:px-10 xl:px-14 flex flex-col gap-6 w-full max-w-[1920px] mx-auto transition-all duration-300" id="kioskCanvas">
+<!-- HARDWARE & EDGE TELEMETRY TICKER (Soft Pill Container) -->
+<section class="w-full bg-surface-container-lowest/80 border border-outline-variant/40 rounded-full px-5 py-2.5 shadow-xs flex flex-wrap items-center justify-between gap-4"><div class="flex items-center gap-6"><div class="flex items-center gap-2"><div class="relative flex h-2 w-2 ml-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span></div><span class="font-label-sm text-label-sm text-on-surface font-medium">Supabase Live</span><span class="font-label-sm text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold">14ms</span><span class="text-outline/30 text-xs">•</span><span class="font-label-sm text-label-sm text-on-surface-variant font-normal">128GB Edge Synced</span></div><div class="hidden lg:flex items-center gap-2 pl-4 border-l border-outline-variant/40"><span class="material-symbols-outlined text-secondary text-sm" data-icon="volume_up">volume_up</span><span class="font-label-sm text-label-sm text-on-surface-variant">40kHz Directional Audio Active</span></div><div class="hidden xl:flex items-center gap-2 pl-4 border-l border-outline-variant/40"><span class="material-symbols-outlined text-primary text-sm" data-icon="sensors">sensors</span><span class="font-label-sm text-label-sm text-on-surface-variant">Proximity Radar: <span class="font-mono font-medium text-primary">68cm</span></span></div></div><div class="flex items-center gap-2.5 mr-1"><span class="font-label-sm text-xs text-on-surface-variant">Edge Fallback Simulation:</span><label class="relative inline-flex items-center cursor-pointer"><input class="sr-only peer" id="edgeSimToggle" type="checkbox"><div class="w-9 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-200 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-secondary"></div></label><span class="font-label-sm text-[11px] text-outline font-mono">NET: LIVE</span></div></section>
+<!-- 1-CLICK CURATOR DEMO SCENARIO LAUNCHER -->
+<section class="w-full"><div class="flex items-center justify-between mb-3 px-1"><div class="flex items-center gap-2"><h2 class="font-headline-md text-lg md:text-xl text-primary font-bold">Curator Demo Scenarios</h2><span class="px-2 py-0.5 bg-surface-container text-on-surface-variant text-[11px] rounded-full font-medium">Grand Jury Presets</span></div><span class="text-body-sm text-xs text-on-surface-variant hidden sm:inline">Instant verification triggers for kiosk evaluation</span></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5"><div class="bg-surface-container-lowest border border-primary/30 p-4.5 rounded-2xl shadow-subtle hover:border-primary transition-all cursor-pointer flex flex-col justify-between"><div class="flex items-center justify-between mb-2"><span class="px-2 py-0.5 bg-primary/10 text-primary text-[11px] font-bold rounded-md">Scenario 01</span><span class="text-[11px] font-semibold text-emerald-700 flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="verified">verified</span> 0.94 Conf</span></div><h3 class="font-label-md text-primary font-bold line-clamp-2 mb-1.5">Article 32 &amp; Constitutional Remedies</h3><p class="font-body-sm text-xs text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">CAD Vol. VII transcript cross-referenced with Babasaheb's original notes &amp; Marathi speech.</p><div class="flex items-center justify-between pt-2 border-t border-outline-variant/30"><span class="text-[11px] text-secondary font-semibold flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="play_circle">play_circle</span> Active Ingest</span><span class="text-[10px] font-mono text-outline">Bhashini: MR/EN</span></div></div><div class="bg-surface-container-lowest border border-outline-variant/40 p-4.5 rounded-2xl shadow-xs hover:border-outline-variant hover:shadow-subtle transition-all cursor-pointer flex flex-col justify-between"><div class="flex items-center justify-between mb-2"><span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[11px] font-medium rounded-md">Scenario 02</span><span class="text-[11px] font-semibold text-emerald-700 flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="verified">verified</span> 0.98 Conf</span></div><h3 class="font-label-md text-on-surface font-bold line-clamp-2 mb-1.5">1936 Annihilation of Caste - Cast-Iron Proof</h3><p class="font-body-sm text-xs text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">British Library microfilm cross-match with Columbia registry &amp; Bombay edition.</p><div class="flex items-center justify-between pt-2 border-t border-outline-variant/30"><button class="text-[11px] text-primary font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="launch">launch</span> Load</button><span class="text-[10px] font-mono text-outline">MSS-EUR-1936</span></div></div><div class="bg-surface-container-lowest border border-outline-variant/40 p-4.5 rounded-2xl shadow-xs hover:border-outline-variant hover:shadow-subtle transition-all cursor-pointer flex flex-col justify-between"><div class="flex items-center justify-between mb-2"><span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[11px] font-medium rounded-md">Scenario 03</span><span class="text-[11px] font-semibold text-amber-700 flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="offline_bolt">offline_bolt</span> 0ms Edge</span></div><h3 class="font-label-md text-on-surface font-bold line-clamp-2 mb-1.5">Offline Edge Failover Simulation</h3><p class="font-body-sm text-xs text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">Emulate museum WAN cutoff; local NVMe SQLite takes over sub-50ms responses.</p><div class="flex items-center justify-between pt-2 border-t border-outline-variant/30"><button class="text-[11px] text-primary font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="network_check">network_check</span> Trigger</button><span class="text-[10px] font-mono text-outline">128GB NVMe</span></div></div><div class="bg-surface-container-lowest border border-outline-variant/40 p-4.5 rounded-2xl shadow-xs hover:border-outline-variant hover:shadow-subtle transition-all cursor-pointer flex flex-col justify-between"><div class="flex items-center justify-between mb-2"><span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[11px] font-medium rounded-md">Scenario 04</span><span class="text-[11px] font-semibold text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="spatial_audio">spatial_audio</span> 40kHz Beam</span></div><h3 class="font-label-md text-on-surface font-bold line-clamp-2 mb-1.5">40kHz Ultrasonic Audio Dome Demo</h3><p class="font-body-sm text-xs text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">Parametric sound array test: audio localized strictly within 1.2m cone.</p><div class="flex items-center justify-between pt-2 border-t border-outline-variant/30"><button class="text-[11px] text-primary font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-xs" data-icon="volume_up">volume_up</span> Fire Dome</button><span class="text-[10px] font-mono text-outline">Transducer Array</span></div></div></div></section>
+<!-- SECTION NAV / MODULE SWITCHER TABS (Soft Rounded Strip) -->
+<div class="w-full bg-surface-container-low/50 p-1 rounded-full border border-outline-variant/40 flex items-center justify-between gap-2 overflow-x-auto"><div class="flex items-center gap-1 min-w-max"><button class="bg-primary text-on-primary font-semibold py-1.5 px-4 rounded-full text-label-sm font-label-sm flex items-center gap-1.5 shadow-xs transition-all"><span class="material-symbols-outlined text-base" data-icon="fact_check">fact_check</span> Provenance Verification</button><button class="text-on-surface-variant hover:text-on-surface py-1.5 px-3 rounded-full text-label-sm font-label-sm flex items-center gap-1.5 transition-colors hover:bg-surface-container"><span class="material-symbols-outlined text-base" data-icon="inventory_2">inventory_2</span> Digital Heritage Vault <span class="text-[10px] text-outline font-normal ml-0.5">(22.4K)</span></button><button class="text-on-surface-variant hover:text-on-surface py-1.5 px-3 rounded-full text-label-sm font-label-sm flex items-center gap-1.5 transition-colors hover:bg-surface-container"><span class="material-symbols-outlined text-base" data-icon="account_tree">account_tree</span> CAD Knowledge Graph</button><button class="text-on-surface-variant hover:text-on-surface py-1.5 px-3 rounded-full text-label-sm font-label-sm flex items-center gap-1.5 transition-colors hover:bg-surface-container"><span class="material-symbols-outlined text-base" data-icon="record_voice_over">record_voice_over</span> Audio Lexicon</button><button class="text-on-surface-variant hover:text-on-surface py-1.5 px-3 rounded-full text-label-sm font-label-sm flex items-center gap-1.5 transition-colors hover:bg-surface-container"><span class="material-symbols-outlined text-base" data-icon="terminal">terminal</span> Curator Console</button></div><div class="hidden lg:flex items-center gap-2 px-3 text-[11px] text-outline font-mono"><span class="">SESSION #7029</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span></div></div>
+<!-- MAIN INTERACTIVE WORKSPACE: SPLIT-SCREEN PROVENANCE VERIFICATION -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT PANEL: GROUNDED AI SYNTHESIS & SCHOLARLY INGESTION (Col 5) -->
+<div class="lg:col-span-5 flex flex-col gap-5">
+<!-- Query Context Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-4 shadow-subtle"><div class="flex items-center justify-between mb-2"><span class="text-[11px] font-label-sm text-secondary font-bold uppercase tracking-wider flex items-center gap-1.5"><span class="material-symbols-outlined text-sm" data-icon="travel_explore">travel_explore</span> Query Vector</span><span class="text-[10px] font-mono text-outline">CAD Vol. VII RAG</span></div><div class="relative flex items-center"><input class="w-full bg-surface-container-low/50 border border-outline-variant/40 rounded-xl px-3 py-2.5 pr-10 text-body-sm font-body-sm text-on-surface focus:ring-1 focus:ring-primary/40 focus:outline-none" readonly="" type="text" value="Analyze Babasaheb's core rationale for Article 32 as the 'Heart and Soul' of the Indian Constitution, with archival proof from CAD Vol. VII."><button class="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-all" title="Re-run Vector Embedding"><span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span></button></div></div>
+<!-- Grounded Synthesis Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 md:p-6 shadow-subtle flex flex-col gap-4"><div class="flex items-center justify-between border-b border-outline-variant/30 pb-3"><div><span class="text-[11px] font-label-sm text-primary font-bold uppercase tracking-wide">Archival Intelligence Synthesis</span><h4 class="font-headline-md text-lg md:text-xl text-on-surface font-bold mt-0.5">Constitutional Analysis: Article 32</h4></div><div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200/60 px-2.5 py-1 rounded-xl"><div class="relative flex items-center justify-center"><svg class="w-7 h-7 transform -rotate-90"><circle class="text-emerald-100" cx="14" cy="14" fill="transparent" r="10" stroke="currentColor" stroke-width="2.5"></circle><circle class="text-emerald-600" cx="14" cy="14" fill="transparent" r="10" stroke="currentColor" stroke-dasharray="63" stroke-dashoffset="3.8" stroke-linecap="round" stroke-width="2.5"></circle></svg><span class="absolute font-mono font-bold text-[9px] text-emerald-800">94%</span></div><div><div class="text-[11px] font-bold text-emerald-900 leading-tight">0.94 / 1.00</div><div class="text-[9px] text-emerald-700">Verified</div></div></div></div><div class="font-citation-editorial text-body-sm text-on-surface/90 leading-relaxed space-y-3"><p class="">On <span class="font-bold text-primary">9th December 1948</span>, during the Constituent Assembly Debates on Draft Article 25 (culminating in Article 32 of the final Constitution), <strong>Dr. B.R. Ambedkar</strong> firmly rebuffed propositions to dilute prerogative constitutional writs. He underscored that remedies are not mere procedure, but the substantive life-force of democratic liberties.</p><p class="bg-surface-container-low/60 p-3.5 rounded-xl border-l-2 border-secondary italic text-tertiary text-xs md:text-sm">"If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it..."</p><p class="text-xs md:text-sm">Babasaheb argued that while Fundamental Rights articulate democratic guarantees, without the <em>Writs of Habeas Corpus, Mandamus, Prohibition, Quo Warranto, and Certiorari</em> directly enforceable in the Supreme Court, constitutional declarations would remain ephemeral promises.</p></div><div class="bg-surface-container-low/50 border border-outline-variant/30 p-3 rounded-xl space-y-1.5"><div class="flex items-center justify-between"><span class="text-[10px] font-label-sm font-bold text-secondary uppercase tracking-wider">Archival Citations</span><span class="material-symbols-outlined text-secondary text-sm" data-icon="menu_book">menu_book</span></div><div class="flex flex-wrap gap-1.5 pt-0.5"><a class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-surface-container-lowest border border-outline-variant/50 hover:border-primary rounded-full text-xs font-semibold text-primary transition-all" href="#transcript-target"><span class="material-symbols-outlined text-xs" data-icon="link">link</span> CAD Vol. VII, Col. 953</a><span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-surface-container-lowest border border-outline-variant/40 rounded-full text-xs text-on-surface-variant"><span class="material-symbols-outlined text-xs" data-icon="description">description</span> MSS-1948-B04</span></div><div class="text-[10px] font-mono text-outline pt-0.5">Hash: SHA-256: 4f9a2e88... Verified on pgvector + Edge</div></div><div class="bg-surface-container-low/50 p-3 rounded-xl border border-outline-variant/40 flex flex-col gap-2.5"><div class="flex items-center justify-between"><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-secondary text-sm" data-icon="graphic_eq">graphic_eq</span><span class="text-xs font-bold text-on-surface">Bhashini Neural Speech</span></div><span class="text-[10px] font-semibold text-secondary flex items-center gap-1 bg-orange-50 px-2 py-0.5 rounded-full"><span class="w-1 h-1 rounded-full bg-secondary animate-ping"></span> 40kHz Audio Dome</span></div><div class="flex items-center gap-2.5 bg-surface-container-lowest p-1.5 rounded-xl border border-outline-variant/30"><button class="w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container shadow-xs active:scale-95 transition-all"><span class="material-symbols-outlined text-base" data-icon="play_arrow">play_arrow</span></button><div class="flex-1 flex items-center gap-1 h-5 px-1 overflow-hidden"><span class="w-0.5 h-2.5 bg-primary rounded-full"></span><span class="w-0.5 h-4 bg-primary rounded-full"></span><span class="w-0.5 h-5 bg-secondary rounded-full"></span><span class="w-0.5 h-3 bg-primary rounded-full"></span><span class="w-0.5 h-4 bg-primary rounded-full"></span><span class="w-0.5 h-5 bg-secondary rounded-full"></span><span class="w-0.5 h-2.5 bg-primary rounded-full"></span><span class="w-0.5 h-4 bg-primary rounded-full"></span><span class="w-0.5 h-2 bg-outline-variant rounded-full"></span><span class="w-0.5 h-3 bg-outline-variant rounded-full"></span><span class="w-0.5 h-4 bg-outline-variant rounded-full"></span></div><span class="font-mono text-xs text-outline pr-1">00:42 / 02:18</span></div><div class="flex items-center gap-1.5 pt-0.5"><span class="text-[10px] text-on-surface-variant font-medium">Voice:</span><button class="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed rounded-full text-[11px] font-semibold">Marathi</button><button class="px-2 py-0.5 hover:bg-surface-container text-on-surface rounded-full text-[11px]">Hindi</button><button class="px-2 py-0.5 hover:bg-surface-container text-on-surface rounded-full text-[11px]">English</button></div></div></div>
+</div>
+<!-- RIGHT PANEL: DIGITIZED ARCHIVAL MANUSCRIPT & CAD TRANSCRIPT VIEWER (Col 7) -->
+<div class="lg:col-span-7 flex flex-col gap-4" id="transcript-target">
+<!-- Archival Viewer Toolbar with Rounded Corners -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl px-4 py-2.5 shadow-subtle flex items-center justify-between gap-3"><div class="flex items-center gap-2.5"><span class="w-2 h-2 rounded-full bg-secondary ml-0.5"></span><div><span class="text-xs font-bold text-on-surface flex items-center gap-2">CAD Official Transcript (9 Dec 1948)<span class="px-1.5 py-0.2 bg-amber-100/60 text-amber-900 rounded text-[9px] font-mono">600 DPI</span></span><span class="text-[11px] text-outline">National Archives • Vault 12-C</span></div></div><div class="flex items-center gap-0.5"><button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Zoom In"><span class="material-symbols-outlined text-base" data-icon="zoom_in">zoom_in</span></button><button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Zoom Out"><span class="material-symbols-outlined text-base" data-icon="zoom_out">zoom_out</span></button><button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Fit to Screen"><span class="material-symbols-outlined text-base" data-icon="fit_screen">fit_screen</span></button><button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Download PDF"><span class="material-symbols-outlined text-base" data-icon="download">download</span></button></div></div>
+<!-- Digitize Artifact Parchment Canvas (Generous Extra Curves) -->
+<div class="minimal-parchment border border-[#decbb7]/60 rounded-2xl p-6 md:p-8 shadow-subtle relative overflow-hidden min-h-[540px] select-text"><div class="absolute inset-0 flex items-center justify-center opacity-[0.025] pointer-events-none"><span class="material-symbols-outlined text-[320px] text-tertiary" data-icon="account_balance">account_balance</span></div><div class="border-b border-[#cfbfae]/50 pb-3 mb-5 flex justify-between items-start"><div><p class="font-headline-md text-sm md:text-base tracking-wide text-[#3a2719] uppercase font-bold">Constituent Assembly of India Debates</p><p class="font-citation-editorial text-xs text-[#6b4e37] mt-0.5">Volume VII • Thursday, 9th December 1948 • Council House, New Delhi</p></div><div class="text-right"><div class="font-mono text-[11px] font-semibold text-[#6b4e37] bg-[#f0e3d2]/80 px-2 py-0.5 rounded">PAGES 952–954</div><div class="text-[9px] text-[#8c6b4f] uppercase tracking-wider mt-0.5">Record #491</div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#2c2016] font-citation-editorial text-xs md:text-[13px] leading-relaxed"><div class="space-y-3.5"><p class="text-justify indent-4"><strong>The Honourable Dr. B. R. Ambedkar:</strong> Mr. Vice-President, Sir, of the amendments that have been moved to this article, I can accept only No. 786 by Mr. Kamath. Regarding the other amendments, I feel compelled to state my respectful disagreement.</p><p class="text-justify indent-4">The general debate on this article has turned largely on the question of whether this article is redundant in view of the remedies already provided in the judicial system or whether it constitutes an unnecessary limitation upon the rights of Parliament.</p><p class="text-justify indent-4">Now, Sir, I am very glad that the majority of those who have spoken on this article have realized the great significance and importance of it. It is difficult to conceive of any constitution which could omit a provision of this character.</p></div><div class="space-y-3.5 relative"><p class="text-justify indent-4">A right without a remedy is a legal fiction. If rights are conferred by the Constitution, the Constitution must itself simultaneously provide the machinery for their immediate enforcement.</p><div class="relative bg-amber-50 border border-secondary/30 p-3.5 rounded-xl shadow-xs my-2"><div class="text-[9px] font-label-sm font-bold text-secondary uppercase tracking-wider mb-1 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> OCR Quote Match • Conf: 99.8%</div><p class="font-citation-editorial text-xs md:text-[13px] leading-relaxed font-semibold text-[#381e09] italic">"If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it and I am glad that the House has realized its significance."</p><div class="mt-2 flex items-center justify-between text-[10px] text-secondary font-mono pt-1 border-t border-secondary/15"><span class="">Col. 953 • 9 Dec 1948</span><span class="flex items-center gap-0.5 font-medium"><span class="material-symbols-outlined text-[11px]" data-icon="check_circle">check_circle</span> Verified Digitization</span></div></div><p class="text-justify indent-4">It does not merely give power to the Supreme Court to issue writs; it confers a fundamental right upon the citizen to move the Supreme Court by appropriate proceedings. Therein lies the paramount dignity of this solemn declaration.</p></div></div><div class="mt-6 pt-3 border-t border-[#cfbfae]/40 flex flex-wrap items-center justify-between text-[10px] text-[#735841] font-mono"><div class="flex items-center gap-2"><span class="">SCAN: 600 DPI TIFF</span><span class="">•</span><span class="">CIE-D65</span><span class="">•</span><span class="">HASH: 0x93FA..C1</span></div><div class="px-2 py-0.5 rounded text-[9px] font-medium bg-[#f3e9db]/40 text-[#6b4e37]">DAIC Curatorial Preservation Seal</div></div></div>
+<!-- Archival Inspector Drawer Details (Curved Pill Cards) -->
+<div class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-3 shadow-subtle grid grid-cols-2 md:grid-cols-4 gap-2.5 text-center"><div class="p-2 bg-surface-container-low/40 rounded-xl"><span class="text-[10px] text-outline block">OCR Model</span><span class="text-xs font-semibold text-on-surface">Tesseract + Bhashini</span></div><div class="p-2 bg-surface-container-low/40 rounded-xl"><span class="text-[10px] text-outline block">Master Record</span><span class="text-xs font-semibold text-on-surface">1948 Parchment Folio</span></div><div class="p-2 bg-surface-container-low/40 rounded-xl"><span class="text-[10px] text-outline block">Digital Rights</span><span class="text-xs font-semibold text-emerald-700">Public Domain</span></div><div class="p-2 bg-surface-container-low/40 rounded-xl"><span class="text-[10px] text-outline block">TEI-XML Format</span><a class="text-xs font-semibold text-primary hover:underline flex items-center justify-center gap-1" href="#"><span class="material-symbols-outlined text-xs" data-icon="code">code</span> Export XML</a></div></div>
+</div>
+</section>
+<!-- BOTTOM HARDWARE BOM ARCHITECTURE STRIP (Minimal Extra-Curved Cards) -->
+
+</main>
+<!-- FLOATING MINIMAL TACTILE KIOSK FOOTER -->
+<footer class="fixed bottom-3 left-4 right-4 md:left-8 md:right-8 lg:left-12 lg:right-12 z-40 px-6 py-2.5 flex justify-between items-center bg-tertiary text-on-tertiary shadow-soft-float rounded-full border border-tertiary-container backdrop-blur-md">
+<!-- Left: Ministry & Centre Copyright Attribution -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined text-lg" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-secondary-fixed font-bold leading-tight">
+          Dr. Ambedkar International Centre (DAIC) • Ministry of Social Justice &amp; Empowerment
+        </p>
+<p class="text-[11px] text-tertiary-fixed-dim">
+          Ambedkar Heritage Intelligence &amp; Kiosk System v4.2
+        </p>
+</div>
+</div>
+<!-- Center: Active Navigation Links -->
+<div class="hidden xl:flex items-center gap-5">
+<a class="text-tertiary-fixed-dim hover:text-on-tertiary text-label-sm font-label-sm transition-colors" href="#hotkeys">Divyangjan Hotkeys</a>
+<a class="text-tertiary-fixed-dim hover:text-on-tertiary text-label-sm font-label-sm transition-colors" href="#diagnostics">Telemetry Diagnostics</a>
+
+<a class="text-secondary-fixed-dim font-bold underline text-label-sm font-label-sm" href="#provenance-proto">Provenance Protocol</a>
+<a class="text-tertiary-fixed-dim hover:text-on-tertiary text-label-sm font-label-sm transition-colors" href="#bhashini">Bhashini Engine</a>
+</div>
+<!-- Right: Kiosk Session Timer & Physical Print/Share Actions -->
+<div class="flex items-center gap-2.5">
+<!-- Session Timeout Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 bg-tertiary-container rounded-full border border-outline/30">
+<span class="material-symbols-outlined text-secondary-fixed text-sm" data-icon="hourglass_top">hourglass_top</span>
+<span class="text-label-sm font-label-sm text-surface-bright font-mono font-bold" id="kioskTimer">01:42</span>
+<button class="text-[10px] text-secondary-fixed underline hover:text-secondary-fixed-dim font-bold ml-1" onclick="resetTimer()">Extend</button>
+</div>
+<!-- Quick Print Certificate Action (Curved Pill) -->
+<button class="px-3.5 py-1.5 bg-secondary text-on-secondary rounded-full font-label-sm text-label-sm font-bold flex items-center gap-1.5 hover:bg-secondary-container active:scale-[0.98] transition-all shadow-sm" title="Thermal Print Citation &amp; Provenance Ticket">
+<span class="material-symbols-outlined text-base" data-icon="print">print</span>
+<span class="">Print Certificate</span>
+</button>
+<!-- Admin Curator Pin -->
+<button class="p-1.5 bg-tertiary-container hover:bg-surface-variant/20 text-surface-bright rounded-full border border-outline/30 transition-colors" title="Curator Console Admin Unlock">
+<span class="material-symbols-outlined text-base" data-icon="shield_person">shield_person</span>
+</button>
+</div>
+</footer>
+<!-- SCRIPT FOR LIGHTWEIGHT KIOSK MICRO-INTERACTIONS -->
+<script>
+    // 1. Wheelchair Reach Mode (Lowers interface elements for ergonomic touch target reach)
+    const reachBtn = document.getElementById('reachToggleBtn');
+    const kioskCanvas = document.getElementById('kioskCanvas');
+    let isLowered = false;
+
+    reachBtn.addEventListener('click', () => {
+      isLowered = !isLowered;
+      if (isLowered) {
+        kioskCanvas.classList.add('pt-40', 'translate-y-6');
+        reachBtn.classList.add('bg-primary', 'text-on-primary');
+        reachBtn.classList.remove('bg-surface-container-lowest', 'text-primary');
+      } else {
+        kioskCanvas.classList.remove('pt-40', 'translate-y-6');
+        reachBtn.classList.remove('bg-primary', 'text-on-primary');
+        reachBtn.classList.add('bg-surface-container-lowest', 'text-primary');
+      }
+    });
+
+    // 2. High Contrast Mode Toggle
+    const contrastBtn = document.getElementById('contrastToggleBtn');
+    let isHighContrast = false;
+
+    contrastBtn.addEventListener('click', () => {
+      isHighContrast = !isHighContrast;
+      if (isHighContrast) {
+        document.body.classList.add('contrast-125', 'brightness-95');
+        contrastBtn.classList.add('bg-secondary', 'text-on-secondary');
+      } else {
+        document.body.classList.remove('contrast-125', 'brightness-95');
+        contrastBtn.classList.remove('bg-secondary', 'text-on-secondary');
+      }
+    });
+
+    // 3. Offline Edge Simulation Toggle
+    const edgeToggle = document.getElementById('edgeSimToggle');
+    edgeToggle.addEventListener('change', (e) => {
+      const isOffline = e.target.checked;
+      const statusLabel = edgeToggle.parentElement.nextElementSibling;
+      if (isOffline) {
+        statusLabel.innerText = "NET: OFFLINE (NVMe ACTIVE)";
+        statusLabel.classList.remove('text-outline');
+        statusLabel.classList.add('text-secondary', 'font-bold');
+      } else {
+        statusLabel.innerText = "NET: LIVE";
+        statusLabel.classList.remove('text-secondary', 'font-bold');
+        statusLabel.classList.add('text-outline');
+      }
+    });
+
+    // 4. Kiosk Idle Session Countdown Timer
+    let totalSeconds = 225; // 3 min 45 sec
+    const timerDisplay = document.getElementById('kioskTimer');
+
+    function updateTimer() {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      if (totalSeconds > 0) {
+        totalSeconds--;
+      } else {
+        totalSeconds = 225; // Auto-reset for kiosk
+      }
+    }
+    setInterval(updateTimer, 1000);
+
+    function resetTimer() {
+      totalSeconds = 300; // Reset to 5:00
+      updateTimer();
+    }
+  </script>
+
+
+</body></html>

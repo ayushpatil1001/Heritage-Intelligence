@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+    background-color: #faf9f6;
+    color: #18181b;
+  }
+
+  .font-serif-archival {
+    font-family: 'Merriweather', Georgia, serif;
+  }
+
+  .font-mono-code {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.minimal-parchment {
+  background-color: #faf8f5;
+  background-image: radial-gradient(rgba(120, 113, 108, 0.16) 0.6px, transparent 0.6px);
+  background-size: 16px 16px;
+}
+
+.stitch-card {
+  background-color: #ffffff;
+  border: 1px solid #e7e5e4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.025);
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 0.96;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.amber-halo {
+  animation: subtlePulse 3.5s infinite ease-in-out;
+}
+
+.high-contrast-mode {
+  filter: contrast(1.25) brightness(0.97);
+}

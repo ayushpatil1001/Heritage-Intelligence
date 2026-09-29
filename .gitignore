@@ -1,0 +1,22 @@
+# Node / Frontend
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+.env.*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
