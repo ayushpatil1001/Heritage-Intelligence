@@ -9,19 +9,8 @@ interface HeaderKioskBarProps {
   setActiveTab: (t: ActiveTab) => void;
   language: SupportedLanguage;
   setLanguage: (l: SupportedLanguage) => void;
-  isOfflineEdgeMode: boolean;
-  setIsOfflineEdgeMode: (v: boolean) => void;
-  ultrasonicDomeActive: boolean;
-  setUltrasonicDomeActive: (v: boolean) => void;
   highContrastMode: boolean;
   setHighContrastMode: (v: boolean) => void;
-  wheelchairMode: boolean;
-  setWheelchairMode: (v: boolean) => void;
-  proximityCm: number;
-  setProximityCm: (cm: number) => void;
-  onTriggerStandbyOverlay: () => void;
-  supabaseDocCount: number;
-  onQuickSearch?: (q: string) => void;
 }
 
 export const HeaderKioskBar: React.FC<HeaderKioskBarProps> = ({
@@ -30,62 +19,46 @@ export const HeaderKioskBar: React.FC<HeaderKioskBarProps> = ({
   language,
   setLanguage,
   highContrastMode,
-  setHighContrastMode,
-  onQuickSearch
+  setHighContrastMode
 }) => {
-  const [quickQuery, setQuickQuery] = React.useState('');
-
-  const pillNav: Array<{ id: ActiveTab; label: string; slug: string }> = [
-    { id: 'search', label: 'Archival Search', slug: SEO_ROUTE_MAP.search.slug },
-    { id: 'vault', label: 'Heritage Vault', slug: SEO_ROUTE_MAP.vault.slug },
-    { id: 'cad-graph', label: 'Constitutional Graph', slug: SEO_ROUTE_MAP['cad-graph'].slug },
-    { id: 'karaoke', label: 'Audio Lexicon', slug: SEO_ROUTE_MAP.karaoke.slug },
-    { id: 'curator', label: 'Curator Archive', slug: SEO_ROUTE_MAP.curator.slug }
+  const navItems: Array<{ id: ActiveTab; label: string; slug: string }> = [
+    { id: 'search', label: 'Search & Provenance', slug: SEO_ROUTE_MAP.search.slug },
+    { id: 'vault', label: 'Archive Vault', slug: SEO_ROUTE_MAP.vault.slug },
+    { id: 'cad-graph', label: 'Constituent Debates', slug: SEO_ROUTE_MAP['cad-graph'].slug },
+    { id: 'karaoke', label: 'Audio & Speeches', slug: SEO_ROUTE_MAP.karaoke.slug },
+    { id: 'curator', label: 'Curator Portal', slug: SEO_ROUTE_MAP.curator.slug }
   ];
 
   return (
-    <header className="w-full px-4 sm:px-6 xl:px-12 py-3.5 flex flex-wrap items-center justify-between gap-3 z-40 sticky top-0 left-0 bg-[#faf9f6]/95 border-b border-stone-200/90 backdrop-blur-md transition-all">
-      {/* Left: DAIC State Emblem & Institutional Brand Link */}
-      <div className="flex items-center gap-3">
+    <header className="w-full bg-white border-b border-stone-300 sticky top-0 z-30 shadow-xs">
+      <div className="max-w-[1540px] mx-auto px-4 sm:px-8 lg:px-10 py-3.5 sm:py-4 flex items-center justify-between gap-4">
+        {/* Brand / Logo */}
         <a
           href="/rag-provenance-engine"
           onClick={(e) => {
             e.preventDefault();
             setActiveTab('search');
           }}
-          aria-label="Ambedkar Heritage Intelligence and Kiosk System Home"
-          className="w-10 h-10 rounded-xl bg-[#1B2A4A] flex items-center justify-center text-white shadow-2xs shrink-0"
+          className="flex items-center gap-3.5 group"
         >
-          <span className="material-symbols-outlined text-xl" aria-hidden="true">
-            account_balance
-          </span>
-        </a>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#1B2A4A]/80 font-semibold tracking-wider uppercase">
-              Dr. Ambedkar International Centre • GoI
+          <div className="w-10 h-10 rounded-xl bg-[#1B2A4A] flex items-center justify-center text-white shadow-xs shrink-0 group-hover:bg-[#142038] transition-colors border border-[#1B2A4A]/20">
+            <span className="material-symbols-outlined text-xl" aria-hidden="true">
+              account_balance
             </span>
           </div>
-          <a
-            href="/rag-provenance-engine"
-            onClick={(e) => {
-              e.preventDefault();
-              setActiveTab('search');
-            }}
-            className="block text-base sm:text-lg font-serif-archival text-zinc-900 tracking-tight font-bold hover:text-[#1B2A4A] transition-colors"
-          >
-            Ambedkar Heritage Intelligence
-          </a>
-        </div>
-      </div>
+          <div>
+            <span className="block text-base sm:text-lg font-serif-archival text-[#1B2A4A] font-bold tracking-tight leading-tight">
+              Ambedkar Heritage Intelligence
+            </span>
+            <span className="block text-[11px] text-zinc-500 font-medium">
+              Digital Archive &amp; Kiosk System
+            </span>
+          </div>
+        </a>
 
-      {/* Center: Navigation Pills & Clean Search Input */}
-      <div className="hidden xl:flex items-center gap-3">
-        <nav
-          aria-label="Primary Archival Modules"
-          className="flex items-center bg-stone-100 p-1 rounded-full border border-stone-200"
-        >
-          {pillNav.map((item) => {
+        {/* Primary Desktop Navigation with Breathing Room */}
+        <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1.5">
+          {navItems.map((item) => {
             const isActive = activeTab === item.id;
             return (
               <a
@@ -95,10 +68,10 @@ export const HeaderKioskBar: React.FC<HeaderKioskBarProps> = ({
                   e.preventDefault();
                   setActiveTab(item.id);
                 }}
-                className={`px-3.5 py-1.5 text-xs rounded-full transition-all cursor-pointer ${
+                className={`px-4 py-2 text-xs rounded-lg transition-all font-medium border ${
                   isActive
-                    ? 'bg-[#1B2A4A] text-white font-semibold shadow-2xs'
-                    : 'text-zinc-600 hover:text-[#1B2A4A] font-medium'
+                    ? 'bg-[#1B2A4A] text-white border-[#1B2A4A] shadow-xs font-semibold'
+                    : 'text-zinc-600 border-transparent hover:text-[#1B2A4A] hover:bg-stone-100 hover:border-stone-200'
                 }`}
               >
                 {item.label}
@@ -107,84 +80,59 @@ export const HeaderKioskBar: React.FC<HeaderKioskBarProps> = ({
           })}
         </nav>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (quickQuery.trim() && onQuickSearch) {
-              onQuickSearch(quickQuery.trim());
-              setQuickQuery('');
-            }
-          }}
-          className="relative w-48"
-          role="search"
-        >
-          <span
-            className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-base"
-            aria-hidden="true"
+        {/* Right: Language Selector & Accessibility */}
+        <div className="flex items-center gap-2.5">
+          {/* Language Switcher */}
+          <div
+            role="group"
+            aria-label="Select Language"
+            className="flex items-center bg-stone-100 rounded-xl p-1 border border-stone-300"
           >
-            search
-          </span>
-          <input
-            type="search"
-            aria-label="Search archival records"
-            value={quickQuery}
-            onChange={(e) => setQuickQuery(e.target.value)}
-            placeholder="Search archive..."
-            className="w-full pl-9 pr-3 py-1.5 bg-white border border-stone-200 rounded-full text-xs text-zinc-900 focus:outline-none focus:border-[#1B2A4A]"
-          />
-        </form>
-      </div>
+            {(['en', 'mr', 'hi'] as SupportedLanguage[]).map((langKey) => {
+              const info = LANGUAGE_LABELS[langKey];
+              const isSelected = language === langKey;
+              return (
+                <button
+                  key={langKey}
+                  type="button"
+                  onClick={() => setLanguage(langKey)}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-white text-[#1B2A4A] font-bold shadow-xs border border-stone-200'
+                      : 'text-zinc-600 hover:text-zinc-900 font-medium border border-transparent'
+                  }`}
+                >
+                  {info.native}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* Right: Language Selector & Contrast Toggle */}
-      <div className="flex items-center gap-2">
-        <div
-          role="group"
-          aria-label="Select Archival Language"
-          className="flex items-center bg-stone-100 rounded-full p-1 border border-stone-200 overflow-x-auto max-w-full"
-        >
-          {(Object.keys(LANGUAGE_LABELS) as SupportedLanguage[]).map((langKey) => {
-            const info = LANGUAGE_LABELS[langKey];
-            const isSelected = language === langKey;
-            return (
-              <button
-                key={langKey}
-                type="button"
-                onClick={() => setLanguage(langKey)}
-                className={`px-2.5 py-1 text-xs rounded-full transition-all cursor-pointer shrink-0 ${
-                  isSelected
-                    ? 'bg-[#1B2A4A] text-white font-semibold shadow-2xs'
-                    : 'text-zinc-600 hover:text-[#1B2A4A] font-medium'
-                }`}
-              >
-                {langKey === 'en' ? 'EN' : info.native}
-              </button>
-            );
-          })}
+          {/* Reading Contrast Mode */}
+          <button
+            type="button"
+            onClick={() => setHighContrastMode(!highContrastMode)}
+            className={`p-2 border rounded-xl text-xs transition-colors cursor-pointer shadow-2xs ${
+              highContrastMode
+                ? 'bg-[#1B2A4A] text-white border-[#1B2A4A]'
+                : 'bg-white text-zinc-600 border-stone-300 hover:border-stone-400 hover:text-[#1B2A4A]'
+            }`}
+            title="Toggle Contrast Mode"
+            aria-label="Toggle Contrast Mode"
+          >
+            <span className="material-symbols-outlined text-base block" aria-hidden="true">
+              contrast
+            </span>
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setHighContrastMode(!highContrastMode)}
-          className={`p-1.5 border rounded-full text-xs font-medium transition-all cursor-pointer ${
-            highContrastMode
-              ? 'bg-[#1B2A4A] text-white border-[#1B2A4A]'
-              : 'bg-white text-zinc-600 border-stone-200 hover:border-[#1B2A4A]/40 hover:text-[#1B2A4A]'
-          }`}
-          title="Toggle High Contrast Reading Mode"
-          aria-label="Toggle High Contrast Reading Mode"
-        >
-          <span className="material-symbols-outlined text-base block" aria-hidden="true">
-            contrast
-          </span>
-        </button>
       </div>
 
-      {/* Mobile & Tablet Responsive Navigation Bar (< xl screens) */}
+      {/* Mobile Navigation Strip (< lg) */}
       <nav
-        aria-label="Mobile Archival Navigation"
-        className="flex xl:hidden w-full items-center gap-1.5 overflow-x-auto py-1 border-t border-stone-200/70 pt-2"
+        aria-label="Mobile Navigation"
+        className="flex lg:hidden w-full items-center gap-1.5 overflow-x-auto px-4 sm:px-8 py-2.5 border-t border-stone-300 bg-[#faf9f6]"
       >
-        {pillNav.map((item) => {
+        {navItems.map((item) => {
           const isActive = activeTab === item.id;
           return (
             <a
@@ -194,10 +142,10 @@ export const HeaderKioskBar: React.FC<HeaderKioskBarProps> = ({
                 e.preventDefault();
                 setActiveTab(item.id);
               }}
-              className={`px-3.5 py-1.5 text-xs rounded-full transition-all shrink-0 ${
+              className={`px-3.5 py-1.5 text-xs rounded-lg transition-all shrink-0 font-medium border ${
                 isActive
-                  ? 'bg-[#1B2A4A] text-white font-semibold shadow-2xs'
-                  : 'bg-stone-100 text-zinc-700 hover:bg-stone-200 font-medium'
+                  ? 'bg-[#1B2A4A] text-white border-[#1B2A4A] font-semibold'
+                  : 'bg-white text-zinc-700 border-stone-300'
               }`}
             >
               {item.label}

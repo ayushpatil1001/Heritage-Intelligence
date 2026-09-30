@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitBranch, Scale, Users, ArrowUpRight, Sparkles, BookOpenCheck } from 'lucide-react';
+import { GitBranch, Scale, Users, ArrowUpRight, BookOpenCheck } from 'lucide-react';
 import { CadNode, EDGE_CAD_GRAPH } from '../data/edgeCorpus';
 
 interface CadVisualizerModuleProps {
@@ -19,27 +19,22 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
   };
 
   return (
-    <div className="space-y-5">
-      <div className="stitch-card rounded-2xl p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1B2A4A]">
-              Constituent Assembly Proceedings (1946–1949)
-            </span>
-            <h2 className="text-xl font-bold text-zinc-900 font-serif-archival mt-0.5">
-              Constitutional Article Provenance Graph &amp; Draft Evolution
-            </h2>
-          </div>
-          <span className="text-xs font-medium px-3 py-1 rounded-lg bg-[#F8FAFC] text-[#1B2A4A] border border-[#1B2A4A]/15">
-            Select any node to inspect proceedings
+    <div className="space-y-8">
+      {/* Interactive SVG Constitutional Graph Card */}
+      <div className="bg-white border border-stone-300 rounded-2xl p-6 sm:p-8 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+          <h2 className="text-lg font-serif-archival font-bold text-zinc-900">
+            Constitutional Article Evolution (CAD 1948–1949)
+          </h2>
+          <span className="text-xs text-zinc-500 font-medium">
+            Click any node to view assembly debates and amendments
           </span>
         </div>
 
-        {/* Interactive SVG Constitutional Graph in Clean Minimal Paper Canvas */}
-        <div className="mt-4 rounded-xl border border-stone-200 bg-[#faf9f6] p-3 overflow-x-auto">
+        <div className="rounded-2xl border border-stone-300 bg-stone-50/60 p-4 overflow-x-auto shadow-inner/none">
           <svg
             role="img"
-            aria-label="Constituent Assembly Debates (CAD) Constitutional Article Provenance Graph showing Articles 32, 14, 15, 17, 38, and Reserve Bank Finance"
+            aria-label="Constituent Assembly Debates (CAD) Constitutional Article Provenance Graph"
             viewBox="0 0 1060 300"
             className="w-full min-w-[780px] h-72 select-none"
           >
@@ -58,9 +53,9 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
                     y1={p1.y}
                     x2={p2.x}
                     y2={p2.y}
-                    stroke={isHighlighted ? '#1B2A4A' : '#a8a29e'}
+                    stroke={isHighlighted ? '#1B2A4A' : '#d6d3d1'}
                     strokeWidth={isHighlighted ? 2.5 : 1.5}
-                    strokeDasharray={isHighlighted ? 'none' : '5,4'}
+                    strokeDasharray={isHighlighted ? 'none' : '4,4'}
                   />
                   <text
                     x={midX}
@@ -69,9 +64,9 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
                     fill={isHighlighted ? '#1B2A4A' : '#78716c'}
                     fontSize="10"
                     fontWeight={isHighlighted ? 'bold' : 'normal'}
-                    fontFamily="JetBrains Mono, monospace"
+                    fontFamily="sans-serif"
                   >
-                    {edge.relation.slice(0, 34)}...
+                    {edge.relation.slice(0, 36)}...
                   </text>
                 </g>
               );
@@ -96,7 +91,7 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
                     rx={12}
                     fill={isSelected ? '#1B2A4A' : '#FFFFFF'}
                     stroke={isSelected ? '#1B2A4A' : '#d6d3d1'}
-                    strokeWidth={isSelected ? 2.5 : 1.5}
+                    strokeWidth={isSelected ? 2 : 1.5}
                   />
                   <text
                     x={0}
@@ -114,7 +109,6 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
                     textAnchor="middle"
                     fill={isSelected ? '#e2e8f0' : '#57534e'}
                     fontSize="10"
-                    fontFamily="JetBrains Mono, monospace"
                   >
                     ({node.draftLabel})
                   </text>
@@ -134,38 +128,38 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
         </div>
       </div>
 
-      {/* Selected Constitutional Article Dossier */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <div className="lg:col-span-7 stitch-card rounded-2xl p-6 space-y-4 border-t-2 border-t-[#1B2A4A]">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-3">
-            <div className="flex items-center gap-2">
-              <Scale className="w-5 h-5 text-[#1B2A4A]" />
-              <span className="text-xs font-mono-code font-bold uppercase text-[#1B2A4A]">
-                {selectedNode.label} ← {selectedNode.draftLabel} ({selectedNode.cadVolume})
+      {/* Selected Constitutional Article Dossier with Generous Grid Gap */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+        <div className="lg:col-span-7 bg-white border border-stone-300 rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 pb-4">
+            <div className="flex items-center gap-2.5">
+              <Scale className="w-4 h-4 text-[#1B2A4A]" />
+              <span className="text-xs font-bold text-[#1B2A4A] uppercase tracking-wide">
+                {selectedNode.label} ({selectedNode.draftLabel}) • {selectedNode.cadVolume}
               </span>
             </div>
-            <span className="text-xs font-mono-code font-medium px-2.5 py-0.5 rounded bg-[#faf9f6] text-zinc-600 border border-stone-200">
-              {selectedNode.date}
+            <span className="text-xs text-zinc-500 font-medium">
+              Debated: {selectedNode.date}
             </span>
           </div>
 
-          <h3 className="text-xl font-bold text-zinc-900 font-serif-archival">{selectedNode.title}</h3>
+          <h3 className="text-xl font-bold text-zinc-900 font-serif-archival leading-snug">{selectedNode.title}</h3>
 
-          <p className="text-sm text-zinc-600 leading-relaxed">{selectedNode.summary}</p>
+          <p className="text-sm sm:text-[14.5px] text-zinc-600 leading-relaxed">{selectedNode.summary}</p>
 
-          <div className="p-4 rounded-xl bg-[#F8FAFC] border-l-2 border-l-[#1B2A4A] border border-stone-200 space-y-1.5">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1B2A4A] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#1B2A4A]" /> Dr. B. R. Ambedkar’s Assembly Rejoinder:
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#F8FAFC] border-l-4 border-l-[#1B2A4A] border-y border-r border-stone-200 shadow-2xs space-y-2 my-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#1B2A4A] block">
+              Dr. B. R. Ambedkar’s Assembly Rejoinder:
             </span>
-            <p className="text-sm text-zinc-900 font-medium leading-relaxed">{selectedNode.ambedkarRejoinder}</p>
+            <p className="text-sm sm:text-[14px] text-zinc-800 leading-relaxed font-serif-archival italic">{selectedNode.ambedkarRejoinder}</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-stone-100">
             <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-600">
-              <Users className="w-4 h-4 text-[#1B2A4A]" />
-              <span className="font-semibold">Co-Debaters:</span>
+              <Users className="w-3.5 h-3.5 text-zinc-500" />
+              <span className="font-semibold text-zinc-700">Assembly Co-Debaters:</span>
               {selectedNode.coDebaters.map((debater, i) => (
-                <span key={i} className="px-2 py-0.5 rounded bg-stone-100 text-zinc-800 border border-stone-200 font-mono-code">
+                <span key={i} className="px-2.5 py-1 rounded-lg bg-stone-100 text-zinc-800 font-medium border border-stone-200">
                   {debater}
                 </span>
               ))}
@@ -173,41 +167,41 @@ export const CadVisualizerModule: React.FC<CadVisualizerModuleProps> = ({ onOpen
 
             <button
               onClick={() => onOpenArticleInRag(`${selectedNode.label} ${selectedNode.title}`)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold bg-[#1B2A4A] hover:bg-[#152238] text-white cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-[#1B2A4A] hover:bg-[#142038] text-white cursor-pointer shadow-xs border border-[#1B2A4A] transition-colors"
             >
-              <BookOpenCheck className="w-4 h-4" />
-              <span>Inspect CAD Manuscript</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <BookOpenCheck className="w-3.5 h-3.5" />
+              <span>Verify in Manuscript</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* All Constitutional Nodes Quick Selector */}
-        <div className="lg:col-span-5 stitch-card rounded-2xl p-6 space-y-3">
-          <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+        {/* Article Quick Selector List */}
+        <div className="lg:col-span-5 bg-white border border-stone-300 rounded-2xl p-6 sm:p-7 shadow-xs space-y-4">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-600 flex items-center gap-2 border-b border-stone-200 pb-3">
             <GitBranch className="w-4 h-4 text-[#1B2A4A]" />
-            Constitutional Draft Evolution Index
+            Constitutional Articles Index
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {EDGE_CAD_GRAPH.nodes.map((n) => {
               const active = n.id === selectedNode.id;
               return (
                 <button
                   key={n.id}
                   onClick={() => setSelectedNode(n)}
-                  className={`w-full text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                  className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
                     active
-                      ? 'bg-[#1B2A4A] border-[#1B2A4A] text-white'
-                      : 'bg-[#faf9f6] border-stone-200 text-zinc-700 hover:bg-stone-100'
+                      ? 'bg-[#1B2A4A] border-[#1B2A4A] text-white shadow-xs'
+                      : 'bg-stone-50 border-stone-300 text-zinc-700 hover:bg-white hover:border-stone-400'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-xs font-mono-code">
+                  <div className="flex items-center justify-between text-xs">
                     <span className={`font-bold ${active ? 'text-white' : 'text-[#1B2A4A]'}`}>
                       {n.label} ({n.draftLabel})
                     </span>
-                    <span className={active ? 'text-slate-200' : 'text-zinc-500'}>{n.cadVolume}</span>
+                    <span className={active ? 'text-slate-200' : 'text-zinc-500 font-medium'}>{n.cadVolume}</span>
                   </div>
-                  <p className={`text-xs font-medium mt-1 ${active ? 'text-slate-100' : 'text-zinc-600'}`}>{n.title}</p>
+                  <p className={`text-xs mt-1.5 leading-relaxed ${active ? 'text-slate-100' : 'text-zinc-600'}`}>{n.title}</p>
                 </button>
               );
             })}

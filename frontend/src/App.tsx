@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HeaderKioskBar, ActiveTab } from './components/HeaderKioskBar';
 import { SearchProvenanceModule } from './components/SearchProvenanceModule';
-import { SeoHeadManager, SeoInternalLinksSection, getTabFromPath } from './components/SeoHeadManager';
+import { SeoHeadManager, getTabFromPath } from './components/SeoHeadManager';
 import { ArchivalRecord, EDGE_NVME_CORPUS, SupportedLanguage } from './data/edgeCorpus';
 import { fetchSupabaseArchivalRecords } from './lib/supabaseClient';
-import { Radio, Hand } from 'lucide-react';
 
-// Code-split secondary modules via React.lazy for Core Web Vitals (LCP / INP) optimization
+// Lazy-loaded secondary modules
 const HeritageVaultModule = lazy(() =>
   import('./components/HeritageVaultModule').then((m) => ({ default: m.HeritageVaultModule }))
 );
@@ -25,16 +24,11 @@ export function App() {
     typeof window !== 'undefined' ? getTabFromPath(window.location.pathname) : 'search'
   );
   const [language, setLanguage] = useState<SupportedLanguage>('en');
-  const [isOfflineEdgeMode, setIsOfflineEdgeMode] = useState<boolean>(false);
-  const [ultrasonicDomeActive, setUltrasonicDomeActive] = useState<boolean>(true);
   const [highContrastMode, setHighContrastMode] = useState<boolean>(false);
-  const [wheelchairMode, setWheelchairMode] = useState<boolean>(false);
-  const [proximityCm, setProximityCm] = useState<number>(68);
-  const [standbyOverlayOpen, setStandbyOverlayOpen] = useState<boolean>(false);
   const [customRecords, setCustomRecords] = useState<ArchivalRecord[]>([]);
   const [externalRagQuery, setExternalRagQuery] = useState<string | undefined>(undefined);
 
-  // Sync live records from Supabase PostgreSQL cluster on startup
+  // Sync records from Supabase on startup
   useEffect(() => {
     fetchSupabaseArchivalRecords().then((rows) => {
       if (rows && rows.length > 0) {
@@ -46,63 +40,40 @@ export function App() {
     });
   }, []);
 
-  // Auto-wake kiosk when visitor approaches <= 120cm on HC-SR04 sensor
-  useEffect(() => {
-    if (standbyOverlayOpen && proximityCm <= 120) {
-      setStandbyOverlayOpen(false);
-    }
-  }, [proximityCm, standbyOverlayOpen]);
-
   const handleJumpToRagQuery = (query: string) => {
     setExternalRagQuery(query);
     setActiveTab('search');
   };
 
-  const totalVerifiedDocs = EDGE_NVME_CORPUS.length + customRecords.length;
-
   return (
     <div
-      className={`min-h-screen bg-[#faf9f6] text-[#18181b] flex flex-col overflow-x-hidden transition-all ${
+      className={`min-h-screen bg-[#faf9f6] text-[#18181b] flex flex-col font-sans transition-colors ${
         highContrastMode ? 'high-contrast-mode' : ''
-      } ${wheelchairMode ? 'pt-28 translate-y-4' : ''}`}
+      }`}
     >
+      {/* Clean Institutional Navigation Header */}
       <HeaderKioskBar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         language={language}
         setLanguage={setLanguage}
-        isOfflineEdgeMode={isOfflineEdgeMode}
-        setIsOfflineEdgeMode={setIsOfflineEdgeMode}
-        ultrasonicDomeActive={ultrasonicDomeActive}
-        setUltrasonicDomeActive={setUltrasonicDomeActive}
         highContrastMode={highContrastMode}
         setHighContrastMode={setHighContrastMode}
-        wheelchairMode={wheelchairMode}
-        setWheelchairMode={setWheelchairMode}
-        proximityCm={proximityCm}
-        setProximityCm={setProximityCm}
-        onTriggerStandbyOverlay={() => {
-          setProximityCm(195);
-          setStandbyOverlayOpen(true);
-        }}
-        supabaseDocCount={totalVerifiedDocs}
-        onQuickSearch={handleJumpToRagQuery}
       />
 
-      {/* Dynamic SEO Manager, Canonical URL Router & Authoritative Single H1 Banner */}
+      {/* Page Title & Head SEO Manager */}
       <SeoHeadManager
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         language={language}
-        onQuickQuery={handleJumpToRagQuery}
       />
 
-      {/* Main Content Workspace (Responsive layout with zero floating bottom bar) */}
-      <main className="flex-1 w-full max-w-[1640px] mx-auto px-4 sm:px-6 xl:px-12 pt-4 pb-8">
+      {/* Main Content Workspace with Generous Padding */}
+      <main className="flex-1 w-full max-w-[1540px] mx-auto px-4 sm:px-8 lg:px-10 py-8 lg:py-10">
         <Suspense
           fallback={
-            <div className="stitch-card rounded-2xl p-8 text-center text-sm font-mono-code text-zinc-600">
-              Loading Verified DAIC Archival Module...
+            <div className="bg-white rounded-2xl border border-stone-300 p-12 text-center text-sm text-zinc-500 shadow-xs">
+              Loading archival module...
             </div>
           }
         >
@@ -110,9 +81,9 @@ export function App() {
             <SearchProvenanceModule
               language={language}
               setLanguage={setLanguage}
-              isOfflineEdgeMode={isOfflineEdgeMode}
-              setIsOfflineEdgeMode={setIsOfflineEdgeMode}
-              ultrasonicDomeActive={ultrasonicDomeActive}
+              isOfflineEdgeMode={false}
+              setIsOfflineEdgeMode={() => {}}
+              ultrasonicDomeActive={true}
               customRecords={customRecords}
               initialQuery={externalRagQuery}
               activeTab={activeTab}
@@ -135,7 +106,7 @@ export function App() {
           {activeTab === 'karaoke' && (
             <AudioKaraokeModule
               language={language}
-              ultrasonicDomeActive={ultrasonicDomeActive}
+              ultrasonicDomeActive={true}
             />
           )}
 
@@ -149,63 +120,15 @@ export function App() {
         </Suspense>
       </main>
 
-      {/* Contextual Internal Archival Links, Sitemap & Institutional Backlink Directory */}
-      <SeoInternalLinksSection
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onQuickQuery={handleJumpToRagQuery}
-      />
-
-      {/* HC-SR04 / VL53L1X Ultrasonic Proximity Auto-Wake Standby Overlay */}
-      {standbyOverlayOpen && (
-        <div className="fixed inset-0 z-50 bg-zinc-950/50 backdrop-blur-xs flex flex-col items-center justify-center p-4 sm:p-6 text-center">
-          <div className="max-w-2xl w-full rounded-3xl border border-stone-300 bg-white p-6 sm:p-8 shadow-xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-stone-100 text-zinc-800 border border-stone-300 text-xs font-mono-code font-medium">
-              <Radio className="w-4 h-4" /> HC-SR04 ULTRASONIC STANDBY RADAR • CURRENT DISTANCE: {proximityCm}cm
-            </div>
-
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 font-serif-archival">
-              Dr. B. R. Ambedkar Digital Heritage Memorial Kiosk
-            </h2>
-            <p className="text-sm text-zinc-600 leading-relaxed">
-              &ldquo;Cultivation of mind should be the ultimate aim of human existence.&rdquo; — Step within{' '}
-              <strong className="text-zinc-900">120 cm</strong> of the ultrasonic sensor (or tap below) to automatically wake the directional audio dome and Bhashini voice assistant.
-            </p>
-
-            <div className="p-4 rounded-2xl bg-[#faf9f6] border border-stone-200 space-y-2">
-              <label className="block text-xs font-mono-code font-medium text-zinc-700">
-                SIH Judge Booth Simulator: Slide HC-SR04 Distance ≤ 120cm to Auto-Wake Kiosk
-              </label>
-              <input
-                type="range"
-                min={25}
-                max={240}
-                value={proximityCm}
-                onChange={(e) => setProximityCm(Number(e.target.value))}
-                className="w-full accent-zinc-900 cursor-pointer"
-              />
-              <div className="flex justify-between text-[11px] font-mono-code text-zinc-500">
-                <span>25cm (Visitor at Kiosk)</span>
-                <span className="text-zinc-900 font-semibold">120cm Auto-Wake Threshold</span>
-                <span>240cm (Gallery Corridor)</span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setProximityCm(68);
-                setStandbyOverlayOpen(false);
-              }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm bg-zinc-900 hover:bg-zinc-800 text-white shadow-xs cursor-pointer"
-            >
-              <Hand className="w-4 h-4" />
-              <span>Tap Touch Panel or Step Closer to Wake Kiosk</span>
-            </button>
-          </div>
+      {/* Clean, Spacious Institutional Footer */}
+      <footer className="w-full bg-white border-t border-stone-300 py-6 mt-12 shadow-2xs">
+        <div className="max-w-[1540px] mx-auto px-4 sm:px-8 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+          <span className="font-medium text-zinc-600">Dr. Ambedkar International Centre • Digital Heritage Archive</span>
+          <span>Aligned with SIH Problem Statement ID 26096</span>
         </div>
-      )}
+      </footer>
     </div>
   );
 }
+
 export default App;

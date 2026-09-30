@@ -18,13 +18,8 @@ interface SearchProvenanceModuleProps {
 export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
   language,
   setLanguage,
-  isOfflineEdgeMode,
-  setIsOfflineEdgeMode,
-  ultrasonicDomeActive,
   customRecords,
-  initialQuery,
-  activeTab,
-  setActiveTab
+  initialQuery
 }) => {
   const [queryInput, setQueryInput] = useState<string>(
     initialQuery ||
@@ -35,26 +30,42 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
   const [isListeningMic, setIsListeningMic] = useState<boolean>(false);
   const [isSpeakingTts, setIsSpeakingTts] = useState<boolean>(false);
   const [zoomScale, setZoomScale] = useState<number>(100);
-  const [copiedXml, setCopiedXml] = useState<boolean>(false);
-  const [activeScenarioIdx, setActiveScenarioIdx] = useState<number>(0);
 
-  const performSearch = async (targetQuery: string, targetLang: SupportedLanguage, forceOffline?: boolean) => {
+  const sampleQueries = [
+    {
+      label: 'Article 32: Heart & Soul',
+      text: "Analyze Babasaheb's core rationale for Article 32 as the 'Heart and Soul' of the Indian Constitution, with archival proof from CAD Vol. VII."
+    },
+    {
+      label: 'Reserve Bank & Rupee Thesis',
+      text: 'डॉ. आंबेडकरांचे रिझर्व्ह बँक स्थापनेविषयी काय विचार होते? (Problem of the Rupee & 1936 Proof)'
+    },
+    {
+      label: 'Mahad Satyagraha (1927)',
+      text: 'महाड सत्याग्रहाबद्दल माहिती द्या (Mahad Chavdar Tale Satyagraha)'
+    },
+    {
+      label: 'Out-of-Scope Test',
+      text: 'Who won the 2026 Cricket IPL Tournament and cryptocurrency forecast?'
+    }
+  ];
+
+  const performSearch = async (targetQuery: string, targetLang: SupportedLanguage) => {
     setIsSearching(true);
-    const offlineState = forceOffline !== undefined ? forceOffline : isOfflineEdgeMode;
-    const response = await executeDualTierRagSearch(targetQuery, targetLang, offlineState, customRecords);
+    const response = await executeDualTierRagSearch(targetQuery, targetLang, false, customRecords);
     setResult(response);
     setIsSearching(false);
   };
 
   useEffect(() => {
-    performSearch(queryInput, language, isOfflineEdgeMode);
+    performSearch(queryInput, language);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, isOfflineEdgeMode]);
+  }, [language]);
 
   useEffect(() => {
     if (initialQuery && initialQuery !== queryInput) {
       setQueryInput(initialQuery);
-      performSearch(initialQuery, language, isOfflineEdgeMode);
+      performSearch(initialQuery, language);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
@@ -102,349 +113,152 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
     } else {
       setIsListeningMic(true);
       setTimeout(() => {
-        const sampleByLang: Record<SupportedLanguage, string> = {
-          mr: 'डॉ. आंबेडकरांचे रिझर्व्ह बँक स्थापनेविषयी काय विचार होते?',
-          hi: 'अनुच्छेद 32 को संविधान की आत्मा क्यों कहा गया है?',
-          en: 'Analyze Babasaheb’s core rationale for Article 32 as the Heart and Soul of the Constitution',
-          ta: 'ரிசர்வ் வங்கி உருவாக்கம் குறித்து டாக்டர் அம்பேத்கரின் கருத்து',
-          te: 'ఆర్టికల్ 32 రాజ్యాంగ ఆత్మ అని డాక్టర్ అంబేద్కర్ ఎందుకు అన్నారు?'
-        };
-        const q = sampleByLang[language];
-        setQueryInput(q);
+        const sample = sampleQueries[0].text;
+        setQueryInput(sample);
         setIsListeningMic(false);
-        performSearch(q, language);
+        performSearch(sample, language);
       }, 800);
     }
   };
 
-  const handleExportTeiXml = () => {
-    if (!result?.primaryRecord) return;
-    const rec = result.primaryRecord;
-    const xml = `<TEI xmlns="http://www.tei-c.org/ns/1.0"><teiHeader><fileDesc><titleStmt><title>${rec.title}</title></titleStmt><publicationStmt><authority>DAIC New Delhi / MoSJE</authority><idno>${rec.manuscriptScan.archiveCode}</idno></publicationStmt></fileDesc></teiHeader><text><body><p>${rec.verbatimQuote}</p></body></text></TEI>`;
-    navigator.clipboard.writeText(xml);
-    setCopiedXml(true);
-    setTimeout(() => setCopiedXml(false), 2000);
-  };
-
-  const confPercentage = result ? Math.round(result.confidence * 100) : 96;
-  const strokeDashoffset = 63 - (63 * Math.min(100, Math.max(0, confPercentage))) / 100;
-
   return (
-    <div className="space-y-6">
-      {/* FEATURED ARCHIVAL INQUIRIES */}
-      <section className="w-full">
-        <div className="flex items-center justify-between mb-2.5 px-1">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#1B2A4A]">
-            Featured Archival Inquiries
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
-          {/* Inquiry 1 */}
-          <div
-            onClick={() => {
-              setActiveScenarioIdx(0);
-              const q =
-                "Analyze Babasaheb's core rationale for Article 32 as the 'Heart and Soul' of the Indian Constitution, with archival proof from CAD Vol. VII.";
-              setLanguage('en');
-              setQueryInput(q);
-              performSearch(q, 'en', isOfflineEdgeMode);
-            }}
-            className={`bg-white p-4 rounded-2xl transition-all cursor-pointer flex flex-col justify-between border ${
-              activeScenarioIdx === 0
-                ? 'border-[#1B2A4A] ring-1 ring-[#1B2A4A]/15 shadow-2xs'
-                : 'border-stone-200 hover:border-[#1B2A4A]/40'
-            }`}
-          >
-            <div>
-              <span className="inline-block px-2 py-0.5 bg-[#1B2A4A]/8 text-[#1B2A4A] text-[11px] font-semibold rounded-md mb-2">
-                CAD Vol. VII • p. 953
+    <div className="space-y-8">
+      {/* Centered, Clean Primary Search Bar with Defined Borders & Spacing */}
+      <section className="bg-white border border-stone-300 rounded-2xl p-6 sm:p-8 shadow-xs">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            performSearch(queryInput, language);
+          }}
+          className="relative flex items-center gap-3"
+        >
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 text-2xl" aria-hidden="true">
+            search
+          </span>
+          <input
+            type="search"
+            aria-label="Search Dr. Ambedkar's writings and debates"
+            value={queryInput}
+            onChange={(e) => setQueryInput(e.target.value)}
+            placeholder="Search Dr. Ambedkar's writings, speeches, and debates..."
+            className="w-full bg-[#faf9f6] border border-stone-300 rounded-xl pl-13 pr-32 py-3.5 sm:py-4 text-sm sm:text-base text-zinc-900 focus:outline-none focus:border-[#1B2A4A] focus:bg-white transition-all shadow-inner/none"
+          />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleVoiceMicInput}
+              className={`p-2.5 rounded-lg transition-colors cursor-pointer border ${
+                isListeningMic
+                  ? 'bg-[#1B2A4A] text-white border-[#1B2A4A] animate-pulse'
+                  : 'text-zinc-500 hover:text-zinc-800 hover:bg-stone-100 border-transparent'
+              }`}
+              title="Voice Search (Bhashini)"
+              aria-label="Voice Search"
+            >
+              <span className="material-symbols-outlined text-xl" aria-hidden="true">
+                mic
               </span>
-              <h3 className="text-sm text-zinc-900 font-bold line-clamp-2 mb-1">
-                Article 32 &amp; Constitutional Remedies
-              </h3>
-              <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                Constituent Assembly debate on the right to move the Supreme Court for fundamental rights.
-              </p>
-            </div>
+            </button>
+            <button
+              type="submit"
+              disabled={isSearching}
+              className="px-5 py-2.5 bg-[#1B2A4A] hover:bg-[#142038] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors cursor-pointer border border-[#1B2A4A]"
+            >
+              {isSearching ? 'Searching...' : 'Search'}
+            </button>
           </div>
+        </form>
 
-          {/* Inquiry 2 */}
-          <div
-            onClick={() => {
-              setActiveScenarioIdx(1);
-              const q = 'डॉ. आंबेडकरांचे रिझर्व्ह बँक स्थापनेविषयी काय विचार होते? (Problem of the Rupee & 1936 Proof)';
-              setLanguage('mr');
-              setQueryInput(q);
-              performSearch(q, 'mr', isOfflineEdgeMode);
-            }}
-            className={`bg-white p-4 rounded-2xl transition-all cursor-pointer flex flex-col justify-between border ${
-              activeScenarioIdx === 1
-                ? 'border-[#1B2A4A] ring-1 ring-[#1B2A4A]/15 shadow-2xs'
-                : 'border-stone-200 hover:border-[#1B2A4A]/40'
-            }`}
-          >
-            <div>
-              <span className="inline-block px-2 py-0.5 bg-[#1B2A4A]/8 text-[#1B2A4A] text-[11px] font-semibold rounded-md mb-2">
-                BAWS Vol. 6 • Marathi
-              </span>
-              <h3 className="text-sm text-zinc-900 font-bold line-clamp-2 mb-1">
-                Reserve Bank &amp; Problem of the Rupee
-              </h3>
-              <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                &ldquo;डॉ. आंबेडकरांचे रिझर्व्ह बँक स्थापनेविषयी काय विचार होते?&rdquo; — Hilton Young Commission evidence.
-              </p>
-            </div>
-          </div>
-
-          {/* Inquiry 3 */}
-          <div
-            onClick={() => {
-              setActiveScenarioIdx(2);
-              const q = 'महाड सत्याग्रहाबद्दल माहिती द्या (Mahad Chavdar Tale Satyagraha)';
-              setIsOfflineEdgeMode(true);
-              setLanguage('mr');
-              setQueryInput(q);
-              performSearch(q, 'mr', true);
-            }}
-            className={`bg-white p-4 rounded-2xl transition-all cursor-pointer flex flex-col justify-between border ${
-              activeScenarioIdx === 2
-                ? 'border-[#1B2A4A] ring-1 ring-[#1B2A4A]/15 shadow-2xs'
-                : 'border-stone-200 hover:border-[#1B2A4A]/40'
-            }`}
-          >
-            <div>
-              <span className="inline-block px-2 py-0.5 bg-[#1B2A4A]/8 text-[#1B2A4A] text-[11px] font-semibold rounded-md mb-2">
-                BAWS Vol. 17 • 1927
-              </span>
-              <h3 className="text-sm text-zinc-900 font-bold line-clamp-2 mb-1">
-                Mahad Chavdar Tale Satyagraha
-              </h3>
-              <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                Primary resolution for equal civic access to public water resources at Mahad (March 1927).
-              </p>
-            </div>
-          </div>
-
-          {/* Inquiry 4 */}
-          <div
-            onClick={() => {
-              setActiveScenarioIdx(3);
-              const q = 'Who won the 2026 Cricket IPL Tournament and cryptocurrency forecast?';
-              setQueryInput(q);
-              performSearch(q, language, isOfflineEdgeMode);
-            }}
-            className={`bg-white p-4 rounded-2xl transition-all cursor-pointer flex flex-col justify-between border ${
-              activeScenarioIdx === 3
-                ? 'border-[#1B2A4A] ring-1 ring-[#1B2A4A]/15 shadow-2xs'
-                : 'border-stone-200 hover:border-[#1B2A4A]/40'
-            }`}
-          >
-            <div>
-              <span className="inline-block px-2 py-0.5 bg-stone-100 text-zinc-600 text-[11px] font-semibold rounded-md mb-2">
-                Citation Guardrail
-              </span>
-              <h3 className="text-sm text-zinc-900 font-bold line-clamp-2 mb-1">
-                Out-of-Archive Topic Verification
-              </h3>
-              <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
-                Demonstrates strict archival boundary rejection for topics outside Dr. Ambedkar&apos;s works.
-              </p>
-            </div>
-          </div>
+        {/* Clean Suggested Inquiry Chips with Breathing Room */}
+        <div className="flex flex-wrap items-center gap-2.5 mt-5 pt-4 border-t border-stone-200/80 text-xs">
+          <span className="text-zinc-500 font-medium mr-1">Suggested topics:</span>
+          {sampleQueries.map((q, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => {
+                setQueryInput(q.text);
+                performSearch(q.text, language);
+              }}
+              className="px-3.5 py-1.5 bg-stone-50 hover:bg-white text-zinc-700 border border-stone-300 rounded-full transition-all hover:border-[#1B2A4A]/50 hover:shadow-2xs cursor-pointer font-medium"
+            >
+              {q.label}
+            </button>
+          ))}
         </div>
       </section>
 
-      {/* NEGATIVE GUARDRAIL REJECTION CARD (When Confidence < 0.85) */}
+      {/* Out-of-Scope Negative Guardrail Result */}
       {result && !result.verified && (
-        <div className="bg-white border border-zinc-900 rounded-2xl p-6 shadow-xs">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 pb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-stone-100 flex items-center justify-center text-zinc-900 border border-stone-300">
-                <span className="material-symbols-outlined text-xl">gpp_bad</span>
-              </div>
-              <div>
-                <span className="text-[11px] font-mono-code font-semibold uppercase tracking-wider text-zinc-600">
-                  ZERO-HALLUCINATION GUARDRAIL ENFORCED (CONFIDENCE {result.confidence} &lt; 0.85)
-                </span>
-                <h3 className="text-lg font-bold text-zinc-900 mt-0.5 font-serif-archival">
-                  Unverified Topic Blocked Prior to Synthesis
-                </h3>
-              </div>
+        <div className="bg-white border border-stone-300 rounded-2xl p-6 sm:p-8 shadow-xs">
+          <div className="flex items-start gap-4">
+            <span className="material-symbols-outlined text-amber-700 text-3xl shrink-0" aria-hidden="true">
+              info
+            </span>
+            <div className="space-y-3">
+              <h2 className="text-lg font-serif-archival font-bold text-zinc-900">
+                Topic Not Documented in Archive
+              </h2>
+              <p className="text-sm text-zinc-600 leading-relaxed">
+                &ldquo;{result.guardrailMessage}&rdquo;
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  const q = sampleQueries[0].text;
+                  setQueryInput(q);
+                  performSearch(q, language);
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1B2A4A] hover:underline cursor-pointer pt-2"
+              >
+                <span>Return to Article 32 Analysis</span>
+                <span className="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+              </button>
             </div>
-
-            <button
-              onClick={() => {
-                const q =
-                  "Analyze Babasaheb's core rationale for Article 32 as the 'Heart and Soul' of the Indian Constitution";
-                setQueryInput(q);
-                performSearch(q, language);
-              }}
-              className="px-4 py-2 rounded-full bg-zinc-900 text-white text-xs font-semibold cursor-pointer"
-            >
-              Return to Verified Article 32 Analysis
-            </button>
-          </div>
-
-          <div className="mt-4 p-4 rounded-xl bg-[#faf9f6] border-l-2 border-l-zinc-900 border border-stone-200">
-            <p className="text-xs uppercase font-mono-code text-zinc-500 mb-1">
-              Mandatory PRD Section 5 Negative Rejection Output:
-            </p>
-            <p className="text-lg sm:text-xl font-serif-archival font-bold text-zinc-900">
-              &ldquo;{result.guardrailMessage}&rdquo;
-            </p>
-            {result.localizedGuardrail && result.language !== 'en' && (
-              <p className="text-sm text-zinc-600 mt-2">{result.localizedGuardrail}</p>
-            )}
           </div>
         </div>
       )}
 
-      {/* MAIN INTERACTIVE WORKSPACE: SPLIT-SCREEN PROVENANCE VERIFICATION */}
+      {/* Verified Split-Screen Provenance Result with Open Spacing */}
       {result && result.verified && result.primaryRecord && (
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* LEFT PANEL: GROUNDED AI SYNTHESIS & SCHOLARLY INGESTION (Col 5) */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
-            {/* Query Vector Card */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                performSearch(queryInput, language);
-              }}
-              className="bg-white border border-stone-200 rounded-2xl p-4 shadow-2xs"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] text-zinc-600 font-semibold uppercase tracking-wider flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-sm">travel_explore</span> Query Vector
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          {/* Left Column: Scholarly Synthesis & Primary Citation (Col 5) */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            <div className="bg-white border border-stone-300 rounded-2xl p-6 sm:p-8 shadow-xs space-y-6">
+              {/* Result Title */}
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#1B2A4A] block mb-1.5">
+                  Archival Synthesis
                 </span>
-                <span className="text-[10px] font-mono-code text-zinc-400">
-                  {result.primaryRecord.volume.slice(0, 24)} • {result.latencyMs}ms
-                </span>
-              </div>
-              <div className="relative flex items-center gap-1.5">
-                <input
-                  type="text"
-                  value={queryInput}
-                  onChange={(e) => setQueryInput(e.target.value)}
-                  placeholder="Enter query in Marathi, Hindi, Tamil, Telugu, or English..."
-                  className="w-full bg-[#faf9f6] border border-stone-200 rounded-xl px-3.5 py-2.5 pr-20 text-xs sm:text-sm text-zinc-900 focus:border-zinc-900 focus:outline-none"
-                />
-                <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={handleVoiceMicInput}
-                    className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all cursor-pointer ${
-                      isListeningMic
-                        ? 'bg-zinc-900 text-white animate-pulse'
-                        : 'bg-stone-100 text-zinc-700 hover:bg-stone-200'
-                    }`}
-                    title="Speak via Bhashini Mic"
-                  >
-                    <span className="material-symbols-outlined text-sm">mic</span>
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSearching}
-                    className="w-7 h-7 flex items-center justify-center bg-[#1B2A4A] text-white rounded-lg hover:bg-[#152238] transition-all cursor-pointer"
-                    title="Run Archival Search"
-                  >
-                    <span className="material-symbols-outlined text-sm">search</span>
-                  </button>
-                </div>
-              </div>
-            </form>
-
-            {/* Grounded Synthesis Card with Subtle Navy Top Border */}
-            <div className="bg-white border border-stone-200 border-t-2 border-t-[#1B2A4A] rounded-2xl p-5 md:p-6 shadow-2xs flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b border-stone-200/80 pb-3">
-                <div>
-                  <span className="text-[11px] text-[#1B2A4A] font-semibold uppercase tracking-wide">
-                    Archival Synthesis
-                  </span>
-                  <h3 className="font-serif-archival text-lg md:text-xl text-zinc-900 font-bold mt-0.5 leading-snug">
-                    {result.primaryRecord.title}
-                  </h3>
-                </div>
-
-                {/* Circular Confidence Ring in Navy */}
-                <div className="flex items-center gap-2 bg-[#F8FAFC] border border-[#1B2A4A]/15 px-2.5 py-1.5 rounded-xl shrink-0">
-                  <div className="relative flex items-center justify-center">
-                    <svg
-                      role="img"
-                      aria-label={`Cosine similarity confidence score ${(result.confidence * 100).toFixed(1)} percent`}
-                      className="w-8 h-8 transform -rotate-90"
-                    >
-                      <circle
-                        className="text-stone-200"
-                        cx="16"
-                        cy="16"
-                        fill="transparent"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                      />
-                      <circle
-                        className="text-[#1B2A4A]"
-                        cx="16"
-                        cy="16"
-                        fill="transparent"
-                        r="10"
-                        stroke="currentColor"
-                        strokeDasharray="63"
-                        strokeDashoffset={strokeDashoffset}
-                        strokeLinecap="round"
-                        strokeWidth="2.5"
-                      />
-                    </svg>
-                    <span className="absolute font-mono-code font-bold text-[9px] text-[#1B2A4A]">
-                      {confPercentage}%
-                    </span>
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-bold text-[#1B2A4A] leading-tight">
-                      {result.confidence}
-                    </div>
-                    <div className="text-[9px] text-zinc-500 font-medium">Verified</div>
-                  </div>
-                </div>
+                <h2 className="text-xl font-serif-archival font-bold text-zinc-900 leading-snug">
+                  {result.primaryRecord.title}
+                </h2>
               </div>
 
-              {/* Editorial Synthesis Text + Quote */}
-              <div className="font-serif-archival text-xs sm:text-sm text-zinc-800 leading-relaxed space-y-3">
-                <p>{result.localizedAnswer}</p>
-                <p className="bg-[#F8FAFC] p-3.5 rounded-xl border-l-2 border-[#1B2A4A] italic text-zinc-800 text-xs md:text-sm">
+              {/* Synthesis Text */}
+              <div className="font-serif-archival text-sm sm:text-[14.5px] text-zinc-800 leading-relaxed space-y-4">
+                <p className="leading-relaxed">{result.localizedAnswer}</p>
+                <blockquote className="bg-[#F8FAFC] p-5 sm:p-6 rounded-2xl border-l-4 border-l-[#1B2A4A] border-y border-r border-stone-200 text-zinc-800 italic text-sm sm:text-[14px] leading-relaxed my-4 shadow-2xs">
                   {result.primaryRecord.verbatimQuote}
-                </p>
+                </blockquote>
                 {language !== 'en' && (
-                  <p className="text-xs text-zinc-500 font-sans border-t border-stone-200 pt-2">
-                    <strong className="text-zinc-800">English Reference:</strong> {result.englishAnswer}
+                  <p className="text-xs text-zinc-500 font-sans border-t border-stone-200 pt-3">
+                    <strong className="text-zinc-700">English Translation:</strong> {result.englishAnswer}
                   </p>
                 )}
               </div>
 
-              {/* Archival Citations Block */}
-              <div className="bg-[#faf9f6] border border-stone-200 p-3 rounded-xl space-y-1.5">
-                <span className="text-[10px] font-semibold text-[#1B2A4A] uppercase tracking-wider block">
-                  Primary Source Citation
+              {/* Source Citation */}
+              <div className="pt-4 border-t border-stone-200 flex items-center justify-between text-xs text-zinc-600">
+                <span className="font-semibold text-[#1B2A4A]">
+                  {result.primaryRecord.volume}, {result.primaryRecord.page}
                 </span>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-white border border-stone-200 rounded-full text-xs font-medium text-zinc-800">
-                    <span className="material-symbols-outlined text-xs text-[#1B2A4A]">link</span> {result.primaryRecord.volume},{' '}
-                    {result.primaryRecord.page}
-                  </span>
-                </div>
+                <span className="font-medium">{result.primaryRecord.date}</span>
               </div>
 
-              {/* Bhashini Neural Speech Player Card */}
-              <div className="bg-[#faf9f6] p-3 rounded-xl border border-stone-200 flex flex-col gap-2.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[#1B2A4A] text-sm">graphic_eq</span>
-                    <span className="text-xs font-semibold text-zinc-900">Audio Narration</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5 bg-white p-1.5 rounded-xl border border-stone-200">
+              {/* Audio Listen Bar */}
+              <div className="bg-stone-50 p-4 sm:p-5 rounded-2xl border border-stone-300 flex flex-wrap items-center justify-between gap-4 mt-6 shadow-2xs">
+                <div className="flex items-center gap-3">
                   <button
                     type="button"
                     onClick={() =>
@@ -452,31 +266,20 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
                         ? stopSpeech()
                         : speakSynthesis(result.localizedAnswer || '', language)
                     }
-                    className="w-8 h-8 rounded-full bg-[#1B2A4A] text-white flex items-center justify-center hover:bg-[#152238] cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-[#1B2A4A] hover:bg-[#142038] text-white flex items-center justify-center cursor-pointer shadow-xs border border-[#1B2A4A]"
+                    aria-label={isSpeakingTts ? 'Stop Narration' : 'Listen to Narration'}
                   >
-                    <span className="material-symbols-outlined text-base">
-                      {isSpeakingTts ? 'stop' : 'play_arrow'}
+                    <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                      {isSpeakingTts ? 'stop' : 'volume_up'}
                     </span>
                   </button>
-                  <div className="flex-1 flex items-center gap-1.5 h-5 px-1 overflow-hidden">
-                    {[3, 5, 4, 3, 5, 4, 2, 4, 3, 5, 3, 2, 4, 3].map((h, i) => (
-                      <span
-                        key={i}
-                        className={`w-1 rounded-full transition-all ${
-                          isSpeakingTts ? 'bg-[#1B2A4A] animate-pulse' : i < 8 ? 'bg-[#1B2A4A]' : 'bg-stone-200'
-                        }`}
-                        style={{ height: `${h * 4}px` }}
-                      />
-                    ))}
-                  </div>
-                  <span className="font-mono-code text-xs text-zinc-400 pr-1">
-                    {isSpeakingTts ? 'Playing' : 'Listen'}
+                  <span className="text-xs font-semibold text-zinc-800">
+                    {isSpeakingTts ? 'Playing audio narration...' : 'Listen to narration'}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-0.5">
-                  <span className="text-[10px] text-zinc-500 font-medium">Language:</span>
-                  {(['mr', 'hi', 'en', 'ta', 'te'] as SupportedLanguage[]).map((lk) => (
+                <div className="flex items-center gap-1.5">
+                  {(['mr', 'hi', 'en'] as SupportedLanguage[]).map((lk) => (
                     <button
                       key={lk}
                       type="button"
@@ -484,10 +287,10 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
                         setLanguage(lk);
                         speakSynthesis(result.primaryRecord?.synthesis[lk] || '', lk);
                       }}
-                      className={`px-2.5 py-0.5 rounded-full text-[11px] cursor-pointer transition-all ${
+                      className={`px-2.5 py-1 rounded-lg text-xs transition-colors cursor-pointer border ${
                         language === lk
-                          ? 'bg-[#1B2A4A] text-white font-semibold'
-                          : 'hover:bg-stone-200 text-zinc-600'
+                          ? 'bg-[#1B2A4A] text-white font-semibold border-[#1B2A4A]'
+                          : 'bg-white text-zinc-600 border-stone-300 hover:bg-stone-100 hover:text-zinc-900'
                       }`}
                     >
                       {LANGUAGE_LABELS[lk].name}
@@ -498,136 +301,103 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
             </div>
           </div>
 
-          {/* RIGHT PANEL: DIGITIZED ARCHIVAL MANUSCRIPT & CAD TRANSCRIPT VIEWER (Col 7) */}
+          {/* Right Column: Digitized Archival Folio (Col 7) */}
           <div className="lg:col-span-7 flex flex-col gap-4">
-            {/* Archival Viewer Toolbar */}
-            <div className="bg-white border border-stone-200 rounded-2xl px-4 py-2.5 shadow-2xs flex items-center justify-between gap-3">
+            {/* Folio Toolbar with Clear Borders */}
+            <div className="bg-white border border-stone-300 rounded-2xl px-5 py-3 shadow-xs flex items-center justify-between gap-4 text-xs">
               <div className="flex items-center gap-2.5">
-                <img
-                  src="/kiosk-preview-compressed.png"
-                  alt={`Digitized 600 DPI Archival Folio Scan for ${result.primaryRecord.title} (${result.primaryRecord.manuscriptScan.archiveCode})`}
-                  width={36}
-                  height={28}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-9 h-7 rounded object-cover border border-stone-200 shrink-0"
-                />
-                <div>
-                  <h2 className="text-xs font-bold text-zinc-900 flex items-center gap-2">
-                    {result.primaryRecord.manuscriptScan.headerTitle}
-                    <span className="px-1.5 py-0.5 bg-stone-100 text-zinc-700 rounded text-[9px] font-mono-code font-medium">
-                      600 DPI
-                    </span>
-                  </h2>
-                  <span className="text-[11px] text-zinc-500">
-                    National Archives / DAIC • {result.primaryRecord.manuscriptScan.archiveCode}
-                  </span>
-                </div>
+                <span className="font-bold text-zinc-900">
+                  {result.primaryRecord.manuscriptScan.headerTitle}
+                </span>
+                <span className="text-stone-300">•</span>
+                <span className="text-zinc-500 font-mono-code font-medium">
+                  {result.primaryRecord.manuscriptScan.archiveCode}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <button
-                  onClick={() => setZoomScale(Math.min(120, zoomScale + 10))}
-                  className="p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                  type="button"
+                  onClick={() => setZoomScale(Math.min(125, zoomScale + 10))}
+                  className="p-1.5 text-zinc-600 hover:text-zinc-950 rounded-lg hover:bg-stone-100 cursor-pointer"
                   title="Zoom In"
+                  aria-label="Zoom In"
                 >
-                  <span className="material-symbols-outlined text-base">zoom_in</span>
+                  <span className="material-symbols-outlined text-base" aria-hidden="true">zoom_in</span>
                 </button>
                 <button
-                  onClick={() => setZoomScale(Math.max(85, zoomScale - 10))}
-                  className="p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                  type="button"
+                  onClick={() => setZoomScale(Math.max(80, zoomScale - 10))}
+                  className="p-1.5 text-zinc-600 hover:text-zinc-950 rounded-lg hover:bg-stone-100 cursor-pointer"
                   title="Zoom Out"
+                  aria-label="Zoom Out"
                 >
-                  <span className="material-symbols-outlined text-base">zoom_out</span>
+                  <span className="material-symbols-outlined text-base" aria-hidden="true">zoom_out</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setZoomScale(100)}
-                  className="p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
-                  title="Fit to Screen"
+                  className="p-1.5 text-zinc-600 hover:text-zinc-950 rounded-lg hover:bg-stone-100 cursor-pointer"
+                  title="Reset Zoom"
+                  aria-label="Reset Zoom"
                 >
-                  <span className="material-symbols-outlined text-base">fit_screen</span>
+                  <span className="material-symbols-outlined text-base" aria-hidden="true">fit_screen</span>
                 </button>
               </div>
             </div>
 
-            {/* Digitized Artifact Parchment Canvas */}
-            <div className="minimal-parchment border border-stone-300/80 rounded-2xl p-6 md:p-8 shadow-2xs relative overflow-hidden min-h-[510px] select-text">
+            {/* Archival Facsimile Canvas with High Breathing Room & Defined Border */}
+            <div className="bg-white border border-stone-300 rounded-2xl p-7 sm:p-10 shadow-xs relative overflow-hidden min-h-[520px]">
               <div
                 style={{ transform: `scale(${zoomScale / 100})`, transformOrigin: 'top left' }}
                 className="transition-transform duration-200"
               >
-                <div className="absolute inset-0 flex items-center justify-center opacity-[0.025] pointer-events-none">
-                  <span className="material-symbols-outlined text-[280px] text-zinc-900">account_balance</span>
-                </div>
-
-                {/* Folio Top Header */}
-                <div className="border-b border-stone-300/80 pb-3 mb-5 flex justify-between items-start">
+                {/* Folio Header */}
+                <div className="border-b border-stone-300 pb-4 mb-6 flex justify-between items-start">
                   <div>
-                    <p className="font-serif-archival text-sm md:text-base tracking-wide text-zinc-900 uppercase font-bold">
+                    <h3 className="font-serif-archival text-sm tracking-wide text-zinc-900 uppercase font-bold">
                       {result.primaryRecord.collection}
-                    </p>
-                    <p className="font-serif-archival text-xs text-zinc-600 mt-0.5">
+                    </h3>
+                    <p className="font-serif-archival text-xs text-zinc-500 mt-1">
                       {result.primaryRecord.manuscriptScan.subHeader}
                     </p>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-mono-code text-[11px] font-semibold text-zinc-800 bg-stone-200/80 px-2.5 py-0.5 rounded">
-                      {result.primaryRecord.page.toUpperCase()}
-                    </div>
-                    <div className="text-[9px] text-zinc-500 uppercase tracking-wider mt-0.5 font-mono-code">
-                      {result.primaryRecord.manuscriptScan.archiveCode}
-                    </div>
-                  </div>
+                  <span className="font-mono-code text-xs font-semibold text-zinc-700 bg-stone-100 px-2.5 py-1 rounded-lg border border-stone-200">
+                    {result.primaryRecord.page}
+                  </span>
                 </div>
 
-                {/* 2-Column Archival Proceedings Layout with OCR Bounding Box Quote Match */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-zinc-800 font-serif-archival text-xs md:text-[13px] leading-relaxed">
+                {/* 2-Column Proceedings Layout with Highlighted Passage */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-800 font-serif-archival text-xs sm:text-[13.5px] leading-relaxed">
                   {/* Left Column */}
-                  <div className="space-y-3.5">
+                  <div className="space-y-4">
                     {result.primaryRecord.manuscriptScan.lines.slice(0, 3).map((line, i) => (
                       <p key={i} className="text-justify indent-4">
-                        <strong className="text-zinc-900">[Folio L{i + 1}]</strong> {line}
+                        <strong className="text-zinc-900">[L{i + 1}]</strong> {line}
                       </p>
                     ))}
-                    <p className="text-justify indent-4 text-zinc-600">
-                      The proceedings of this archival volume are cryptographically indexed in the National Digital Library (NDL) and Dr. Ambedkar International Centre (DAIC) repository to guarantee zero-hallucination provenance verification.
+                    <p className="text-justify indent-4 text-zinc-500">
+                      Primary proceedings verified in the official records of the Constituent Assembly and Dr. B. R. Ambedkar Writings and Speeches.
                     </p>
                   </div>
 
-                  {/* Right Column: Highlighted Primary Excerpt */}
-                  <div className="space-y-3.5 relative">
-                    <div className="relative bg-[#F8FAFC] border border-[#1B2A4A]/35 p-4 rounded-xl shadow-2xs my-1">
-                      <div className="text-[10px] font-semibold text-[#1B2A4A] uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                        <span className="flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#1B2A4A]" />
-                          Verified Primary Passage
-                        </span>
-                        <span className="font-mono-code text-zinc-500">
-                          {result.primaryRecord.date}
-                        </span>
+                  {/* Right Column: Verified Passage Box */}
+                  <div className="space-y-4">
+                    <div className="bg-[#F8FAFC] border-2 border-[#1B2A4A] p-5 rounded-2xl shadow-xs">
+                      <div className="text-[10px] font-bold text-[#1B2A4A] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#1B2A4A]" />
+                        Verified Archival Text
                       </div>
-                      <p className="font-serif-archival text-xs md:text-[13px] leading-relaxed font-semibold text-zinc-900 italic">
+                      <p className="font-serif-archival text-xs sm:text-[13.5px] leading-relaxed font-bold text-zinc-900 italic">
                         {result.primaryRecord.verbatimQuote}
                       </p>
                     </div>
 
                     {result.primaryRecord.manuscriptScan.lines.slice(3).map((line, i) => (
                       <p key={i} className="text-justify indent-4">
-                        <strong className="text-zinc-900">[Folio L{i + 4}]</strong> {line}
+                        <strong className="text-zinc-900">[L{i + 4}]</strong> {line}
                       </p>
                     ))}
                   </div>
-                </div>
-
-                {/* Clean Archival Footer */}
-                <div className="mt-6 pt-3 border-t border-stone-300/60 flex flex-wrap items-center justify-between text-[11px] text-zinc-500">
-                  <span>Dr. Ambedkar International Centre (DAIC) Archival Folio</span>
-                  <button
-                    onClick={handleExportTeiXml}
-                    className="text-xs font-medium text-[#1B2A4A] hover:underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-xs">download</span>
-                    <span>{copiedXml ? 'Citation Copied' : 'Copy Citation XML'}</span>
-                  </button>
                 </div>
               </div>
             </div>

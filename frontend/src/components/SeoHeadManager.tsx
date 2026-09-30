@@ -15,52 +15,52 @@ export interface RouteSeoMetadata {
 export const SEO_ROUTE_MAP: Record<ActiveTab, RouteSeoMetadata> = {
   search: {
     slug: '/rag-provenance-engine',
-    h1Title: 'Primary Source Provenance & Archival Synthesis',
-    subtitle: 'Verified citations from Babasaheb Ambedkar Writings & Speeches (BAWS Vol. 1–22) and Constituent Assembly Debates',
-    metaTitle: 'Ambedkar Heritage Intelligence & Kiosk System (AHI-KS) | DAIC Archival RAG Portal',
+    h1Title: 'Archival Search & Provenance',
+    subtitle: 'Ask questions grounded in Dr. B. R. Ambedkar’s collected works (BAWS Vol. 1–22) and Constituent Assembly Debates',
+    metaTitle: 'Search & Provenance | Ambedkar Heritage Intelligence',
     metaDescription:
-      'Official Dr. Ambedkar International Centre (DAIC) Zero-Hallucination Archival RAG Kiosk System. Verify BAWS Vol. 1–22 & Constituent Assembly Debates (CAD) with 600 DPI OCR bounding-box provenance.',
-    breadcrumbName: 'Archival Search & Provenance',
+      'Search verified primary sources of Dr. B. R. Ambedkar with original manuscript scans and citations from BAWS Vol. 1–22 and Constituent Assembly Debates.',
+    breadcrumbName: 'Search',
     schemaType: 'SearchResultsPage'
   },
   vault: {
     slug: '/heritage-archive-vault',
-    h1Title: 'Digital Heritage Archive — BAWS Vol. 1–22 & Manuscripts',
-    subtitle: 'Curated primary volumes, historic speeches, constitutional memoranda, and rare manuscripts',
-    metaTitle: 'Digital Heritage Archive Vault (BAWS Vol. 1–22 & CAD) | AHI-KS DAIC',
+    h1Title: 'Digital Heritage Archive',
+    subtitle: 'Browse books, historic speeches, Constituent Assembly proceedings, and rare manuscripts',
+    metaTitle: 'Archive Vault | Ambedkar Heritage Intelligence',
     metaDescription:
-      'Browse authenticated primary sources of Dr. B. R. Ambedkar including Babasaheb Ambedkar Writings and Speeches (BAWS Vol. 1–22), 1936 Annihilation of Caste, 1947 States and Minorities, and rare manuscripts.',
-    breadcrumbName: 'Heritage Vault',
+      'Explore authenticated books, debates, speeches, and manuscripts from Dr. B. R. Ambedkar Writings and Speeches.',
+    breadcrumbName: 'Archive Vault',
     schemaType: 'CollectionPage'
   },
   'cad-graph': {
     slug: '/constituent-assembly-debates-visualizer',
-    h1Title: 'Constituent Assembly Debates (1946–1949) Knowledge Graph',
-    subtitle: 'Interactive constitutional evolution of Fundamental Rights, Directive Principles, and Federal Finance',
-    metaTitle: 'Constituent Assembly Debates (CAD) Article 32 & 14 Knowledge Graph | AHI-KS DAIC',
+    h1Title: 'Constituent Assembly Debates (1946–1949)',
+    subtitle: 'Interactive evolution of constitutional articles and Dr. Ambedkar’s decisive assembly rejoinders',
+    metaTitle: 'Constituent Assembly Debates | Ambedkar Heritage Intelligence',
     metaDescription:
-      'Trace the constitutional evolution of Articles 32, 14, 15, 17, and 38 through Dr. B. R. Ambedkar’s decisive rejoinders and co-debater amendments in the Constituent Assembly of India (CAD Vol. VII–XI).',
-    breadcrumbName: 'Constitutional Graph',
+      'Examine the drafting and debate evolution of Articles 32, 14, 15, 17, and 38 with Dr. B. R. Ambedkar’s assembly speeches.',
+    breadcrumbName: 'Debates Graph',
     schemaType: 'Dataset'
   },
   karaoke: {
     slug: '/bhashini-audio-karaoke-lexicon',
-    h1Title: 'Archival Speech Audio & Parliamentary Legal Lexicon',
-    subtitle: 'Synchronized transcripts and multilingual legal definitions across English, Marathi, and Hindi',
-    metaTitle: 'Bhashini 5-Language Audio Karaoke & Constitutional Lexicon | AHI-KS DAIC',
+    h1Title: 'Historical Speeches & Audio Archive',
+    subtitle: 'Audio recordings with synchronized text transcripts and constitutional legal definitions',
+    metaTitle: 'Audio & Speeches | Ambedkar Heritage Intelligence',
     metaDescription:
-      'Listen to Dr. B. R. Ambedkar’s historic Constituent Assembly speeches with real-time synchronized transcript highlighting and multi-lingual Marathi, Hindi, Tamil, Telugu & English legal lexicon.',
-    breadcrumbName: 'Audio Lexicon',
+      'Listen to historical speeches of Dr. B. R. Ambedkar with real-time synchronized transcripts and parliamentary lexicon.',
+    breadcrumbName: 'Audio Archive',
     schemaType: 'AudioObject'
   },
   curator: {
     slug: '/daic-curator-hardware-telemetry',
-    h1Title: 'Curatorial Archival Ingest & Kiosk System Overview',
-    subtitle: 'Add verified primary documents to the archive and inspect kiosk hardware specifications',
-    metaTitle: 'DAIC Curatorial Ingest Pipeline & ₹38,500 Kiosk Hardware BOM | AHI-KS DAIC',
+    h1Title: 'Curator Ingestion & Specifications',
+    subtitle: 'Index new archival documents and inspect public kiosk appliance hardware specifications',
+    metaTitle: 'Curator Portal | Ambedkar Heritage Intelligence',
     metaDescription:
-      'Inspect live Supabase PostgreSQL 17.6 telemetry, 128GB NVMe offline failover benchmarks, ₹38,500 Raspberry Pi 5 Kiosk Bill of Materials, and institutional Search Console SEO verification.',
-    breadcrumbName: 'Curator Archive',
+      'Curator document ingestion pipeline and turnkey public kiosk hardware specifications.',
+    breadcrumbName: 'Curator Portal',
     schemaType: 'TechArticle'
   }
 };
@@ -79,7 +79,6 @@ interface SeoHeadManagerProps {
   activeTab: ActiveTab;
   setActiveTab: (t: ActiveTab) => void;
   language: SupportedLanguage;
-  onQuickQuery: (q: string) => void;
 }
 
 export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
@@ -90,6 +89,7 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
   const activeMeta = SEO_ROUTE_MAP[activeTab];
   const canonicalUrl = `https://ahi-ks.daic.gov.in${activeMeta.slug}`;
 
+  // Silent HTTPS enforcement & robots tag guard
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&
@@ -101,19 +101,9 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
         `https://${window.location.host}${window.location.pathname}${window.location.search}`
       );
     }
-
-    const robotsTags = document.querySelectorAll('meta[name="robots"], meta[name="googlebot"]');
-    robotsTags.forEach((tag) => {
-      const content = tag.getAttribute('content') || '';
-      if (content.toLowerCase().includes('noindex')) {
-        tag.setAttribute(
-          'content',
-          'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
-        );
-      }
-    });
   }, []);
 
+  // History sync
   useEffect(() => {
     const initialTab = getTabFromPath(window.location.pathname);
     if (initialTab !== activeTab) {
@@ -127,6 +117,7 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Update <head> metadata silently
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -152,12 +143,6 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
     const ogUrlEl = document.getElementById('og-url');
     if (ogUrlEl) ogUrlEl.setAttribute('content', canonicalUrl);
 
-    const twTitleEl = document.getElementById('twitter-title');
-    if (twTitleEl) twTitleEl.setAttribute('content', activeMeta.metaTitle);
-
-    const twDescEl = document.getElementById('twitter-description');
-    if (twDescEl) twDescEl.setAttribute('content', activeMeta.metaDescription);
-
     const schemaEl = document.getElementById('schema-jsonld');
     if (schemaEl) {
       const schemaPayload = {
@@ -166,7 +151,7 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
           {
             '@type': 'ArchiveOrganization',
             '@id': 'https://ahi-ks.daic.gov.in/#organization',
-            name: 'Dr. Ambedkar International Centre (DAIC) — Ministry of Social Justice & Empowerment',
+            name: 'Ambedkar Heritage Intelligence & Kiosk System',
             url: 'https://ahi-ks.daic.gov.in',
             logo: 'https://ahi-ks.daic.gov.in/og-image.png'
           },
@@ -177,15 +162,7 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
             name: activeMeta.metaTitle,
             headline: activeMeta.h1Title,
             description: activeMeta.metaDescription,
-            inLanguage: language,
-            isPartOf: { '@id': 'https://ahi-ks.daic.gov.in/#organization' },
-            primaryImageOfPage: {
-              '@type': 'ImageObject',
-              url: 'https://ahi-ks.daic.gov.in/og-image.png',
-              width: 1200,
-              height: 630,
-              caption: activeMeta.h1Title
-            }
+            inLanguage: language
           }
         ]
       };
@@ -194,125 +171,19 @@ export const SeoHeadManager: React.FC<SeoHeadManagerProps> = ({
   }, [activeTab, activeMeta, canonicalUrl, language]);
 
   return (
-    <div className="w-full max-w-[1640px] mx-auto px-4 sm:px-6 xl:px-12 pt-4">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-3 border-b border-stone-200/80">
-        <div>
-          {/* STRICTLY THE SINGLE H1 TAG ON EVERY PAGE */}
-          <h1
-            id="page-main-h1"
-            className="text-lg sm:text-xl md:text-2xl font-serif-archival font-bold text-[#1B2A4A] tracking-tight"
-          >
-            {activeMeta.h1Title}
-          </h1>
-          <p className="text-xs sm:text-sm text-zinc-500 mt-0.5">{activeMeta.subtitle}</p>
-        </div>
+    <div className="w-full max-w-[1540px] mx-auto px-4 sm:px-8 lg:px-10 pt-6 sm:pt-8 pb-3">
+      <div className="border-b border-stone-300 pb-5">
+        {/* Strictly the 1 Authoritative H1 Tag Per Page */}
+        <h1
+          id="page-main-h1"
+          className="text-2xl sm:text-3xl font-serif-archival font-bold text-[#1B2A4A] tracking-tight"
+        >
+          {activeMeta.h1Title}
+        </h1>
+        <p className="text-xs sm:text-sm text-zinc-600 mt-2 max-w-3xl leading-relaxed">
+          {activeMeta.subtitle}
+        </p>
       </div>
     </div>
-  );
-};
-
-interface SeoInternalLinksSectionProps {
-  activeTab: ActiveTab;
-  setActiveTab: (t: ActiveTab) => void;
-  onQuickQuery: (q: string) => void;
-}
-
-export const SeoInternalLinksSection: React.FC<SeoInternalLinksSectionProps> = ({
-  activeTab,
-  setActiveTab,
-  onQuickQuery
-}) => {
-  const internalTopicLinks = [
-    {
-      label: 'Article 32 — Constitutional Remedies (CAD Vol. VII)',
-      slug: '/rag-provenance-engine',
-      tab: 'search' as ActiveTab,
-      query: "Analyze Babasaheb's core rationale for Article 32 as the 'Heart and Soul' of the Indian Constitution"
-    },
-    {
-      label: 'BAWS Vol. 6 — The Problem of the Rupee (1923)',
-      slug: '/rag-provenance-engine',
-      tab: 'search' as ActiveTab,
-      query: 'How did Dr. B. R. Ambedkar conceptualize the Reserve Bank of India in The Problem of the Rupee (BAWS Vol. 6)?'
-    },
-    {
-      label: 'BAWS Vol. 1–22 Digital Heritage Vault',
-      slug: '/heritage-archive-vault',
-      tab: 'vault' as ActiveTab
-    },
-    {
-      label: 'Constituent Assembly Debates Graph',
-      slug: '/constituent-assembly-debates-visualizer',
-      tab: 'cad-graph' as ActiveTab
-    },
-    {
-      label: 'Parliamentary Speech & Legal Lexicon',
-      slug: '/bhashini-audio-karaoke-lexicon',
-      tab: 'karaoke' as ActiveTab
-    }
-  ];
-
-  const partnerPortals = [
-    { name: 'DAIC New Delhi', url: 'https://daic.gov.in' },
-    { name: 'Ministry of Social Justice & Empowerment', url: 'https://socialjustice.gov.in' },
-    { name: 'National Archives of India', url: 'https://nationalarchives.nic.in' },
-    { name: 'Digital India Bhashini', url: 'https://bhashini.gov.in' }
-  ];
-
-  return (
-    <section
-      aria-label="Related Archival Sections and Institutional Links"
-      className="w-full max-w-[1640px] mx-auto px-4 sm:px-6 xl:px-12 pb-10 pt-2"
-    >
-      <div className="bg-white border border-stone-200/90 rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#1B2A4A]">
-            Explore Archival Collections
-          </h2>
-          <div className="flex flex-wrap items-center gap-2">
-            {internalTopicLinks.map((item, idx) => (
-              <a
-                key={idx}
-                href={item.slug}
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (item.query) {
-                    onQuickQuery(item.query);
-                  } else {
-                    setActiveTab(item.tab);
-                  }
-                }}
-                className={`px-3 py-1.5 rounded-lg border text-xs transition-all ${
-                  activeTab === item.tab && !item.query
-                    ? 'bg-[#1B2A4A] text-white border-[#1B2A4A] font-medium'
-                    : 'bg-[#faf9f6] hover:bg-stone-100 text-zinc-700 border-stone-200'
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2 lg:text-right">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-            Institutional Portals
-          </h3>
-          <div className="flex flex-wrap lg:justify-end items-center gap-3 text-xs text-zinc-600">
-            {partnerPortals.map((p, i) => (
-              <a
-                key={i}
-                href={p.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#1B2A4A] hover:underline transition-colors"
-              >
-                {p.name}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
   );
 };
