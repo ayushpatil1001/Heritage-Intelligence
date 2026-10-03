@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .toUpperCase();
   const title = `Archival Document Reader: ${readableName}`;
   const description = `Inspect high-resolution archival facsimile scans, side-by-side OCR transcriptions, grounded translations, and academic citations for record ${itemId}.`;
-  const canonical = `https://ambedkarverse.in/reader/${itemId}`;
+  const canonical = `https://heritage-intelligence-drab.vercel.app/reader/${itemId}`;
 
   return {
     title,

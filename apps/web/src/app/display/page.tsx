@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Passive ambient museum video wall mode rotating curated high-resolution archival treasures, historical context, and visitor mobile QR handoffs.",
   alternates: {
-    canonical: "https://ambedkarverse.in/display",
+    canonical: "https://heritage-intelligence-drab.vercel.app/display",
   },
   openGraph: {
     title: "Museum Display Wall | AmbedkarVerse",
     description:
       "Passive ambient museum video wall mode rotating curated high-resolution archival treasures.",
-    url: "https://ambedkarverse.in/display",
+    url: "https://heritage-intelligence-drab.vercel.app/display",
     images: [
       {
         url: "/og-image.png",

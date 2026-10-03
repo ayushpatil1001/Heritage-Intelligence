@@ -1,7 +1,12 @@
 import os
 import sys
+import time
+from collections import defaultdict
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
 
@@ -11,13 +16,74 @@ app = FastAPI(
     version="2.6.0"
 )
 
+PRIMARY_DOMAIN = "https://heritage-intelligence-drab.vercel.app"
+
+# Domain-aware Sliding Window Rate Limiter
+class DomainRateLimiter(BaseHTTPMiddleware):
+    def __init__(self, app, max_requests_per_minute: int = 120):
+        super().__init__(app)
+        self.max_requests = max_requests_per_minute
+        self.requests = defaultdict(list)
+
+    async def dispatch(self, request: Request, call_next):
+        if request.url.path in ["/health", "/docs", "/openapi.json", "/redoc"]:
+            return await call_next(request)
+
+        client_ip = request.client.host if request.client else "unknown"
+        origin = request.headers.get("origin") or request.headers.get("referer") or ""
+        
+        is_primary_domain = PRIMARY_DOMAIN in origin
+        key = f"{client_ip}:{PRIMARY_DOMAIN if is_primary_domain else 'general'}"
+        
+        current_time = time.time()
+        minute_ago = current_time - 60
+
+        self.requests[key] = [t for t in self.requests[key] if t > minute_ago]
+
+        limit = self.max_requests if is_primary_domain else 60
+        used = len(self.requests[key])
+
+        if used >= limit:
+            retry_after = int(60 - (current_time - self.requests[key][0])) if self.requests[key] else 60
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": "Rate limit exceeded",
+                    "domain": PRIMARY_DOMAIN,
+                    "limit_per_minute": limit,
+                    "message": f"Too many requests. Rate limit is active for {PRIMARY_DOMAIN}.",
+                    "retry_after_seconds": max(1, retry_after)
+                },
+                headers={
+                    "Retry-After": str(max(1, retry_after)),
+                    "X-RateLimit-Limit": str(limit),
+                    "X-RateLimit-Remaining": "0",
+                    "X-RateLimit-Domain": PRIMARY_DOMAIN
+                }
+            )
+
+        self.requests[key].append(current_time)
+        response = await call_next(request)
+        response.headers["X-RateLimit-Limit"] = str(limit)
+        response.headers["X-RateLimit-Remaining"] = str(max(0, limit - used - 1))
+        response.headers["X-RateLimit-Domain"] = PRIMARY_DOMAIN
+        return response
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        PRIMARY_DOMAIN,
+        f"{PRIMARY_DOMAIN}/",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(DomainRateLimiter, max_requests_per_minute=120)
 
 AI_MODE = os.getenv("AI_MODE", "mock")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
@@ -27,6 +93,7 @@ def health():
     return {
         "status": "healthy",
         "service": "AmbedkarVerse AI Microservice",
+        "primary_domain": PRIMARY_DOMAIN,
         "ai_mode": AI_MODE,
         "gemini_configured": bool(GEMINI_API_KEY)
     }

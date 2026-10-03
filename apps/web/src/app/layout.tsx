@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ambedkarverse.in"),
+  metadataBase: new URL("https://heritage-intelligence-drab.vercel.app"),
   title: {
     default: "AmbedkarVerse | AI Digital Heritage Archive & Memorial Kiosk",
     template: "%s | AmbedkarVerse Digital Heritage Archive",
@@ -53,11 +53,11 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: "https://ambedkarverse.in",
+    canonical: "https://heritage-intelligence-drab.vercel.app",
     languages: {
-      "en-IN": "https://ambedkarverse.in",
-      "hi-IN": "https://ambedkarverse.in?lang=hi",
-      "mr-IN": "https://ambedkarverse.in?lang=mr",
+      "en-IN": "https://heritage-intelligence-drab.vercel.app",
+      "hi-IN": "https://heritage-intelligence-drab.vercel.app?lang=hi",
+      "mr-IN": "https://heritage-intelligence-drab.vercel.app?lang=mr",
     },
   },
   robots: {
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://ambedkarverse.in",
+    url: "https://heritage-intelligence-drab.vercel.app",
     siteName: "AmbedkarVerse Digital Heritage Archive",
     title: "AmbedkarVerse | AI Digital Heritage Archive & Memorial Kiosk",
     description:
@@ -115,8 +115,8 @@ export default function RootLayout({
     "@type": "GovernmentOrganization",
     "name": "Dr. Ambedkar International Centre (DAIC)",
     "alternateName": "AmbedkarVerse National Heritage Archive",
-    "url": "https://ambedkarverse.in",
-    "logo": "https://ambedkarverse.in/og-image.png",
+    "url": "https://heritage-intelligence-drab.vercel.app",
+    "logo": "https://heritage-intelligence-drab.vercel.app/og-image.png",
     "parentOrganization": {
       "@type": "GovernmentOrganization",
       "name": "Ministry of Social Justice and Empowerment, Government of India",
@@ -132,10 +132,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "AmbedkarVerse",
-    "url": "https://ambedkarverse.in",
+    "url": "https://heritage-intelligence-drab.vercel.app",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://ambedkarverse.in/search?q={search_term_string}",
+      "target": "https://heritage-intelligence-drab.vercel.app/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };

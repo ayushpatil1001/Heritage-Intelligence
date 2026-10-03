@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Verify any quote attributed to Dr. B. R. Ambedkar against authenticated primary sources (BAWS Vol. 1–22 and Constituent Assembly Debates). Instant verbatim matching with exact citations.",
   alternates: {
-    canonical: "https://ambedkarverse.in/quotes/verify",
+    canonical: "https://heritage-intelligence-drab.vercel.app/quotes/verify",
   },
   openGraph: {
     title: "Quote Verifier & Misattribution Detector | AmbedkarVerse",
     description:
       "Verify historical quotes against authenticated primary sources with exact citations and similarity confidence scores.",
-    url: "https://ambedkarverse.in/quotes/verify",
+    url: "https://heritage-intelligence-drab.vercel.app/quotes/verify",
     images: [
       {
         url: "/og-image.png",

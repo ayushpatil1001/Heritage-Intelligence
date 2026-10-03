@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Interactive physical museum kiosk mode designed for 55-inch portrait touch displays, multi-touch navigation, high-contrast accessibility, and 90-second idle timeouts.",
   alternates: {
-    canonical: "https://ambedkarverse.in/kiosk",
+    canonical: "https://heritage-intelligence-drab.vercel.app/kiosk",
   },
   openGraph: {
     title: "Museum Kiosk Surface | AmbedkarVerse",
     description:
       "Interactive physical museum kiosk mode designed for portrait touch displays in museum installations.",
-    url: "https://ambedkarverse.in/kiosk",
+    url: "https://heritage-intelligence-drab.vercel.app/kiosk",
     images: [
       {
         url: "/og-image.png",

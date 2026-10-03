@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Explore the semantic network of Dr. B. R. Ambedkar's treatises, historical events, movements, and key figures through an interactive node-link knowledge graph.",
   alternates: {
-    canonical: "https://ambedkarverse.in/graph",
+    canonical: "https://heritage-intelligence-drab.vercel.app/graph",
   },
   openGraph: {
     title: "Archival Knowledge Graph | AmbedkarVerse",
     description:
       "Explore the semantic network of Dr. B. R. Ambedkar's treatises, historical events, movements, and key figures.",
-    url: "https://ambedkarverse.in/graph",
+    url: "https://heritage-intelligence-drab.vercel.app/graph",
     images: [
       {
         url: "/og-image.png",

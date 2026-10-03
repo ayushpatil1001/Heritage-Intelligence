@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Organize, bookmark, and export primary archival records, citations, and milestone notes. Generate PDF dossiers or transfer to mobile via QR tokens.",
   alternates: {
-    canonical: "https://ambedkarverse.in/collections",
+    canonical: "https://heritage-intelligence-drab.vercel.app/collections",
   },
   openGraph: {
     title: "Researcher Dossier & Curated Collections | AmbedkarVerse",
     description:
       "Organize, bookmark, and export primary archival records, citations, and milestone notes.",
-    url: "https://ambedkarverse.in/collections",
+    url: "https://heritage-intelligence-drab.vercel.app/collections",
     images: [
       {
         url: "/og-image.png",

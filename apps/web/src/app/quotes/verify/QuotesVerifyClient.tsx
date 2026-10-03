@@ -21,7 +21,7 @@ export default function QuotesVerifyClient() {
     if (!text.trim()) return;
 
     setIsLoading(true);
-    fetch("http://127.0.0.1:8000/api/v1/quotes/verify", {
+    fetch("/api/v1/quotes/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, lang: language })

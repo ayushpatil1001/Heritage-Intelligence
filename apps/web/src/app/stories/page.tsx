@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Explore long-form curated visual narratives on the Mahad Satyagraha, Drafting the Constitution, The Grammar of Anarchy, and Columbia & LSE Scholarly Foundations.",
   alternates: {
-    canonical: "https://ambedkarverse.in/stories",
+    canonical: "https://heritage-intelligence-drab.vercel.app/stories",
   },
   openGraph: {
     title: "Curated Archival Stories | AmbedkarVerse",
     description:
       "Long-form curated visual narratives anchored in primary documents, speeches, and high-resolution scans.",
-    url: "https://ambedkarverse.in/stories",
+    url: "https://heritage-intelligence-drab.vercel.app/stories",
     images: [
       {
         url: "/og-image.png",

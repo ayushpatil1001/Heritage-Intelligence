@@ -50,7 +50,7 @@ export default function AssistantClient() {
     setInputValue("");
     setIsLoading(true);
 
-    fetch("http://127.0.0.1:8000/api/v1/assistant/chat", {
+    fetch("/api/v1/assistant/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

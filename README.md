@@ -10,6 +10,8 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16_pgvector-336791?logo=postgresql)](https://github.com/pgvector/pgvector)
+[![Production](https://img.shields.io/badge/Production-Live-0070f3?logo=vercel)](https://heritage-intelligence-drab.vercel.app/)
+[![Rate Limit](https://img.shields.io/badge/Rate_Limit-120_req%2Fmin-brightgreen)](https://heritage-intelligence-drab.vercel.app/api/v1/rate-limit-status)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.1_AAA-green.svg)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 
@@ -81,6 +83,30 @@ graph TD
 
 ---
 
+## 🌐 Production Deployment & Domain-Aware Rate Limiting
+
+The official production deployment for the Ambedkar Heritage Intelligence & Kiosk System (AHI-KS) is hosted at:
+👉 **[https://heritage-intelligence-drab.vercel.app/](https://heritage-intelligence-drab.vercel.app/)**
+
+### 🛡️ Sliding-Window Rate Limiting Policy
+To safeguard institutional archival servers against DoS attacks, protect high-load vector search endpoints, and guarantee continuous availability for physical museum kiosks:
+* **Primary Production Domain (`https://heritage-intelligence-drab.vercel.app`):** **120 requests / minute**
+* **General / Unauthenticated Traffic:** **60 requests / minute**
+* **Real-Time Rate Limit Inspection:** `GET /api/v1/rate-limit-status`
+* **Exempt Paths:** Health and API documentation endpoints (`/health`, `/docs`, `/openapi.json`).
+
+```http
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 119
+X-RateLimit-Domain: https://heritage-intelligence-drab.vercel.app
+Access-Control-Allow-Origin: https://heritage-intelligence-drab.vercel.app
+```
+
+When a client or kiosk exceeds the threshold, the gateway immediately returns `HTTP 429 Too Many Requests` with a calculated `Retry-After: <seconds>` header to throttle abusive traffic smoothly without dropping museum sessions.
+
+---
+
 ## 🛡️ Hard Historical Guardrails & Ethics
 
 > **We treat history with the reverence it deserves. The system is designed with strict boundaries to prevent misinformation.**
@@ -124,7 +150,7 @@ python -m uvicorn apps.api.main:app --host 127.0.0.1 --port 8000
 python -m uvicorn apps.ai-service.main:app --host 127.0.0.1 --port 8001
 ```
 
-**4. Install & Run Frontend Web Application (Port 3000):**
+**4. Install & Run Frontend Web Application:**
 ```bash
 # Terminal 3: Web App
 cd apps/web
@@ -132,7 +158,7 @@ npm install
 npm run dev
 ```
 
-**5. Visit [http://localhost:3000](http://localhost:3000)** in your browser! 🎉
+**5. Visit [https://heritage-intelligence-drab.vercel.app/](https://heritage-intelligence-drab.vercel.app/)** in your browser! 🎉
 
 <details>
 <summary><b>Option B: Full Docker Compose Deployment</b></summary>
@@ -142,7 +168,7 @@ cp .env.example .env
 docker compose up -d --build
 ```
 Services will launch automatically:
-- **Frontend:** `http://localhost:3000`
+- **Frontend & Web App:** `https://heritage-intelligence-drab.vercel.app/`
 - **API Gateway:** `http://localhost:8000/docs`
 - **AI Microservice:** `http://localhost:8001/docs`
 - **MinIO S3 Console:** `http://localhost:9001`
@@ -155,7 +181,7 @@ Services will launch automatically:
 
 | Time | Area & Screenshot | Action & Key Feature to Highlight |
 |:---:|---|---|
-| **0:00 - 1:00** | **Home & Cross-Lingual Search**<br/>`http://localhost:3000`<br/><br/><img src="docs/screenshots/desktop_home_1920x1080.png" width="200"> | **1.** Toggle language between **English**, **हिन्दी**, and **मराठी**.<br/>**2.** Open Search (`/search`), type *"social democracy"* or click the microphone.<br/>**3.** Observe sub-second hybrid retrieval with facet filters. |
+| **0:00 - 1:00** | **Home & Cross-Lingual Search**<br/>`https://heritage-intelligence-drab.vercel.app/`<br/><br/><img src="docs/screenshots/desktop_home_1920x1080.png" width="200"> | **1.** Toggle language between **English**, **हिन्दी**, and **मराठी**.<br/>**2.** Open Search (`/search`), type *"social democracy"* or click the microphone.<br/>**3.** Observe sub-second hybrid retrieval with facet filters. |
 | **1:00 - 2:00** | **Deep Zoom & Split Reader**<br/>`/reader/item-001`<br/><br/><img src="docs/screenshots/reader_split_view.png" width="200"> | **1.** View side-by-side facsimile scan and clean digitized text.<br/>**2.** Click **Zoom In (+)** to inspect high-resolution archival scans.<br/>**3.** Switch translation tabs (**Hindi / Marathi**).<br/>**4.** Click **Listen Audio** and **Copy Scholarly Citation**. |
 | **2:00 - 3:00** | **AI Assistant & Quote Verifier**<br/>`/assistant`<br/><br/><img src="docs/screenshots/ai_assistant.png" width="200"> | **1.** Prompt: *"What was Dr. Ambedkar's argument on caste mechanism at Columbia?"*<br/>**2.** Inspect strictly grounded response with clickable citation cards (`[S1]`).<br/>**3.** Test Quote Verifier (`/quotes/verify`) to see instant **Verified Authenticated** status. |
 | **3:00 - 4:00** | **Timeline, Knowledge Graph & Map**<br/>`/graph`<br/><br/><img src="docs/screenshots/knowledge_graph.png" width="200"> | **1.** Browse interactive timeline (1891–1956) with category filtering.<br/>**2.** Explore SVG Knowledge Graph (Dr. Ambedkar, Columbia University, Poona Pact).<br/>**3.** Open Historical Map to view geospatial coordinates (Mahad, New York, London). |
@@ -182,7 +208,7 @@ Services will launch automatically:
     --disable-pinch \
     --overscroll-history-navigation=0 \
     --check-for-update-interval=31536000 \
-    --app=http://localhost:3000/kiosk
+    --app=https://heritage-intelligence-drab.vercel.app/kiosk
   ```
 * **Session Privacy & Idle Guard:** 
   * 60 seconds of touch inactivity triggers a 30-second warning modal with an audible prompt.

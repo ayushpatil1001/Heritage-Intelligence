@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = story
     ? story.subtitleEn
     : "Curated archival narrative from Dr. B. R. Ambedkar's historical milestones.";
-  const canonical = `https://ambedkarverse.in/stories/${params.slug}`;
+  const canonical = `https://heritage-intelligence-drab.vercel.app/stories/${params.slug}`;
 
   return {
     title,

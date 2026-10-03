@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Explore 25 authenticated milestones in Dr. B. R. Ambedkar's life, from his 1891 birth in Mhow, higher education at Columbia and LSE, to the Constitution and timeless legacy.",
   alternates: {
-    canonical: "https://ambedkarverse.in/timeline",
+    canonical: "https://heritage-intelligence-drab.vercel.app/timeline",
   },
   openGraph: {
     title: "Chronological Timeline (1891–1956) | AmbedkarVerse",
     description:
       "Explore 25 authenticated milestones in Dr. B. R. Ambedkar's life with primary archival records and geospatial mappings.",
-    url: "https://ambedkarverse.in/timeline",
+    url: "https://heritage-intelligence-drab.vercel.app/timeline",
     images: [
       {
         url: "/og-image.png",

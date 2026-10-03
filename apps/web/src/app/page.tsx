@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "National digital heritage archive and AI research assistant for Dr. B. R. Ambedkar. Explore 22 BAWS volumes, Constituent Assembly Debates, interactive memorial kiosk, and grounded semantic search.",
   alternates: {
-    canonical: "https://ambedkarverse.in",
+    canonical: "https://heritage-intelligence-drab.vercel.app",
   },
   openGraph: {
     title: "AmbedkarVerse | AI Digital Heritage Archive & Memorial Kiosk",
     description:
       "Explore 22 BAWS volumes, Constituent Assembly Debates, interactive memorial kiosk, and grounded semantic search.",
-    url: "https://ambedkarverse.in",
+    url: "https://heritage-intelligence-drab.vercel.app",
     images: [
       {
         url: "/og-image.png",

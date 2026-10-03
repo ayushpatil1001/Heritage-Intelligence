@@ -23,7 +23,7 @@ function SearchContent() {
 
   const performSearch = (searchTerm: string, typeFilter: string) => {
     setIsSearching(true);
-    let url = `http://127.0.0.1:8000/api/v1/search?q=${encodeURIComponent(searchTerm)}&lang=${language}`;
+    let url = `/api/v1/search?q=${encodeURIComponent(searchTerm)}&lang=${language}`;
     if (typeFilter && typeFilter !== "all") {
       url += `&type=${typeFilter}`;
     }

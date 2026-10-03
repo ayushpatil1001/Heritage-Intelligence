@@ -39,11 +39,11 @@ export default function ReaderClient() {
   // Fetch Item & Page Data
   useEffect(() => {
     setLoading(true);
-    fetch(`http://127.0.0.1:8000/api/v1/items/${itemId}`)
+    fetch(`/api/v1/items/${itemId}`)
       .then((res) => res.json())
       .then((data) => {
         setItem(data);
-        return fetch(`http://127.0.0.1:8000/api/v1/items/${itemId}/pages/${pageNo}`);
+        return fetch(`/api/v1/items/${itemId}/pages/${pageNo}`);
       })
       .then((res) => res.json())
       .then((pData) => {
@@ -76,7 +76,7 @@ export default function ReaderClient() {
   // Fetch Translation when toggled
   useEffect(() => {
     if (showTranslation) {
-      fetch(`http://127.0.0.1:8000/api/v1/items/${itemId}/translation?lang=${language}&page_no=${pageNo}`)
+      fetch(`/api/v1/items/${itemId}/translation?lang=${language}&page_no=${pageNo}`)
         .then((res) => res.json())
         .then((data) => setTranslationText(data.text))
         .catch(() => {
@@ -93,7 +93,7 @@ export default function ReaderClient() {
   const handleOpenSummary = () => {
     setIsSummaryOpen(true);
     if (!summaryData) {
-      fetch(`http://127.0.0.1:8000/api/v1/items/${itemId}/summary?lang=${language}`)
+      fetch(`/api/v1/items/${itemId}/summary?lang=${language}`)
         .then((res) => res.json())
         .then((data) => setSummaryData(data))
         .catch(() => {

@@ -2,10 +2,15 @@ import os
 import sys
 import uuid
 import datetime
+import time
+from collections import defaultdict
 from typing import List, Optional
 from fastapi import FastAPI, Depends, HTTPException, Query, Body, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, and_, desc
 
@@ -25,6 +30,61 @@ from schemas import (
 # Ensure tables exist
 Base.metadata.create_all(bind=engine)
 
+PRIMARY_DOMAIN = "https://heritage-intelligence-drab.vercel.app"
+
+# Domain-aware Sliding Window Rate Limiter
+class DomainRateLimiter(BaseHTTPMiddleware):
+    def __init__(self, app, max_requests_per_minute: int = 120):
+        super().__init__(app)
+        self.max_requests = max_requests_per_minute
+        self.requests = defaultdict(list)
+
+    async def dispatch(self, request: Request, call_next):
+        # Exclude documentation and health check from rate limiting
+        if request.url.path in ["/health", "/docs", "/openapi.json", "/redoc"]:
+            return await call_next(request)
+
+        client_ip = request.client.host if request.client else "unknown"
+        origin = request.headers.get("origin") or request.headers.get("referer") or ""
+        
+        is_primary_domain = PRIMARY_DOMAIN in origin
+        key = f"{client_ip}:{PRIMARY_DOMAIN if is_primary_domain else 'general'}"
+        
+        current_time = time.time()
+        minute_ago = current_time - 60
+
+        # Purge older requests
+        self.requests[key] = [t for t in self.requests[key] if t > minute_ago]
+
+        limit = self.max_requests if is_primary_domain else 60
+        used = len(self.requests[key])
+
+        if used >= limit:
+            retry_after = int(60 - (current_time - self.requests[key][0])) if self.requests[key] else 60
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": "Rate limit exceeded",
+                    "domain": PRIMARY_DOMAIN,
+                    "limit_per_minute": limit,
+                    "message": f"Too many requests. Rate limit is active for {PRIMARY_DOMAIN}.",
+                    "retry_after_seconds": max(1, retry_after)
+                },
+                headers={
+                    "Retry-After": str(max(1, retry_after)),
+                    "X-RateLimit-Limit": str(limit),
+                    "X-RateLimit-Remaining": "0",
+                    "X-RateLimit-Domain": PRIMARY_DOMAIN
+                }
+            )
+
+        self.requests[key].append(current_time)
+        response = await call_next(request)
+        response.headers["X-RateLimit-Limit"] = str(limit)
+        response.headers["X-RateLimit-Remaining"] = str(max(0, limit - used - 1))
+        response.headers["X-RateLimit-Domain"] = PRIMARY_DOMAIN
+        return response
+
 app = FastAPI(
     title="AmbedkarVerse API",
     description="Digital Heritage Archive for Memorials, Manuscripts & Ambedkar (SIH 2026 PS 26096)",
@@ -34,6 +94,14 @@ app = FastAPI(
 )
 
 # CORS configuration
+ALLOWED_ORIGINS = [
+    PRIMARY_DOMAIN,
+    f"{PRIMARY_DOMAIN}/",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "*"
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -42,15 +110,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(DomainRateLimiter, max_requests_per_minute=120)
+
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy",
         "service": "AmbedkarVerse Core API",
+        "primary_domain": PRIMARY_DOMAIN,
         "timestamp": datetime.datetime.utcnow().isoformat(),
         "problem_statement": "SIH 2026 PS 26096",
         "institution": "Dr. Ambedkar International Centre (DAIC), MoSJE",
         "ai_mode": os.getenv("AI_MODE", "mock")
+    }
+
+@app.get("/api/v1/rate-limit-status")
+def get_rate_limit_status(request: Request):
+    origin = request.headers.get("origin") or request.headers.get("referer") or ""
+    client_ip = request.client.host if request.client else "unknown"
+    return {
+        "status": "active",
+        "primary_domain": PRIMARY_DOMAIN,
+        "client_ip": client_ip,
+        "is_primary_domain": PRIMARY_DOMAIN in origin,
+        "rate_limit_per_minute": 120 if PRIMARY_DOMAIN in origin else 60,
+        "policy": f"Sliding-window rate limiter bound to domain {PRIMARY_DOMAIN}"
     }
 
 # ------------------------------------------------------------------------------

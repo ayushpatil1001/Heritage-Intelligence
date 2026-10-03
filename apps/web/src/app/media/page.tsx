@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Listen to authenticated historic radio broadcasts and speeches by Dr. B. R. Ambedkar with real-time synchronized multilingual transcripts and chapter markers.",
   alternates: {
-    canonical: "https://ambedkarverse.in/media",
+    canonical: "https://heritage-intelligence-drab.vercel.app/media",
   },
   openGraph: {
     title: "Historic Audio & Media Archive | AmbedkarVerse",
     description:
       "Listen to authenticated historic radio broadcasts and speeches by Dr. B. R. Ambedkar with real-time synchronized multilingual transcripts.",
-    url: "https://ambedkarverse.in/media",
+    url: "https://heritage-intelligence-drab.vercel.app/media",
     images: [
       {
         url: "/og-image.png",

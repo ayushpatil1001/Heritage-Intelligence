@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://ambedkarverse.in";
+  const baseUrl = "https://heritage-intelligence-drab.vercel.app";
   const now = new Date();
 
   // Primary static routes

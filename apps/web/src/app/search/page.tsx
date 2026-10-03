@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Search authenticated writings, speeches, and parliamentary debates of Dr. B. R. Ambedkar across English, Hindi, and Marathi with voice search and hybrid retrieval.",
   alternates: {
-    canonical: "https://ambedkarverse.in/search",
+    canonical: "https://heritage-intelligence-drab.vercel.app/search",
   },
   openGraph: {
     title: "Cross-Lingual Archival Search | AmbedkarVerse",
     description:
       "Search authenticated writings, speeches, and parliamentary debates of Dr. B. R. Ambedkar across English, Hindi, and Marathi.",
-    url: "https://ambedkarverse.in/search",
+    url: "https://heritage-intelligence-drab.vercel.app/search",
     images: [
       {
         url: "/og-image.png",

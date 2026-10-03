@@ -19,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://ambedkarverse.in/sitemap.xml",
-    host: "https://ambedkarverse.in",
+    sitemap: "https://heritage-intelligence-drab.vercel.app/sitemap.xml",
+    host: "https://heritage-intelligence-drab.vercel.app",
   };
 }

@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Interactive cartographic journey tracing Dr. B. R. Ambedkar's life across India, London, New York, and Germany—from Mhow to Mahad, Deekshabhoomi, and Parliament House.",
   alternates: {
-    canonical: "https://ambedkarverse.in/map",
+    canonical: "https://heritage-intelligence-drab.vercel.app/map",
   },
   openGraph: {
     title: "Geospatial Heritage Map | AmbedkarVerse",
     description:
       "Interactive cartographic journey tracing Dr. B. R. Ambedkar's life across India, London, New York, and Germany.",
-    url: "https://ambedkarverse.in/map",
+    url: "https://heritage-intelligence-drab.vercel.app/map",
     images: [
       {
         url: "/og-image.png",

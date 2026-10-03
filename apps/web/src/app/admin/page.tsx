@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Institutional digitization, OCR verification, Dublin Core metadata management, and kiosk telemetry monitoring dashboard for Dr. B. R. Ambedkar Digital Heritage Archive.",
   alternates: {
-    canonical: "https://ambedkarverse.in/admin",
+    canonical: "https://heritage-intelligence-drab.vercel.app/admin",
   },
   openGraph: {
     title: "Archivist Console & Digitization Pipeline | AmbedkarVerse",
     description:
       "Institutional digitization, OCR verification, and metadata management console.",
-    url: "https://ambedkarverse.in/admin",
+    url: "https://heritage-intelligence-drab.vercel.app/admin",
     images: [
       {
         url: "/og-image.png",

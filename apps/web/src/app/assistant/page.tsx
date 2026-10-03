@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   description:
     "Ask questions grounded strictly in Dr. B. R. Ambedkar Writings and Speeches (BAWS Vol. 1–22) and Constituent Assembly Debates. Zero hallucination guarantee with exact volume, page, and paragraph citations.",
   alternates: {
-    canonical: "https://ambedkarverse.in/assistant",
+    canonical: "https://heritage-intelligence-drab.vercel.app/assistant",
   },
   openGraph: {
     title: "Grounded AI Research Assistant | AmbedkarVerse",
     description:
       "Scholarly questions answered strictly from authenticated primary sources with exact citations and deep links.",
-    url: "https://ambedkarverse.in/assistant",
+    url: "https://heritage-intelligence-drab.vercel.app/assistant",
     images: [
       {
         url: "/og-image.png",

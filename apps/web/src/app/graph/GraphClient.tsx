@@ -78,7 +78,7 @@ export default function GraphClient() {
 
   // Fetch live graph from FastAPI backend if available
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/v1/graph")
+    fetch("/api/v1/graph")
       .then((res) => {
         if (!res.ok) throw new Error("Backend offline");
         return res.json();
