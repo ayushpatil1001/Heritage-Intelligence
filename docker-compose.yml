@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: ambedkarverse_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - AI_MODE=${AI_MODE:-mock}
+    depends_on:
+      - api
+    networks:
+      - ambedkarverse_net
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: ambedkarverse_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-ambedkarverse}:${POSTGRES_PASSWORD:-ambedkarverse_secure_pass_2026}@db:5432/${POSTGRES_DB:-ambedkarverse_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin_secure_pass}
+      - MINIO_BUCKET=${MINIO_BUCKET:-ambedkarverse-archive}
+      - AI_SERVICE_URL=http://ai-service:8001
+      - AI_MODE=${AI_MODE:-mock}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - JWT_SECRET=${JWT_SECRET:-ambedkarverse_jwt_super_secret_key_sih2026_change_in_production}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    networks:
+      - ambedkarverse_net
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: apps/ai-service/Dockerfile
+    container_name: ambedkarverse_ai_service
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - AI_MODE=${AI_MODE:-mock}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    networks:
+      - ambedkarverse_net
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/worker/Dockerfile
+    container_name: ambedkarverse_worker
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-ambedkarverse}:${POSTGRES_PASSWORD:-ambedkarverse_secure_pass_2026}@db:5432/${POSTGRES_DB:-ambedkarverse_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-minioadmin_secure_pass}
+      - MINIO_BUCKET=${MINIO_BUCKET:-ambedkarverse-archive}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+    networks:
+      - ambedkarverse_net
+
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: ambedkarverse_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ambedkarverse}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ambedkarverse_secure_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-ambedkarverse_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ambedkarverse} -d ${POSTGRES_DB:-ambedkarverse_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ambedkarverse_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ambedkarverse_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ambedkarverse_net
+
+  minio:
+    image: minio/minio:RELEASE.2024-01-18T22-51-28Z
+    container_name: ambedkarverse_minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin_secure_pass}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - ambedkarverse_net
+
+networks:
+  ambedkarverse_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

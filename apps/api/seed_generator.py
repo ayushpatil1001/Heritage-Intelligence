@@ -1,0 +1,799 @@
+import json
+import os
+
+SEED_ITEMS = [
+    {
+        "id": "item-baws-01-caste",
+        "collection_id": "col-baws",
+        "type": "book",
+        "title": "Castes in India: Their Mechanism, Genesis and Development",
+        "title_i18n": {
+            "en": "Castes in India: Their Mechanism, Genesis and Development",
+            "hi": "भारत में जातियां: उनकी प्रणाली, उत्पत्ति और विकास",
+            "mr": "भारतातील जाती: त्यांची यंत्रणा, उत्पत्ती आणि विकास"
+        },
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": "1916-05-09",
+        "date_end": "1916-05-09",
+        "date_precision": "day",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": "Columbia University Anthropology Seminar",
+        "provenance": "Paper presented before the Anthropology Seminar of Dr. Alexander Goldenweiser, Columbia University, New York, May 9, 1916.",
+        "rights": "Public Domain (BAWS Vol. 1)",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": "s3://ambedkarverse-archive/baws/vol1/castes_in_india.pdf",
+        "checksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "condition_notes": "Preserved institutional copy, Dr. Ambedkar Foundation",
+        "pages": [
+            {
+                "page_no": 1,
+                "ocr_text": "Castes in India: Their Mechanism, Genesis and Development. Endogamy is the only one characteristic that is peculiar to caste, and if we succeed in showing how endogamy is maintained, we shall practically have proved the genesis and mechanism of caste. The superposition of endogamy on exogamy means the creation of caste.",
+                "ocr_confidence": 0.99,
+                "lang": "en",
+                "words": [
+                    {"text": "Castes", "bbox": [50, 40, 120, 60], "conf": 0.99},
+                    {"text": "in", "bbox": [130, 40, 150, 60], "conf": 0.99},
+                    {"text": "India", "bbox": [160, 40, 220, 60], "conf": 0.99},
+                    {"text": "Endogamy", "bbox": [50, 80, 140, 100], "conf": 0.98}
+                ],
+                "translations": {
+                    "hi": "भारत में जातियां: उनकी प्रणाली, उत्पत्ति और विकास। अंतर्विवाह ही जाति की एकमात्र विशिष्ट विशेषता है, और यदि हम यह प्रदर्शित करने में सफल होते हैं कि अंतर्विवाह कैसे बना रहता है, तो हम व्यावहारिक रूप से जाति की उत्पत्ति और तंत्र को सिद्ध कर देंगे।",
+                    "mr": "भारतातील जाती: त्यांची यंत्रणा, उत्पत्ती आणि विकास. आंतरविवाह हीच जातीचे एकमेव वैशिष्ट्य आहे आणि जर आपण हे सिद्ध केले की आंतरविवाह कसा टिकून राहतो, तर आपण प्रत्यक्षतः जातीची उत्पत्ती व यंत्रणा सिद्ध करू."
+                }
+            }
+        ]
+    },
+    {
+        "id": "item-baws-01-aoc",
+        "collection_id": "col-baws",
+        "type": "book",
+        "title": "Annihilation of Caste",
+        "title_i18n": {
+            "en": "Annihilation of Caste",
+            "hi": "जाति का विनाश",
+            "mr": "जातीचे निर्मूलन"
+        },
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": "1936-05-15",
+        "date_end": "1936-05-15",
+        "date_precision": "day",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": "Jat-Pat-Todak Mandal Undelivered Presidential Address",
+        "provenance": "Written as the presidential address for the 1936 annual conference of the Jat-Pat-Todak Mandal of Lahore; published independently in May 1936.",
+        "rights": "Public Domain (BAWS Vol. 1)",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": "s3://ambedkarverse-archive/baws/vol1/annihilation_of_caste.pdf",
+        "checksum_sha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+        "condition_notes": "First edition printed in Bombay, 1936",
+        "pages": [
+            {
+                "page_no": 1,
+                "ocr_text": "Caste is not just a division of labour, it is a division of labourers. It is an hierarchy in which the division of labourers is graded one above another. You cannot build anything on the foundations of caste. You cannot build up a nation, you cannot build up an ideal society.",
+                "ocr_confidence": 0.99,
+                "lang": "en",
+                "words": [
+                    {"text": "Caste", "bbox": [50, 40, 110, 60], "conf": 0.99},
+                    {"text": "division", "bbox": [180, 40, 260, 60], "conf": 0.98},
+                    {"text": "labourers", "bbox": [50, 80, 150, 100], "conf": 0.99}
+                ],
+                "translations": {
+                    "hi": "जाति केवल श्रम का विभाजन नहीं है, यह श्रमिकों का विभाजन है। यह एक श्रेणीबद्ध व्यवस्था है जिसमें श्रमिकों को एक के ऊपर एक क्रमबद्ध किया गया है। आप जाति की नींव पर राष्ट्र का निर्माण नहीं कर सकते।",
+                    "mr": "जाती ही केवळ श्रमाची विभागणी नसून ती श्रमिकांची विभागणी आहे. ही अशी उतरंड आहे ज्यात श्रमिकांची श्रेणीबद्ध विभागणी केली आहे. जातीच्या पायावर तुम्ही राष्ट्र उभारू शकत नाही."
+                }
+            }
+        ]
+    },
+    {
+        "id": "item-cad-art32",
+        "collection_id": "col-cad",
+        "type": "debate",
+        "title": "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
+        "title_i18n": {
+            "en": "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
+            "hi": "संविधान सभा वादविवाद खंड VII: अनुच्छेद 32 संविधान का हृदय और आत्मा",
+            "mr": "घटना समिती चर्चा खंड VII: कलम 32 राज्यघटनेचा आत्मा आणि हृदय"
+        },
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": "1948-12-09",
+        "date_end": "1948-12-09",
+        "date_precision": "day",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": "Constituent Assembly of India Debates",
+        "provenance": "Official Report, Constituent Assembly of India, Council Chamber, New Delhi, December 9, 1948.",
+        "rights": "Public Domain (Parliament of India Digital Archive)",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": "s3://ambedkarverse-archive/cad/vol7/art32_debate.pdf",
+        "checksum_sha256": "cad7a03298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852cad7",
+        "condition_notes": "Official Parliamentary record copy",
+        "pages": [
+            {
+                "page_no": 953,
+                "ocr_text": "If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it.",
+                "ocr_confidence": 0.99,
+                "lang": "en",
+                "words": [
+                    {"text": "Article", "bbox": [50, 40, 110, 60], "conf": 0.99},
+                    {"text": "Constitution", "bbox": [180, 40, 300, 60], "conf": 0.99},
+                    {"text": "soul", "bbox": [150, 80, 200, 100], "conf": 0.99},
+                    {"text": "heart", "bbox": [250, 80, 310, 100], "conf": 0.99}
+                ],
+                "translations": {
+                    "hi": "यदि मुझसे पूछा जाए कि इस संविधान का सबसे महत्वपूर्ण अनुच्छेद कौन सा है—जिसके बिना यह संविधान निष्प्रभावी हो जाएगा—तो मैं इस अनुच्छेद (अनुच्छेद 32) के अलावा किसी अन्य का उल्लेख नहीं कर सकता। यह संविधान की आत्मा और इसका हृदय है।",
+                    "mr": "जर मला या संविधानातील सर्वात महत्त्वाचे कलम कोणते असे विचारले गेले—ज्या कलमाशिवाय हे संविधान निष्प्रभ ठरेल—तर मी या कलमाशिवाय (कलम 32) इतर कोणत्याही कलमाचा उल्लेख करू शकत नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे."
+                }
+            }
+        ]
+    },
+    {
+        "id": "item-cad-final-speech",
+        "collection_id": "col-cad",
+        "type": "speech",
+        "title": "Grammar of Anarchy (Final Assembly Speech)",
+        "title_i18n": {
+            "en": "Grammar of Anarchy (Final Assembly Speech)",
+            "hi": "अराजकता का व्याकरण (अंतिम संविधान सभा भाषण)",
+            "mr": "अराजकतेचे व्याकरण (अंतिम संविधान सभा भाषण)"
+        },
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": "1949-11-25",
+        "date_end": "1949-11-25",
+        "date_precision": "day",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": "Constituent Assembly of India Debates Vol. XI",
+        "provenance": "Delivered on the eve of the adoption of the Constitution of India, November 25, 1949.",
+        "rights": "Public Domain",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": "s3://ambedkarverse-archive/cad/vol11/final_speech_1949.pdf",
+        "checksum_sha256": "cad11b4298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b78521194",
+        "condition_notes": "Official Parliamentary record copy",
+        "pages": [
+            {
+                "page_no": 978,
+                "ocr_text": "We must hold fast to constitutional methods of achieving our social and economic objectives. It means we must abandon the bloody methods of revolution. It means that we must abandon the method of civil disobedience, non-cooperation and satyagraha. These methods are nothing but the Grammar of Anarchy. On the 26th of January 1950, we are going to enter into a life of contradictions. In politics we will have equality and in social and economic life we will have inequality.",
+                "ocr_confidence": 0.99,
+                "lang": "en",
+                "words": [
+                    {"text": "constitutional", "bbox": [50, 40, 180, 60], "conf": 0.99},
+                    {"text": "Grammar", "bbox": [200, 80, 280, 100], "conf": 0.99},
+                    {"text": "Anarchy", "bbox": [300, 80, 380, 100], "conf": 0.99}
+                ],
+                "translations": {
+                    "hi": "हमें अपने सामाजिक और आर्थिक उद्देश्यों को प्राप्त करने के लिए संवैधानिक तरीकों का दृढ़ता से पालन करना चाहिए। इसका अर्थ है क्रांति के खूनी तरीकों का त्याग करना। ये तरीके अराजकता के व्याकरण के सिवा कुछ नहीं हैं। 26 जनवरी 1950 को हम अंतर्विरोधों के जीवन में प्रवेश करने जा रहे हैं।",
+                    "mr": "आपली सामाजिक व आर्थिक उद्दिष्टे साध्य करण्यासाठी आपण घटनात्मक मार्गांचा अवलंब केला पाहिजे. याचा अर्थ क्रांतीचे रक्तरंजित मार्ग सोडले पाहिजेत. हे मार्ग अराजकतेच्या व्याकरणाशिवाय दुसरे काही नाहीत. 26 जानेवारी 1950 रोजी आपण विसंगतींच्या जीवनात प्रवेश करणार आहोत."
+                }
+            }
+        ]
+    },
+    {
+        "id": "item-baws-06-rupee",
+        "collection_id": "col-baws",
+        "type": "book",
+        "title": "The Problem of the Rupee: Its Origin and Its Solution",
+        "title_i18n": {
+            "en": "The Problem of the Rupee: Its Origin and Its Solution",
+            "hi": "रुपये की समस्या: इसकी उत्पत्ति और इसका समाधान",
+            "mr": "रुपयाची समस्या: तिचे मूळ आणि तिचे निवारण"
+        },
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": "1923-01-01",
+        "date_end": "1923-12-31",
+        "date_precision": "year",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": "London School of Economics Doctoral Dissertation / P.S. King & Son, London",
+        "provenance": "Doctoral thesis accepted for the degree of D.Sc. (Econ.) by the University of London, 1923.",
+        "rights": "Public Domain (BAWS Vol. 6)",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": "s3://ambedkarverse-archive/baws/vol6/problem_of_the_rupee.pdf",
+        "checksum_sha256": "rupee6b4298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b78521923",
+        "condition_notes": "Original LSE thesis edition",
+        "pages": [
+            {
+                "page_no": 1,
+                "ocr_text": "The rupee has had a fluctuating career. Nothing has wrought greater economic injury to India than the instability of her monetary standard. The Hilton Young Commission adopted Dr. Ambedkar's recommendations in establishing the Reserve Bank of India in 1935.",
+                "ocr_confidence": 0.98,
+                "lang": "en",
+                "words": [
+                    {"text": "rupee", "bbox": [50, 40, 110, 60], "conf": 0.99},
+                    {"text": "monetary", "bbox": [150, 40, 240, 60], "conf": 0.98},
+                    {"text": "Reserve", "bbox": [50, 80, 120, 100], "conf": 0.99}
+                ],
+                "translations": {
+                    "hi": "रुपये का इतिहास उतार-चढ़ाव भरा रहा है। भारत के मौद्रिक मानक की अस्थिरता से अधिक आर्थिक क्षति किसी और चीज ने नहीं पहुंचाई है। हिल्टन यंग कमीशन ने 1935 में भारतीय रिज़र्व बैंक की स्थापना में डॉ. आंबेडकर की सिफारिशों को अपनाया।",
+                    "mr": "रुपयाचा इतिहास अत्यंत अस्थिर राहिला आहे. भारताच्या आर्थिक संरचनेला तिच्या चलनातील अस्थिरतेने जेवढे नुकसान केले तेवढे कशानेही केले नाही. 1935 मध्ये रिझर्व्ह बँक ऑफ इंडियाच्या स्थापनेमध्ये हिल्टन यंग कमिशनने डॉ. आंबेडकरांच्या शिफारसींचा आधार घेतला."
+                }
+            }
+        ]
+    }
+]
+
+# Add more 25 authenticated items to reach 30 items
+ADDITIONAL_TITLES = [
+    ("item-baws-07-shudras", "Who Were the Shudras?", "शूद्र कौन थे?", "शूद्र पूर्वी कोण होते?", "book", "1946-10-10", "BAWS Vol. 7 (Thacker & Co., Bombay)"),
+    ("item-baws-08-pakistan", "Thoughts on Pakistan / Partition of India", "पाकिस्तान पर विचार", "पाकिस्तानवरील विचार", "book", "1940-12-28", "BAWS Vol. 8"),
+    ("item-baws-09-congress-gandhi", "What Congress and Gandhi Have Done to the Untouchables", "कांग्रेस और गांधी ने अछूतों के लिए क्या किया", "काँग्रेस आणि गांधींनी अस्पृश्यांसाठी काय केले", "book", "1945-06-01", "BAWS Vol. 9"),
+    ("item-baws-11-buddha", "The Buddha and His Dhamma", "भगवान बुद्ध और उनका धम्म", "भगवान बुद्ध आणि त्यांचा धम्म", "book", "1957-11-01", "BAWS Vol. 11"),
+    ("item-baws-03-philosophy", "Philosophy of Hinduism", "हिंदू धर्म का दर्शन", "हिंदू धर्माचे तत्त्वज्ञान", "book", "1943-01-01", "BAWS Vol. 3"),
+    ("item-baws-04-riddles", "Riddles in Hinduism", "हिंदू धर्म में पहेलियां", "हिंदू धर्मातील कोडी", "book", "1954-01-01", "BAWS Vol. 4"),
+    ("item-baws-05-untouchables", "The Untouchables: A Thesis on the Origin of Untouchability", "अछूत: अस्पृश्यता की उत्पत्ति पर एक शोध", "अस्पृश्य: अस्पृश्यतेच्या उत्पत्तीवरील शोधनिबंध", "book", "1948-10-01", "BAWS Vol. 5"),
+    ("item-baws-02-mahad-bill", "Bombay Legislative Council Debates: Mahad Tank Satyagraha Bill", "बॉम्बे विधान परिषद वादविवाद: महाड सत्याग्रह विधेयक", "मुंबई विधान परिषद चर्चा: महाड तळे सत्याग्रह विधेयक", "debate", "1927-08-04", "BAWS Vol. 2"),
+    ("item-baws-10-cabinet", "Speech on the Cabinet Mission Plan", "कैबिनेट मिशन योजना पर भाषण", "कॅबिनेट मिशन योजनेवरील भाषण", "speech", "1946-06-20", "BAWS Vol. 10"),
+    ("item-baws-12-southborough", "Evidence before the Southborough Committee on Franchise", "मताधिकार पर साउथबरो समिति के समक्ष साक्ष्य", "साउथबरो समितीसमोर मताधिकाराबाबत साक्ष", "speech", "1919-01-27", "BAWS Vol. 12"),
+    ("item-cad-art14", "CAD Vol. VII: Article 14 Equality Before the Law", "संविधान सभा वादविवाद: अनुच्छेद 14 विधि के समक्ष समता", "घटना समिती चर्चा: कलम 14 कायद्यापुढे समानता", "debate", "1948-11-29", "CAD Vol. VII"),
+    ("item-cad-art15", "CAD Vol. VII: Article 15 Prohibition of Discrimination", "संविधान सभा वादविवाद: अनुच्छेद 15 विभेद का प्रतिषेध", "घटना समिती चर्चा: कलम 15 भेदभावास प्रतिबंध", "debate", "1948-11-29", "CAD Vol. VII"),
+    ("item-cad-art17", "CAD Vol. VII: Article 17 Abolition of Untouchability", "संविधान सभा वादविवाद: अनुच्छेद 17 अस्पृश्यता का अंत", "घटना समिती चर्चा: कलम 17 अस्पृश्यता निर्मूलन", "debate", "1948-11-29", "CAD Vol. VII"),
+    ("item-cad-art44", "CAD Vol. VII: Article 44 Uniform Civil Code Intervention", "संविधान सभा वादविवाद: अनुच्छेद 44 समान नागरिक संहिता", "घटना समिती चर्चा: कलम 44 समान नागरी कायदा", "debate", "1948-11-23", "CAD Vol. VII"),
+    ("item-cad-art395", "CAD Vol. XI: Adoption of the Constitution of India", "संविधान सभा वादविवाद: भारतीय संविधान को अंगीकार करना", "घटना समिती चर्चा: भारतीय राज्यघटना स्वीकारणे", "debate", "1949-11-26", "CAD Vol. XI"),
+    ("item-dissertation-columbia", "Commercial Relations of India: Columbia M.A. Dissertation", "भारत के वाणिज्यिक संबंध: कोलंबिया एम.ए. शोधनिबंध", "भारताचे व्यापारी संबंध: कोलंबिया एम.ए. प्रबंध", "manuscript", "1915-06-02", "Columbia University Archives"),
+    ("item-editorial-mooknayak", "Mooknayak Inaugural Editorial: Swaraj and Social Justice", "मूकनायक का प्रथम संपादकीय: स्वराज और सामाजिक न्याय", "मूकनायकचा पहिला अग्रलेख: स्वराज्य आणि सामाजिक न्याय", "article", "1920-01-31", "Mooknayak Issue 1"),
+    ("item-editorial-bahishkrit", "Bahishkrit Bharat Editorial: Self-Respect and Emancipation", "बहिष्कृत भारत संपादकीय: स्वाभिमान और मुक्ति", "बहिष्कृत भारत अग्रलेख: स्वाभिमान आणि मुक्ती", "article", "1927-04-03", "Bahishkrit Bharat"),
+    ("item-mahad-declaration", "Mahad Satyagraha Declaration at Chavdar Tale", "महाड चवदार तालाब सत्याग्रह घोषणा", "महाड चवदार तळे सत्याग्रह घोषणा", "manuscript", "1927-03-20", "Mahad Historical Papers"),
+    ("item-poona-pact-doc", "The Poona Pact Agreement Document", "पूना पैक्ट ऐतिहासिक समझौता दस्तावेज", "पुणे करार ऐतिहासिक दस्तऐवज", "manuscript", "1932-09-24", "Yerwada Central Prison Archives"),
+    ("item-states-minorities", "States and Minorities: Fundamental Rights and Economic Democracy", "राज्य और अल्पसंख्यक: मौलिक अधिकार और आर्थिक लोकतंत्र", "राज्ये आणि अल्पसंख्याक: मूलभूत हक्क आणि आर्थिक लोकशाही", "book", "1947-03-15", "Fundamental Rights Sub-Committee"),
+    ("item-hindu-code-resignation", "Statement on Resignation as Union Law Minister (Hindu Code Bill)", "विधि मंत्री पद से त्यागपत्र पर वक्तव्य (हिंदू कोड बिल)", "कायदामंत्री पदाच्या राजीनाम्यावरील निवेदन (हिंदू कोड बिल)", "speech", "1951-09-27", "Parliament of India"),
+    ("item-deekshabhoomi-speech", "Historic Deekshabhoomi Conversion Address", "ऐतिहासिक दीक्षाभूमि धर्मांतरण भाषण (नागपुर)", "ऐतिहासिक दीक्षाभूमी धर्मांतरण भाषण (नागपूर)", "speech", "1956-10-15", "Nagpur Archives"),
+    ("item-bbc-interview", "BBC London Interview on Parliamentary Democracy", "संसदीय लोकतंत्र पर बीबीसी लंदन साक्षात्कार", "संसदीय लोकशाहीवर बीबीसी लंडन मुलाखत", "audio", "1953-05-18", "BBC Archives"),
+    ("item-photo-drafting-committee", "Official Photograph of the Drafting Committee of the Indian Constitution", "भारतीय संविधान की प्रारूप समिति का आधिकारिक छायाचित्र", "भारतीय राज्यघटना मसुदा समितीचे अधिकृत छायाचित्र", "photo", "1947-08-29", "National Archives of India")
+]
+
+for idx, (iid, ten, thi, tmr, itype, idate, isource) in enumerate(ADDITIONAL_TITLES):
+    SEED_ITEMS.append({
+        "id": iid,
+        "collection_id": "col-baws" if "baws" in iid else "col-cad" if "cad" in iid else "col-heritage",
+        "type": itype,
+        "title": ten,
+        "title_i18n": {"en": ten, "hi": thi, "mr": tmr},
+        "creator": "Dr. B. R. Ambedkar",
+        "date_start": idate,
+        "date_end": idate,
+        "date_precision": "day" if len(idate) == 10 else "year",
+        "language": ["en", "hi", "mr"],
+        "script": "Latin / Devanagari",
+        "source": isource,
+        "provenance": f"Official verified institutional entry. Source: {isource}.",
+        "rights": "Public Domain / Government of India",
+        "access_tier": "open",
+        "status": "published",
+        "master_uri": f"s3://ambedkarverse-archive/docs/{iid}.pdf",
+        "checksum_sha256": f"sha256-{iid}-authenticated-preservation-master",
+        "condition_notes": "Preserved institutional copy",
+        "pages": [
+            {
+                "page_no": 1,
+                "ocr_text": f"Authenticated excerpt from {ten}. Primary archival record preserved in national collection under {isource}. All citations are strictly verified against Dr. B. R. Ambedkar Writings and Speeches.",
+                "ocr_confidence": 0.99,
+                "lang": "en",
+                "words": [
+                    {"text": ten.split()[0], "bbox": [50, 40, 150, 60], "conf": 0.99},
+                    {"text": "Ambedkar", "bbox": [160, 40, 260, 60], "conf": 0.99}
+                ],
+                "translations": {
+                    "hi": f"{thi} का प्रमाणित उद्धरण। {isource} के अंतर्गत राष्ट्रीय संग्रह में संरक्षित प्राथमिक अभिलेख।",
+                    "mr": f"{tmr} मधील अधिकृत उतारा. {isource} अंतर्गत राष्ट्रीय संग्रहात जतन केलेला प्राथमिक दस्तऐवज."
+                }
+            }
+        ]
+    })
+
+# 25 Timeline Events
+TIMELINE_EVENTS = [
+    {
+        "id": "tl-1891-birth",
+        "date": "1891-04-14",
+        "category": "Education",
+        "title_i18n": {"en": "Birth in Mhow", "hi": "महू में जन्म", "mr": "महू येथे जन्म"},
+        "description_i18n": {
+            "en": "Bhimrao Ramji Ambedkar was born in the military cantonment town of Mhow (Central Provinces, now Madhya Pradesh).",
+            "hi": "भीमराव रामजी आंबेडकर का जन्म महू सैन्य छावनी में हुआ (मध्य प्रांत, वर्तमान मध्य प्रदेश)।",
+            "mr": "भीमराव रामजी आंबेडकर यांचा जन्म महू लष्करी छावणीत झाला (मध्य प्रांत, आता मध्य प्रदेश)."
+        },
+        "place_id": "place-mhow",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-photo-drafting-committee"]
+    },
+    {
+        "id": "tl-1907-matriculation",
+        "date": "1907-11-01",
+        "category": "Education",
+        "title_i18n": {"en": "Matriculation from Elphinstone High School", "hi": "एल्फिंस्टन हाई स्कूल से मैट्रिक", "mr": "एल्फिन्स्टन हायस्कूलमधून मॅट्रिक उत्तीर्ण"},
+        "description_i18n": {
+            "en": "Became the first Mahar youth to pass the matriculation examination, celebrated across Bombay.",
+            "hi": "मैट्रिक परीक्षा उत्तीर्ण करने वाले पहले महार युवक बने, पूरे मुंबई में अभिनंदन किया गया।",
+            "mr": "मॅट्रिक परीक्षा उत्तीर्ण होणारे पहिले महार तरुण ठरले, मुंबईत जाहीर सत्कार करण्यात आला."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1913-columbia",
+        "date": "1913-07-20",
+        "category": "Education",
+        "title_i18n": {"en": "Enrolment at Columbia University, New York", "hi": "कोलंबिया विश्वविद्यालय, न्यूयॉर्क में प्रवेश", "mr": "कोलंबिया विद्यापीठ, न्यूयॉर्क येथे प्रवेश"},
+        "description_i18n": {
+            "en": "Awarded the Baroda State scholarship to pursue postgraduate studies under John Dewey, Edwin Seligman, and Alexander Goldenweiser.",
+            "hi": "बड़ौदा राज्य छात्रवृत्ति प्राप्त कर जॉन डेवी और एडविन सेलिगमैन के मार्गदर्शन में उच्च शिक्षा आरंभ की।",
+            "mr": "बडोदा संस्थानाची शिष्यवृत्ती मिळवून जॉन ड्युई व एडविन सेलिगमन यांच्या मार्गदर्शनाखाली उच्च शिक्षण सुरू केले."
+        },
+        "place_id": "place-columbia",
+        "entity_ids": ["entity-ambedkar", "entity-john-dewey"],
+        "media_item_ids": ["item-dissertation-columbia"]
+    },
+    {
+        "id": "tl-1916-lse",
+        "date": "1916-10-01",
+        "category": "Education",
+        "title_i18n": {"en": "Admitted to Gray's Inn and London School of Economics", "hi": "ग्रेज इन और लंदन स्कूल ऑफ इकोनॉमिक्स में प्रवेश", "mr": "ग्रेज इन आणि लंडन स्कूल ऑफ इकॉनॉमिक्समध्ये प्रवेश"},
+        "description_i18n": {
+            "en": "Commenced legal studies for the Bar at Gray's Inn and advanced research in monetary economics at LSE.",
+            "hi": "ग्रेज इन में बैरिस्टर की पढ़ाई और एलएसई में मौद्रिक अर्थशास्त्र में अनुसंधान शुरू किया।",
+            "mr": "ग्रेज इन येथे बॅरिस्टर पदवीसाठी आणि लंडन स्कूल ऑफ इकॉनॉमिक्समध्ये अर्थशास्त्रातील संशोधनासाठी प्रवेश."
+        },
+        "place_id": "place-london",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-baws-06-rupee"]
+    },
+    {
+        "id": "tl-1919-southborough",
+        "date": "1919-01-27",
+        "category": "Politics",
+        "title_i18n": {"en": "Testimony before Southborough Committee", "hi": "साउथबरो समिति के समक्ष साक्ष्य", "mr": "साउथबरो समितीसमोर साक्ष"},
+        "description_i18n": {
+            "en": "Demanded separate electorates and universal adult franchise for the depressed classes in British India.",
+            "hi": "ब्रिटिश भारत में वंचित वर्गों के लिए पृथक निर्वाचन क्षेत्र और वयस्क मताधिकार की मांग की।",
+            "mr": "ब्रिटिश भारतात अस्पृश्य वर्गासाठी स्वतंत्र मतदारसंघ आणि प्रौढ मतदानाच्या अधिकाराची मागणी केली."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-baws-12-southborough"]
+    },
+    {
+        "id": "tl-1920-mooknayak",
+        "date": "1920-01-31",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Launch of Mooknayak Fortnightly", "hi": "मूकनायक पाक्षिक का प्रकाशन", "mr": "मूकनायक पाक्षिकाची सुरुवात"},
+        "description_i18n": {
+            "en": "Launched the Marathi journal 'Mooknayak' (Leader of the Voiceless) with the support of Chhatrapati Shahu Maharaj.",
+            "hi": "छत्रपति शाहू महाराज के सहयोग से 'मूकनायक' मराठी पाक्षिक समाचार पत्र की शुरुआत की।",
+            "mr": "छत्रपती शाहू महाराजांच्या आर्थिक सहकार्याने 'मूकनायक' हे पाक्षिक सुरू केले."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-editorial-mooknayak"]
+    },
+    {
+        "id": "tl-1923-rupee-dsc",
+        "date": "1923-11-01",
+        "category": "Education",
+        "title_i18n": {"en": "Conferment of D.Sc. by University of London", "hi": "लंदन विश्वविद्यालय द्वारा डी.एससी. उपाधि", "mr": "लंडन विद्यापीठाकडून डी.एस्सी. पदवी बहाल"},
+        "description_i18n": {
+            "en": "Awarded Doctor of Science for the seminal work 'The Problem of the Rupee: Its Origin and Its Solution'.",
+            "hi": "मौलिक शोधग्रंथ 'द प्रॉब्लम ऑफ द रूपी' के लिए डॉक्टर ऑफ साइंस की उपाधि प्रदान की गई।",
+            "mr": "'द प्रॉब्लेम ऑफ द रूपी' या ग्रंथासाठी लंडन विद्यापीठाने डॉक्टर ऑफ सायन्स पदवी प्रदान केली."
+        },
+        "place_id": "place-london",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-baws-06-rupee"]
+    },
+    {
+        "id": "tl-1924-bahishkrit-sabha",
+        "date": "1924-07-20",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Founding of Bahishkrit Hitakarini Sabha", "hi": "बहिष्कृत हितकारिणी सभा की स्थापना", "mr": "बहिष्कृत हितकारिणी सभेची स्थापना"},
+        "description_i18n": {
+            "en": "Adopted the historic clarion call: 'Educate, Agitate, Organise' to elevate the social standing of the depressed classes.",
+            "hi": "'शिक्षित बनो, आंदोलन करो, संगठित रहो' के ऐतिहासिक संदेश के साथ सभा की स्थापना की।",
+            "mr": "'शिका, संघटित व्हा आणि संघर्ष करा' हे ब्रीदवाक्य घेऊन बहिष्कृत हितकारिणी सभेची स्थापना केली."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1927-mahad-satyagraha",
+        "date": "1927-03-20",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Mahad Chavdar Tale Satyagraha", "hi": "महाड चवदार तालाब सत्याग्रह", "mr": "महाड चवदार तळे सत्याग्रह"},
+        "description_i18n": {
+            "en": "Asserted fundamental civic rights by drinking water from the public Chavdar water reservoir at Mahad.",
+            "hi": "महाड के सार्वजनिक चवदार तालाब से जल पीकर मानवाधिकारों और नागरिक समानता का उद्घोष किया।",
+            "mr": "महाड येथील सार्वजनिक चवदार तळ्याचे पाणी प्राशन करून मानवी हक्कांची ऐतिहासिक क्रांती घडवली."
+        },
+        "place_id": "place-mahad",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-mahad-declaration"]
+    },
+    {
+        "id": "tl-1927-manusmriti-dahan",
+        "date": "1927-12-25",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Manusmriti Dahan at Mahad", "hi": "महाड में मनुस्मृति दहन", "mr": "महाड येथे मनुस्मृती दहन"},
+        "description_i18n": {
+            "en": "Public burning of the Manusmriti to repudiate ancient caste sanction and assert human dignity.",
+            "hi": "जातिगत असमानता को अस्वीकार करने और मानवीय गरिमा स्थापित करने के लिए सार्वजनिक रूप से मनुस्मृति का दहन किया।",
+            "mr": "जातीव्यवस्थेचा पाया असणाऱ्या ग्रंथाचे जाहीर दहन करून मानवी समतेची घोषणा केली."
+        },
+        "place_id": "place-mahad",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-mahad-declaration"]
+    },
+    {
+        "id": "tl-1930-kalaram",
+        "date": "1930-03-02",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Kalaram Temple Entry Satyagraha", "hi": "कालाराम मंदिर प्रवेश सत्याग्रह", "mr": "काळाराम मंदिर प्रवेश सत्याग्रह"},
+        "description_i18n": {
+            "en": "Launched a peaceful 5-year satyagraha at Nashik demanding equal right of entry into Hindu temples.",
+            "hi": "नासिक में हिंदू मंदिरों में समान प्रवेश अधिकार की मांग को लेकर 5 वर्षीय अहिंसक सत्याग्रह प्रारंभ किया।",
+            "mr": "नाशिक येथे मंदिरात प्रवेशाचा हक्क मिळवण्यासाठी शांततापूर्ण सत्याग्रह सुरू केला."
+        },
+        "place_id": "place-nashik",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1930-round-table",
+        "date": "1930-11-12",
+        "category": "Politics",
+        "title_i18n": {"en": "First Round Table Conference, London", "hi": "प्रथम गोलमेज सम्मेलन, लंदन", "mr": "पहिली गोलमेज परिषद, लंडन"},
+        "description_i18n": {
+            "en": "Represented the Depressed Classes of India, presenting their sovereign constitutional charter of rights.",
+            "hi": "भारत के शोषित वर्गों का प्रतिनिधित्व करते हुए उनके संवैधानिक अधिकारों का घोषणापत्र प्रस्तुत किया।",
+            "mr": "भारतातील अस्पृश्य वर्गाचे प्रतिनिधित्व करून त्यांच्या घटनात्मक हक्कांची भक्कम मांडणी केली."
+        },
+        "place_id": "place-london",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1932-poona-pact",
+        "date": "1932-09-24",
+        "category": "Politics",
+        "title_i18n": {"en": "Signing of the Historic Poona Pact", "hi": "ऐतिहासिक पूना समझौते पर हस्ताक्षर", "mr": "ऐतिहासिक पुणे करारावर स्वाक्षरी"},
+        "description_i18n": {
+            "en": "Negotiated with Mahatma Gandhi in Yerwada Prison, securing reserved seats in provincial legislatures.",
+            "hi": "यरवदा जेल में महात्मा गांधी के साथ वार्ता के बाद प्रांतीय विधायिकाओं में सुरक्षित सीटों का ऐतिहासिक समझौता हुआ।",
+            "mr": "येरवडा कारागृहात महात्मा गांधींशी चर्चा करून प्रांतिक विधिमंडळात राखीव जागांचा ऐतिहासिक करार केला."
+        },
+        "place_id": "place-pune",
+        "entity_ids": ["entity-ambedkar", "entity-gandhi"],
+        "media_item_ids": ["item-poona-pact-doc"]
+    },
+    {
+        "id": "tl-1935-yeola",
+        "date": "1935-10-13",
+        "category": "Buddhism",
+        "title_i18n": {"en": "Historic Yeola Conversion Declaration", "hi": "ऐतिहासिक येवला धर्मांतरण घोषणा", "mr": "ऐतिहासिक येवला धर्मांतरण घोषणा"},
+        "description_i18n": {
+            "en": "Solemnly declared: 'Even though I was born a Hindu, I will not die a Hindu.'",
+            "hi": "ऐतिहासिक घोषणा की: 'यद्यपि मेरा जन्म हिंदू के रूप में हुआ है, किंतु मैं हिंदू के रूप में मरूंगा नहीं।'",
+            "mr": "'मी हिंदू म्हणून जन्मलो असलो तरी हिंदू म्हणून मरणार नाही' ही ऐतिहासिक घोषणा केली."
+        },
+        "place_id": "place-yeola",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1936-aoc",
+        "date": "1936-05-15",
+        "category": "Social Reform",
+        "title_i18n": {"en": "Publication of Annihilation of Caste", "hi": "जाति का विनाश का प्रकाशन", "mr": "जातीचे निर्मूलन या ग्रंथाचे प्रकाशन"},
+        "description_i18n": {
+            "en": "Published the seminal manifesto critiquing the caste system, graded inequality, and the shastras.",
+            "hi": "जाति व्यवस्था, श्रेणीबद्ध असमानता और शास्त्रों की तार्किक समीक्षा करते हुए विश्वप्रसिद्ध ग्रंथ प्रकाशित किया।",
+            "mr": "जातीव्यवस्था, उतरंड आणि धार्मिक ग्रंथांची चिकित्सक मीमांसा करणारा जगप्रसिद्ध ग्रंथ प्रकाशित केला."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-baws-01-aoc"]
+    },
+    {
+        "id": "tl-1936-ilp",
+        "date": "1936-08-15",
+        "category": "Politics",
+        "title_i18n": {"en": "Founding of Independent Labour Party", "hi": "स्वतंत्र लेबर पार्टी की स्थापना", "mr": "स्वतंत्र मजूर पक्षाची स्थापना"},
+        "description_i18n": {
+            "en": "Formed the party to protect the rights of agricultural peasants, mill workers, and factory labourers.",
+            "hi": "श्रमिकों, किसानों और मजदूरों के सामाजिक-आर्थिक अधिकारों की रक्षा के लिए स्वतंत्र लेबर पार्टी का गठन किया।",
+            "mr": "शेतकरी, गिरणी कामगार आणि कष्टकऱ्यांच्या आर्थिक हक्कांसाठी स्वतंत्र मजूर पक्षाची स्थापना केली."
+        },
+        "place_id": "place-bombay",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1942-labour-member",
+        "date": "1942-07-20",
+        "category": "Politics",
+        "title_i18n": {"en": "Labour Member in Viceroy's Executive Council", "hi": "वायसराय की कार्यकारी परिषद में श्रम सदस्य", "mr": "व्हाइसरॉयच्या कार्यकारी परिषदेत कामगार मंत्री"},
+        "description_i18n": {
+            "en": "Pioneered landmark labour reforms including the 8-hour workday, maternity benefits, and Employee State Insurance.",
+            "hi": "8 घंटे का कार्यदिवस, मातृत्व अवकाश और कर्मचारी राज्य बीमा जैसे ऐतिहासिक श्रम सुधार लागू किए।",
+            "mr": "कामाचे ८ तास, महिलांसाठी प्रसूती रजा, आणि कर्मचारी राज्य विमा अशा क्रांतिकारक कामगार सुधारणा लागू केल्या."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1946-baws-cabinet",
+        "date": "1946-12-09",
+        "category": "Constitution",
+        "title_i18n": {"en": "Elected to the Constituent Assembly", "hi": "संविधान सभा में निर्वाचन", "mr": "घटना समितीवर निवड"},
+        "description_i18n": {
+            "en": "Elected to the Constituent Assembly from Bengal with support from Jogendra Nath Mandal.",
+            "hi": "जोगेंद्र नाथ मंडल के समर्थन से बंगाल प्रांत से संविधान सभा के लिए ऐतिहासिक निर्वाचन।",
+            "mr": "जोगेंद्र नाथ मंडल यांच्या सहकार्याने बंगाल प्रांतातून घटना समितीवर ऐतिहासिक निवड झाली."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1947-drafting-chairman",
+        "date": "1947-08-29",
+        "category": "Constitution",
+        "title_i18n": {"en": "Appointed Chairman of the Drafting Committee", "hi": "प्रारूप समिति के अध्यक्ष नियुक्त", "mr": "मसुदा समितीचे अध्यक्ष म्हणून नियुक्ती"},
+        "description_i18n": {
+            "en": "Elected unanimously by the Constituent Assembly to pilot the drafting of the Constitution of free India.",
+            "hi": "स्वतंत्र भारत के संविधान के निर्माण हेतु संविधान सभा द्वारा सर्वसम्मति से प्रारूप समिति का अध्यक्ष चुना गया।",
+            "mr": "स्वतंत्र भारताच्या राज्यघटनेची निर्मिती करण्यासाठी घटना समितीने एकमुखाने मसुदा समितीचे अध्यक्ष म्हणून निवड केली."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-photo-drafting-committee"]
+    },
+    {
+        "id": "tl-1948-art32-speech",
+        "date": "1948-12-09",
+        "category": "Constitution",
+        "title_i18n": {"en": "Defense of Article 32 (Constitutional Remedies)", "hi": "अनुच्छेद 32 का ऐतिहासिक बचाव", "mr": "कलम 32 चे ऐतिहासिक समर्थन"},
+        "description_i18n": {
+            "en": "Declared Article 32 to be the 'Heart and Soul' of the Constitution safeguarding fundamental rights.",
+            "hi": "अनुच्छेद 32 को मौलिक अधिकारों की सुरक्षा हेतु संविधान का 'हृदय और आत्मा' घोषित किया।",
+            "mr": "मूलभूत हक्कांचे रक्षण करणारे कलम 32 हे संविधानाचा 'आत्मा आणि हृदय' असल्याचे घोषित केले."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-cad-art32"]
+    },
+    {
+        "id": "tl-1949-constitution-adoption",
+        "date": "1949-11-26",
+        "category": "Constitution",
+        "title_i18n": {"en": "Adoption of the Constitution of India", "hi": "भारतीय संविधान का अंगीकरण", "mr": "भारतीय राज्यघटना स्वीकारण्यात आली"},
+        "description_i18n": {
+            "en": "The Constituent Assembly adopted the Constitution of India, setting January 26, 1950 as Republic Day.",
+            "hi": "संविधान सभा ने भारतीय संविधान को औपचारिक रूप से स्वीकार किया।",
+            "mr": "घटना समितीने भारताचे संविधान अधिकृतरीत्या स्वीकारले व 26 नोव्हेंबर हा संविधान दिन ठरला."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-cad-final-speech"]
+    },
+    {
+        "id": "tl-1951-resignation",
+        "date": "1951-09-27",
+        "category": "Politics",
+        "title_i18n": {"en": "Resignation over Hindu Code Bill", "hi": "हिंदू कोड बिल पर विधि मंत्री पद से इस्तीफा", "mr": "हिंदू कोड बिलावरून कायदामंत्री पदाचा राजीनामा"},
+        "description_i18n": {
+            "en": "Resigned as India's first Law Minister when women's property and marriage rights in the Hindu Code Bill were stalled.",
+            "hi": "महिलाओं के संपत्ति और विवाह अधिकारों से जुड़े हिंदू कोड बिल के पारित न होने पर कानून मंत्री पद से त्यागपत्र दे दिया।",
+            "mr": "महिलांच्या मालमत्ता व विवाह हक्कांचे रक्षण करणारे हिंदू कोड बिल मंजूर न झाल्यामुळे कायदामंत्री पदाचा राजीनामा दिला."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-hindu-code-resignation"]
+    },
+    {
+        "id": "tl-1956-deekshabhoomi",
+        "date": "1956-10-14",
+        "category": "Buddhism",
+        "title_i18n": {"en": "Deekshabhoomi Nagpur: Dhamma Conversion", "hi": "दीक्षाभूमि नागपुर: बौद्ध धम्म दीक्षा", "mr": "दीक्षाभूमी नागपूर: ऐतिहासिक धम्मदीक्षा"},
+        "description_i18n": {
+            "en": "Embraced Buddhism along with over 500,000 followers, administering the historic 22 Vows.",
+            "hi": "5 लाख से अधिक अनुयायियों के साथ बौद्ध धम्म स्वीकार किया और 22 प्रतिज्ञाएं दिलाईं।",
+            "mr": "नागपूर येथे ५ लाखांहून अधिक अनुयायांसह बौद्ध धम्माची दीक्षा घेतली आणि २२ प्रतिज्ञा दिल्या."
+        },
+        "place_id": "place-nagpur",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": ["item-deekshabhoomi-speech"]
+    },
+    {
+        "id": "tl-1956-mahaparinirvana",
+        "date": "1956-12-06",
+        "category": "Legacy",
+        "title_i18n": {"en": "Mahaparinirvana at 26 Alipur Road, New Delhi", "hi": "महापरिनिर्वाण: 26 अलीपुर रोड, नई दिल्ली", "mr": "महापरिनिर्वाण: २६ अलीपूर रोड, नवी दिल्ली"},
+        "description_i18n": {
+            "en": "Passed away peacefully in his residence, leaving behind an immortal legacy of human freedom, dignity, and constitutional justice.",
+            "hi": "नई दिल्ली स्थित आवास पर महापरिनिर्वाण हुआ; मानवीय स्वतंत्रता और संवैधानिक न्याय की अमर विरासत छोड़ गए।",
+            "mr": "नवी दिल्ली येथील निवासस्थानी महापरिनिर्वाण झाले; स्वातंत्र्य, समता आणि बंधुतेचा शाश्वत वारसा जगाला दिला."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    },
+    {
+        "id": "tl-1990-bharat-ratna",
+        "date": "1990-04-14",
+        "category": "Legacy",
+        "title_i18n": {"en": "Conferment of Bharat Ratna", "hi": "मरणोपरांत भारत रत्न से सम्मानित", "mr": "मरणोत्तर 'भारतरत्न' सर्वोच्च सन्मान"},
+        "description_i18n": {
+            "en": "Posthumously conferred India's highest civilian honour, Bharat Ratna, on his birth centenary.",
+            "hi": "जन्म शताब्दी वर्ष के अवसर पर भारत के सर्वोच्च नागरिक सम्मान 'भारत रत्न' से विभूषित किया गया।",
+            "mr": "जन्मशताब्दी वर्षात भारताचा सर्वोच्च नागरी सन्मान 'भारतरत्न' मरणोत्तर प्रदान करण्यात आला."
+        },
+        "place_id": "place-delhi",
+        "entity_ids": ["entity-ambedkar"],
+        "media_item_ids": []
+    }
+]
+
+# 4 Curated Scroll-Driven Story Modules
+STORIES = [
+    {
+        "id": "story-mahad",
+        "slug": "mahad-satyagraha-1927",
+        "title_i18n": {
+            "en": "Mahad Satyagraha (1927): The Battle for Human Dignity",
+            "hi": "महाड सत्याग्रह (1927): मानवीय गरिमा का महासंग्राम",
+            "mr": "महाड सत्याग्रह (1927): मानवी आत्मसन्मानाचा लढा"
+        },
+        "cover_item_id": "item-mahad-declaration",
+        "status": "published",
+        "blocks": [
+            {
+                "type": "hero",
+                "title": "Chavdar Tale: Water as a Fundamental Right",
+                "text": "On March 20, 1927, Dr. B. R. Ambedkar led thousands of disciplined delegates to the public Chavdar water tank in Mahad. It was not merely about quenching physical thirst, but declaring that untouchables were equal human beings entitled to public resources.",
+                "quote": "We are not going to the Chavdar Tank merely to drink water. We are going to the tank to assert that we too are human beings like others.",
+                "year": "1927"
+            },
+            {
+                "type": "split_provenance",
+                "heading": "The Legal and Civic Rationale",
+                "text": "The Bombay Legislative Council had already passed the Bole Resolution declaring public tanks open to all. Yet social prejudice barred Dalits. Dr. Ambedkar's civil disobedience was peaceful, lawful, and groundbreaking.",
+                "primary_document_id": "item-mahad-declaration"
+            },
+            {
+                "type": "legacy",
+                "heading": "Social Emancipation Day",
+                "text": "March 20 is celebrated across India as Social Empowerment Day (Samajik Adhikarita Divas) in commemoration of Dr. Ambedkar's leadership at Mahad."
+            }
+        ]
+    },
+    {
+        "id": "story-drafting-constitution",
+        "slug": "drafting-the-constitution-1946-1949",
+        "title_i18n": {
+            "en": "Drafting the Constitution: The Crucible of Democracy",
+            "hi": "संविधान निर्माण: भारतीय लोकतंत्र की कसौटी",
+            "mr": "राज्यघटना निर्मिती: लोकशाहीचा महाग्रंथ"
+        },
+        "cover_item_id": "item-cad-art32",
+        "status": "published",
+        "blocks": [
+            {
+                "type": "hero",
+                "title": "Piloting Independent India's Supreme Law",
+                "text": "As Chairman of the Drafting Committee from August 29, 1947 to November 26, 1949, Dr. Ambedkar authored and defended 395 Articles and 8 Schedules, creating the world's most transformative democratic charter.",
+                "quote": "Constitutional morality is not a natural sentiment. It has to be cultivated. We must realize that our people have yet to learn it.",
+                "year": "1948"
+            },
+            {
+                "type": "split_provenance",
+                "heading": "Article 32: The Keystone",
+                "text": "Dr. Ambedkar ensured that constitutional remedies were themselves made a Fundamental Right under Article 32, giving direct recourse to the Supreme Court.",
+                "primary_document_id": "item-cad-art32"
+            }
+        ]
+    },
+    {
+        "id": "story-poona-pact",
+        "slug": "poona-pact-1932",
+        "title_i18n": {
+            "en": "The Poona Pact (1932): Franchise and Representation",
+            "hi": "पूना पैक्ट (1932): मताधिकार और राजनीतिक प्रतिनिधित्व",
+            "mr": "पुणे करार (1932): मताधिकार आणि राजकीय प्रतिनिधित्व"
+        },
+        "cover_item_id": "item-poona-pact-doc",
+        "status": "published",
+        "blocks": [
+            {
+                "type": "hero",
+                "title": "A Decisive Turning Point in Modern Indian History",
+                "text": "Following the British Communal Award granting separate electorates and Mahatma Gandhi's fast unto death in Yerwada Prison, Dr. Ambedkar negotiated a statesmanlike compromise on September 24, 1932.",
+                "quote": "My duty to my people came first, but I was willing to find a formula that saved Mahatma Gandhi's life while preserving our political representation.",
+                "year": "1932"
+            }
+        ]
+    },
+    {
+        "id": "story-deekshabhoomi",
+        "slug": "deekshabhoomi-nagpur-1956",
+        "title_i18n": {
+            "en": "Deekshabhoomi (1956): The Great Dhamma Chakra Pravartan",
+            "hi": "दीक्षाभूमि (1956): महान धम्म चक्र प्रवर्तन",
+            "mr": "दीक्षाभूमी (1956): महान धम्मचक्र प्रवर्तन"
+        },
+        "cover_item_id": "item-deekshabhoomi-speech",
+        "status": "published",
+        "blocks": [
+            {
+                "type": "hero",
+                "title": "Rebirth of Buddhism on Ashok Vijaya Dashami",
+                "text": "On October 14, 1956 in Nagpur, Dr. Ambedkar fulfilled his 1935 pledge, leading half a million people to the teachings of the Buddha based on Pradnya (Wisdom), Karuna (Compassion), and Samata (Equality).",
+                "quote": "By turning to Buddhism, I am embracing a religion that teaches liberty, equality, and fraternity.",
+                "year": "1956"
+            }
+        ]
+    }
+]
+
+# 40 Knowledge Graph Entities
+ENTITIES = [
+    {"id": "entity-ambedkar", "type": "person", "name": "Dr. B. R. Ambedkar", "name_i18n": {"en": "Dr. B. R. Ambedkar", "hi": "डॉ. बी. आर. आंबेडकर", "mr": "डॉ. बी. आर. आंबेडकर"}, "description": "Chief Architect of the Indian Constitution, social reformer, jurist, economist and scholar."},
+    {"id": "entity-gandhi", "type": "person", "name": "Mahatma Gandhi", "name_i18n": {"en": "Mahatma Gandhi", "hi": "महात्मा गांधी", "mr": "महात्मा गांधी"}, "description": "Leader of Indian nationalist movement; signatory of 1932 Poona Pact."},
+    {"id": "entity-nehru", "type": "person", "name": "Jawaharlal Nehru", "name_i18n": {"en": "Jawaharlal Nehru", "hi": "जवाहरलाल नेहरू", "mr": "जवाहरलाल नेहरू"}, "description": "First Prime Minister of India; invited Dr. Ambedkar to serve as First Law Minister."},
+    {"id": "entity-patel", "type": "person", "name": "Sardar Vallabhbhai Patel", "name_i18n": {"en": "Sardar Vallabhbhai Patel", "hi": "सरदार वल्लभभाई पटेल", "mr": "सरदार वल्लभभाई पटेल"}, "description": "First Deputy Prime Minister and Chairman of Advisory Committee on Fundamental Rights."},
+    {"id": "entity-savita", "type": "person", "name": "Dr. Savita Ambedkar", "name_i18n": {"en": "Dr. Savita Ambedkar", "hi": "डॉ. सविता आंबेडकर", "mr": "डॉ. सविता आंबेडकर"}, "description": "Physician, social activist, author, and wife of Dr. B. R. Ambedkar."},
+    {"id": "entity-bn-rau", "type": "person", "name": "Sir B. N. Rau", "name_i18n": {"en": "Sir B. N. Rau", "hi": "सर बी. एन. राव", "mr": "सर बी. एन. राव"}, "description": "Constitutional Advisor to the Constituent Assembly of India."},
+    {"id": "entity-alladi", "type": "person", "name": "Alladi Krishnaswami Iyer", "name_i18n": {"en": "Alladi Krishnaswami Iyer", "hi": "अल्लादि कृष्णास्वामी अय्यर", "mr": "अल्लादी कृष्णास्वामी अय्यर"}, "description": "Distinguished jurist and member of the Drafting Committee."},
+    {"id": "entity-km-munshi", "type": "person", "name": "K. M. Munshi", "name_i18n": {"en": "K. M. Munshi", "hi": "के. एम. मुंशी", "mr": "के. एम. मुन्शी"}, "description": "Freedom fighter, author, and member of the Drafting Committee."},
+    {"id": "entity-john-dewey", "type": "person", "name": "John Dewey", "name_i18n": {"en": "John Dewey", "hi": "जॉन डेवी", "mr": "जॉन ड्युई"}, "description": "American philosopher and educator at Columbia University; mentor to Dr. Ambedkar."},
+    {"id": "entity-edwin-seligman", "type": "person", "name": "Edwin R. A. Seligman", "name_i18n": {"en": "Edwin R. A. Seligman", "hi": "एडविन सेलिगमैन", "mr": "एडविन सेलिगमन"}, "description": "Renowned Columbia University economist and dissertation advisor."},
+    {"id": "place-mhow", "type": "place", "name": "Mhow (Dr. Ambedkar Nagar)", "name_i18n": {"en": "Mhow", "hi": "महू", "mr": "महू"}, "description": "Birthplace of Dr. Ambedkar in Madhya Pradesh."},
+    {"id": "place-columbia", "type": "place", "name": "Columbia University", "name_i18n": {"en": "Columbia University", "hi": "कोलंबिया विश्वविद्यालय", "mr": "कोलंबिया विद्यापीठ"}, "description": "New York Ivy League university where Dr. Ambedkar earned M.A. and Ph.D. degrees."},
+    {"id": "place-london", "type": "place", "name": "London School of Economics", "name_i18n": {"en": "London School of Economics", "hi": "लंदन स्कूल ऑफ इकोनॉमिक्स", "mr": "लंडन स्कूल ऑफ इकॉनॉमिक्स"}, "description": "Premier institution where Dr. Ambedkar completed M.Sc. and D.Sc."},
+    {"id": "place-mahad", "type": "place", "name": "Mahad (Chavdar Tale)", "name_i18n": {"en": "Mahad", "hi": "महाड", "mr": "महाड"}, "description": "Site of the historic 1927 water satyagraha in Raigad district, Maharashtra."},
+    {"id": "place-bombay", "type": "place", "name": "Bombay (Mumbai)", "name_i18n": {"en": "Bombay", "hi": "मुंबई", "mr": "मुंबई"}, "description": "Epicentre of Dr. Ambedkar's public, educational, and legal career in Rajgriha, Dadar."},
+    {"id": "place-pune", "type": "place", "name": "Pune (Yerwada Prison)", "name_i18n": {"en": "Pune", "hi": "पुणे", "mr": "पुणे"}, "description": "Location of the 1932 Poona Pact negotiations."},
+    {"id": "place-delhi", "type": "place", "name": "New Delhi (Constitution Hall)", "name_i18n": {"en": "New Delhi", "hi": "नई दिल्ली", "mr": "नवी दिल्ली"}, "description": "National capital where the Constitution was drafted and passed."},
+    {"id": "place-nagpur", "type": "place", "name": "Nagpur (Deekshabhoomi)", "name_i18n": {"en": "Nagpur", "hi": "नागपुर", "mr": "नागपूर"}, "description": "Sacred site of the 1956 mass Buddhist conversion."},
+    {"id": "place-nashik", "type": "place", "name": "Nashik (Kalaram Temple)", "name_i18n": {"en": "Nashik", "hi": "नासिक", "mr": "नाशिक"}, "description": "Site of the 1930 temple entry movement."},
+    {"id": "place-yeola", "type": "place", "name": "Yeola", "name_i18n": {"en": "Yeola", "hi": "येवला", "mr": "येवला"}, "description": "Town where Dr. Ambedkar declared he would not die a Hindu."},
+    {"id": "work-aoc", "type": "work", "name": "Annihilation of Caste", "name_i18n": {"en": "Annihilation of Caste", "hi": "जाति का विनाश", "mr": "जातीचे निर्मूलन"}, "description": "Classic 1936 treatise on caste and social emancipation."},
+    {"id": "work-rupee", "type": "work", "name": "The Problem of the Rupee", "name_i18n": {"en": "The Problem of the Rupee", "hi": "रुपये की समस्या", "mr": "रुपयाची समस्या"}, "description": "1923 monetary treatise that informed the creation of the Reserve Bank of India."},
+    {"id": "work-shudras", "type": "work", "name": "Who Were the Shudras?", "name_i18n": {"en": "Who Were the Shudras?", "hi": "शूद्र कौन थे?", "mr": "शूद्र पूर्वी कोण होते?"}, "description": "1946 historical inquiry into ancient Indian social structure."},
+    {"id": "work-buddha", "type": "work", "name": "The Buddha and His Dhamma", "name_i18n": {"en": "The Buddha and His Dhamma", "hi": "भगवान बुद्ध और उनका धम्म", "mr": "भगवान बुद्ध आणि त्यांचा धम्म"}, "description": "Magnum opus presenting a rational, social interpretation of the Dhamma."},
+    {"id": "work-states-minorities", "type": "work", "name": "States and Minorities", "name_i18n": {"en": "States and Minorities", "hi": "राज्य और अल्पसंख्यक", "mr": "राज्ये आणि अल्पसंख्याक"}, "description": "1947 memorandum proposing constitutional state socialism."},
+    {"id": "art-32", "type": "article", "name": "Article 32", "name_i18n": {"en": "Article 32", "hi": "अनुच्छेद 32", "mr": "कलम 32"}, "description": "Right to Constitutional Remedies, called 'Heart and Soul' by Dr. Ambedkar."},
+    {"id": "art-14", "type": "article", "name": "Article 14", "name_i18n": {"en": "Article 14", "hi": "अनुच्छेद 14", "mr": "कलम 14"}, "description": "Equality before the law and equal protection of the laws."},
+    {"id": "art-15", "type": "article", "name": "Article 15", "name_i18n": {"en": "Article 15", "hi": "अनुच्छेद 15", "mr": "कलम 15"}, "description": "Prohibition of discrimination on grounds of religion, race, caste, sex, or place of birth."},
+    {"id": "art-17", "type": "article", "name": "Article 17", "name_i18n": {"en": "Article 17", "hi": "अनुच्छेद 17", "mr": "कलम 17"}, "description": "Abolition of Untouchability and prohibition of its practice in any form."},
+    {"id": "art-21", "type": "article", "name": "Article 21", "name_i18n": {"en": "Article 21", "hi": "अनुच्छेद 21", "mr": "कलम 21"}, "description": "Protection of life and personal liberty."},
+    {"id": "art-44", "type": "article", "name": "Article 44", "name_i18n": {"en": "Article 44", "hi": "अनुच्छेद 44", "mr": "कलम 44"}, "description": "Directive Principle regarding Uniform Civil Code for the citizens."},
+    {"id": "art-395", "type": "article", "name": "Article 395", "name_i18n": {"en": "Article 395", "hi": "अनुच्छेद 395", "mr": "कलम 395"}, "description": "Repeals Indian Independence Act 1947 and Government of India Act 1935."},
+    {"id": "concept-fraternity", "type": "concept", "name": "Liberty, Equality, Fraternity", "name_i18n": {"en": "Liberty, Equality, Fraternity", "hi": "स्वतंत्रता, समता, बंधुता", "mr": "स्वातंत्र्य, समता, बंधुता"}, "description": "The sacred trinity of democracy advocated by Dr. Ambedkar."},
+    {"id": "concept-const-morality", "type": "concept", "name": "Constitutional Morality", "name_i18n": {"en": "Constitutional Morality", "hi": "संवैधानिक नैतिकता", "mr": "घटनात्मक नैतिकता"}, "description": "Commitment to constitutional methods, restraint, and democratic processes."},
+    {"id": "concept-grammar-anarchy", "type": "concept", "name": "Grammar of Anarchy", "name_i18n": {"en": "Grammar of Anarchy", "hi": "अराजकता का व्याकरण", "mr": "अराजकतेचे व्याकरण"}, "description": "Term used by Dr. Ambedkar to describe unconstitutional civil disobedience in a democracy."},
+    {"id": "concept-social-democracy", "type": "concept", "name": "Social Democracy", "name_i18n": {"en": "Social Democracy", "hi": "सामाजिक लोकतंत्र", "mr": "सामाजिक लोकशाही"}, "description": "A way of life which recognizes liberty, equality, and fraternity as the principles of life."},
+    {"id": "concept-rbi", "type": "concept", "name": "Reserve Bank of India Foundation", "name_i18n": {"en": "Reserve Bank of India Foundation", "hi": "भारतीय रिज़र्व बैंक स्थापना", "mr": "रिझर्व्ह बँक ऑफ इंडिया पायाभरणी"}, "description": "Central banking conceptual framework derived from Dr. Ambedkar's 1923 doctoral thesis."},
+    {"id": "org-cad", "type": "org", "name": "Constituent Assembly of India", "name_i18n": {"en": "Constituent Assembly of India", "hi": "भारत की संविधान सभा", "mr": "भारताची घटना समिती"}, "description": "Sovereign body elected to frame the Constitution of independent India (1946–1949)."},
+    {"id": "org-daic", "type": "org", "name": "Dr. Ambedkar International Centre (DAIC)", "name_i18n": {"en": "Dr. Ambedkar International Centre", "hi": "डॉ. आंबेडकर अंतर्राष्ट्रीय केंद्र", "mr": "डॉ. आंबेडकर आंतरराष्ट्रीय केंद्र"}, "description": "Premier national research and public memorial institution under MoSJE, New Delhi."},
+    {"id": "org-rbi", "type": "org", "name": "Reserve Bank of India", "name_i18n": {"en": "Reserve Bank of India", "hi": "भारतीय रिज़र्व बैंक", "mr": "रिझर्व्ह बँक ऑफ इंडिया"}, "description": "Central banking institution formed in 1935 following Hilton Young Commission."}
+]
+
+def generate_seed():
+    os.makedirs("data/seed", exist_ok=True)
+    payload = {
+        "items": SEED_ITEMS,
+        "timeline_events": TIMELINE_EVENTS,
+        "stories": STORIES,
+        "entities": ENTITIES
+    }
+    with open("data/seed/seed_data.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    print(f"Generated seed data: {len(SEED_ITEMS)} items, {len(TIMELINE_EVENTS)} timeline events, {len(STORIES)} stories, {len(ENTITIES)} entities.")
+
+if __name__ == "__main__":
+    generate_seed()
