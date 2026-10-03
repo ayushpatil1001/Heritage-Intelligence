@@ -5,8 +5,8 @@ import sys
 # Ensure project root is in python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from apps.api.database import engine, Base, SessionLocal
-from apps.api.models import (
+from database import engine, Base, SessionLocal
+from models import (
     Collection, Item, Page, Chunk, Summary, Translation,
     TimelineEvent, Story, Entity, EntityRelation, Kiosk
 )

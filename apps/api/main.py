@@ -11,12 +11,12 @@ from sqlalchemy import or_, and_, desc
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from apps.api.database import get_db, Base, engine
-from apps.api.models import (
+from database import get_db, Base, engine
+from models import (
     Item, Page, Chunk, Summary, Translation, TimelineEvent,
     Story, Entity, EntityRelation, Kiosk, CollectionUser, AuditLog, FixityCheck
 )
-from apps.api.schemas import (
+from schemas import (
     ItemBase, PageBase, SummaryBase, TimelineEventBase, StoryBase,
     SearchResult, ChatRequest, ChatResponse, Citation,
     QuoteVerifyRequest, QuoteVerifyResponse, HeartbeatRequest

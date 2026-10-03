@@ -1,35 +1,52 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
-    "backend": {
-      "root": "backend",
+    "api": {
+      "root": "apps/api",
       "framework": "fastapi",
       "entrypoint": "main.py"
     },
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite",
+    "ai-service": {
+      "root": "apps/ai-service",
+      "framework": "fastapi",
+      "entrypoint": "main.py"
+    },
+    "web": {
+      "root": "apps/web",
+      "framework": "nextjs",
       "bindings": [
         {
           "type": "service",
-          "service": "backend",
+          "service": "api",
           "format": "url",
-          "env": "BACKEND_URL"
+          "env": "API_URL"
+        },
+        {
+          "type": "service",
+          "service": "ai-service",
+          "format": "url",
+          "env": "AI_SERVICE_URL"
         }
       ]
     }
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/v1/ai/(.*)",
       "destination": {
-        "service": "backend"
+        "service": "ai-service"
+      }
+    },
+    {
+      "source": "/api/v1/(.*)",
+      "destination": {
+        "service": "api"
       }
     },
     {
       "source": "/(.*)",
       "destination": {
-        "service": "frontend"
+        "service": "web"
       }
     }
   ]

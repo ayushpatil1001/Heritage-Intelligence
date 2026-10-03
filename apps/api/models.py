@@ -4,7 +4,7 @@ from sqlalchemy import (
     ForeignKey, Table, JSON
 )
 from sqlalchemy.orm import relationship
-from apps.api.database import Base
+from database import Base
 
 class Collection(Base):
     __tablename__ = "collections"
