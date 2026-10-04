@@ -28,30 +28,32 @@ export function AccessibilityPanel() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="accessibility-title"
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
     >
-      <div className="bg-white rounded-3xl border-2 border-primary/20 shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border-2 border-primary/20 shadow-2xl max-w-xl w-full max-h-[92vh] flex flex-col p-5 sm:p-8 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-stone-200 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-accent">
-              <Sliders className="w-5 h-5" />
+        <div className="flex items-center justify-between border-b border-stone-200 pb-3 sm:pb-4 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center text-accent shrink-0">
+              <Sliders className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h2 id="accessibility-title" className="text-xl font-bold font-serif text-primary">
+              <h2 id="accessibility-title" className="text-lg sm:text-xl font-bold font-serif text-primary leading-tight">
                 {t.accessibility.title}
               </h2>
-              <p className="text-xs text-zinc-500">WCAG 2.2 AA & GIGW 3.0 Compliant Architecture</p>
+              <p className="text-[11px] sm:text-xs text-zinc-500">WCAG 2.2 AA & GIGW 3.0 Compliant Architecture</p>
             </div>
           </div>
           <button
             onClick={() => setIsAccessibilityOpen(false)}
-            className="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-zinc-600 cursor-pointer"
+            className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-stone-100 hover:bg-stone-200 text-zinc-600 cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        <div className="overflow-y-auto space-y-5 py-4 pr-1 -mr-1 flex-1">
 
         {/* Text Scaling */}
         <div className="space-y-2">
@@ -175,12 +177,13 @@ export function AccessibilityPanel() {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Footer */}
-        <div className="pt-3 border-t border-stone-200 flex justify-end">
+      {/* Footer */}
+      <div className="pt-3 border-t border-stone-200 flex justify-end shrink-0">
           <button
             onClick={() => setIsAccessibilityOpen(false)}
-            className="px-6 py-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md cursor-pointer transition-colors"
+            className="px-6 py-3 min-h-[44px] bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md cursor-pointer transition-colors"
           >
             {t.accessibility.close}
           </button>

@@ -35,6 +35,7 @@ export default function ReaderClient() {
   const [isPlayingTTS, setIsPlayingTTS] = useState(false);
   const [speechRate, setSpeechRate] = useState(1.0);
   const [loading, setLoading] = useState(true);
+  const [mobileView, setMobileView] = useState<"both" | "scan" | "text">("text");
 
   // Fetch Item & Page Data
   useEffect(() => {
@@ -82,8 +83,8 @@ export default function ReaderClient() {
         .catch(() => {
           setTranslationText(
             language === "hi"
-              ? "à¤¯à¤¦à¤¿ à¤®à¥à¤à¤¸à¥‡ à¤ªà¥‚à¤›à¤¾ à¤œà¤¾à¤ à¤•à¤¿ à¤‡à¤¸ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨ à¤•à¤¾ à¤¸à¤¬à¤¸à¥‡ à¤®à¤¹à¤¤à¥à¤µà¤ªà¥‚à¤°à¥à¤£ à¤…à¤¨à¥à¤šà¥à¤›à¥‡à¤¦ à¤•à¥Œà¤¨ à¤¸à¤¾ à¤¹à¥ˆ à¤œà¤¿à¤¸à¤•à¥‡ à¤¬à¤¿à¤¨à¤¾ à¤¯à¤¹ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨ à¤¨à¤¿à¤·à¥à¤ªà¥à¤°à¤­à¤¾à¤µà¥€ à¤¹à¥‹ à¤œà¤¾à¤à¤—à¤¾â€”à¤¤à¥‹ à¤®à¥ˆà¤‚ à¤‡à¤¸ à¤…à¤¨à¥à¤šà¥à¤›à¥‡à¤¦ (à¤…à¤¨à¥à¤šà¥à¤›à¥‡à¤¦ 32) à¤•à¥‡ à¤…à¤²à¤¾à¤µà¤¾ à¤•à¤¿à¤¸à¥€ à¤…à¤¨à¥à¤¯ à¤•à¤¾ à¤‰à¤²à¥à¤²à¥‡à¤– à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¤¾à¥¤ à¤¯à¤¹ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨ à¤•à¥€ à¤†à¤¤à¥à¤®à¤¾ à¤”à¤° à¤‡à¤¸à¤•à¤¾ à¤¹à¥ƒà¤¦à¤¯ à¤¹à¥ˆà¥¤"
-              : "à¤œà¤° à¤®à¤²à¤¾ à¤¯à¤¾ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨à¤¾à¤¤à¥€à¤² à¤¸à¤°à¥à¤µà¤¾à¤¤ à¤®à¤¹à¤¤à¥à¤¤à¥à¤µà¤¾à¤šà¥‡ à¤•à¤²à¤® à¤•à¥‹à¤£à¤¤à¥‡ à¤…à¤¸à¥‡ à¤µà¤¿à¤šà¤¾à¤°à¤²à¥‡ à¤—à¥‡à¤²à¥‡â€”à¤œà¥à¤¯à¤¾ à¤•à¤²à¤®à¤¾à¤¶à¤¿à¤µà¤¾à¤¯ à¤¹à¥‡ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨ à¤¨à¤¿à¤·à¥à¤ªà¥à¤°à¤­ à¤ à¤°à¥‡à¤²â€”à¤¤à¤° à¤®à¥€ à¤¯à¤¾ à¤•à¤²à¤®à¤¾à¤¶à¤¿à¤µà¤¾à¤¯ (à¤•à¤²à¤® 32) à¤‡à¤¤à¤° à¤•à¥‹à¤£à¤¤à¥à¤¯à¤¾à¤¹à¥€ à¤•à¤²à¤®à¤¾à¤šà¤¾ à¤‰à¤²à¥à¤²à¥‡à¤– à¤•à¤°à¥‚ à¤¶à¤•à¤¤ à¤¨à¤¾à¤¹à¥€. à¤¹à¤¾ à¤¸à¤‚à¤µà¤¿à¤§à¤¾à¤¨à¤¾à¤šà¤¾ à¤†à¤¤à¥à¤®à¤¾ à¤†à¤£à¤¿ à¤¤à¥à¤¯à¤¾à¤šà¥‡ à¤¹à¥ƒà¤¦à¤¯ à¤†à¤¹à¥‡."
+              ? "यदि मुझसे पूछा जाए कि इस संविधान का सबसे महत्वपूर्ण अनुच्छेद कौन सा है जिसके बिना यह संविधान निष्प्रभावी हो जाएगा—तो मैं इस अनुच्छेद (अनुच्छेद 32) के अलावा किसी अन्य का उल्लेख नहीं कर सकता। यह संविधान की आत्मा और इसका हृदय है।"
+              : "जर मला या संविधानातील सर्वात महत्त्वाचे कलम कोणते असे विचारले गेले—ज्या कलमाशिवाय हे संविधान निष्प्रभ ठरेल—तर मी या कलमाशिवाय (कलम 32) इतर कोणत्याही कलमाचा उल्लेख करू शकत नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे."
           );
         });
     }
@@ -198,12 +199,12 @@ export default function ReaderClient() {
       </div>
 
       {/* Reader Secondary Toolbar: Zoom, Translation, TTS, Page Nav */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white px-5 py-3 rounded-2xl border border-stone-300 shadow-sm text-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white px-4 sm:px-5 py-3 rounded-2xl border border-stone-300 shadow-sm text-xs">
         {/* Left: Translation & TTS */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setShowTranslation(!showTranslation)}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold transition-all cursor-pointer border ${
+            className={`flex items-center gap-1.5 px-3 py-2 min-h-[40px] rounded-xl font-bold transition-all cursor-pointer border ${
               showTranslation
                 ? "bg-primary text-white border-primary shadow-xs"
                 : "bg-stone-100 hover:bg-stone-200 text-zinc-700 border-stone-300"
@@ -212,25 +213,25 @@ export default function ReaderClient() {
             <Globe className="w-4 h-4 text-accent" />
             <span>
               {showTranslation
-                ? "View Original"
+                ? (language === "mr" ? "मूळ दस्तऐवज पहा" : language === "hi" ? "मूल दस्तावेज देखें" : "View Original")
                 : language === "hi"
-                ? "à¤¹à¤¿à¤‚à¤¦à¥€ à¤…à¤¨à¥à¤µà¤¾à¤¦ à¤¦à¥‡à¤–à¥‡à¤‚"
+                ? "हिन्दी अनुवाद देखें"
                 : language === "mr"
-                ? "à¤®à¤°à¤¾à¤ à¥€ à¤­à¤¾à¤·à¤¾à¤‚à¤¤à¤° à¤ªà¤¹à¤¾"
+                ? "मराठी भाषांतर पहा"
                 : "Translate (Indic)"}
             </span>
           </button>
 
           {/* TTS Player */}
-          <div className="flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl border border-stone-300">
+          <div className="flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl border border-stone-300 min-h-[40px]">
             <button
               onClick={handleToggleTTS}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
                 isPlayingTTS ? "bg-red-600 text-white animate-pulse" : "bg-white text-zinc-800 hover:bg-stone-50"
               }`}
             >
               {isPlayingTTS ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-accent" />}
-              <span>{isPlayingTTS ? "Stop Audio" : t.reader.listenTTS}</span>
+              <span>{isPlayingTTS ? (language === "mr" ? "ऑडिओ थांबवा" : language === "hi" ? "ऑडियो रोकें" : "Stop Audio") : t.reader.listenTTS}</span>
             </button>
             <select
               value={speechRate}
@@ -246,25 +247,25 @@ export default function ReaderClient() {
         </div>
 
         {/* Right: Zoom Controls & Page Nav */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-300">
+        <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-stone-200">
+          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-300 min-h-[40px]">
             <button
               onClick={() => setZoomLevel(Math.min(150, zoomLevel + 15))}
-              className="p-1.5 rounded hover:bg-white text-zinc-700 cursor-pointer"
+              className="p-2 rounded hover:bg-white text-zinc-700 cursor-pointer"
               title={t.reader.zoomIn}
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={() => setZoomLevel(Math.max(80, zoomLevel - 15))}
-              className="p-1.5 rounded hover:bg-white text-zinc-700 cursor-pointer"
+              className="p-2 rounded hover:bg-white text-zinc-700 cursor-pointer"
               title={t.reader.zoomOut}
             >
               <ZoomOut className="w-4 h-4" />
             </button>
             <button
               onClick={() => setZoomLevel(100)}
-              className="p-1.5 rounded hover:bg-white text-zinc-700 cursor-pointer"
+              className="p-2 rounded hover:bg-white text-zinc-700 cursor-pointer"
               title={t.reader.resetZoom}
             >
               <RotateCcw className="w-4 h-4" />
@@ -280,10 +281,41 @@ export default function ReaderClient() {
         </div>
       </div>
 
+      {/* Mobile View Segmented Switcher (visible on < lg) */}
+      <div className="lg:hidden flex items-center p-1 bg-stone-100 rounded-2xl border border-stone-300 shadow-xs">
+        <button
+          type="button"
+          onClick={() => setMobileView("text")}
+          className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
+            mobileView === "text" ? "bg-primary text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"
+          }`}
+        >
+          Transcript & Translation
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileView("scan")}
+          className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
+            mobileView === "scan" ? "bg-primary text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"
+          }`}
+        >
+          Facsimile Scan
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileView("both")}
+          className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all ${
+            mobileView === "both" ? "bg-primary text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"
+          }`}
+        >
+          Split
+        </button>
+      </div>
+
       {/* Split-Screen Reader Canvas (Col 6 / Col 6) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left Column: Original Scanned Facsimile Viewer (Col 6) */}
-        <div className="lg:col-span-6 bg-white rounded-3xl border border-stone-300 p-6 sm:p-8 shadow-sm flex flex-col space-y-4 min-h-[580px]">
+        <div className={`lg:col-span-6 bg-white rounded-2xl sm:rounded-3xl border border-stone-300 p-4 sm:p-8 shadow-sm flex flex-col space-y-4 min-h-[460px] sm:min-h-[580px] ${mobileView === "text" ? "hidden lg:flex" : "flex"}`}>
           <div className="flex items-center justify-between border-b border-stone-200 pb-3 text-xs">
             <span className="font-serif font-bold text-primary flex items-center gap-1.5">
               <BookOpen className="w-4 h-4 text-accent" />
@@ -295,33 +327,33 @@ export default function ReaderClient() {
           </div>
 
           {/* Facsimile Viewport */}
-          <div className="flex-1 bg-stone-50 rounded-2xl border border-stone-300 p-6 sm:p-8 overflow-auto relative">
+          <div className="flex-1 bg-stone-50 rounded-2xl border border-stone-300 p-4 sm:p-8 overflow-auto relative">
             <div
               style={{ transform: `scale(${zoomLevel / 100})`, transformOrigin: "top left" }}
-              className="transition-transform duration-200 max-w-xl mx-auto space-y-5 font-serif text-sm leading-relaxed text-zinc-900 bg-[#FFFDF9] p-8 rounded-xl shadow-md border border-stone-300/80"
+              className="transition-transform duration-200 max-w-xl mx-auto space-y-5 font-serif text-sm leading-relaxed text-zinc-900 bg-[#FFFDF9] p-6 sm:p-8 rounded-xl shadow-md border border-stone-300/80"
             >
               <div className="border-b-2 border-stone-800 pb-3 text-center space-y-1">
                 <span className="text-xs uppercase tracking-widest font-bold block text-zinc-700">
                   CONSTITUENT ASSEMBLY OF INDIA DEBATES
                 </span>
                 <span className="text-[11px] text-zinc-500 font-mono block">
-                  Official Report â€¢ Volume VII â€¢ Council Chamber, New Delhi
+                  Official Report • Volume VII • Council Chamber, New Delhi
                 </span>
               </div>
 
-              <div className="text-justify indent-6 space-y-4">
+              <div className="text-justify indent-4 sm:indent-6 space-y-4">
                 <p className="font-semibold text-zinc-950">
                   The Honourable Dr. B. R. Ambedkar (Bombay: General):
                 </p>
                 <div
-                  className={`p-4 rounded-xl transition-all ${
+                  className={`p-3 sm:p-4 rounded-xl transition-all ${
                     highlightWord
                       ? "bg-amber-100 border-2 border-accent text-zinc-950 font-medium"
                       : "bg-blue-50/60 border-l-4 border-primary"
                   }`}
                 >
                   <p className="italic text-zinc-900 leading-relaxed font-serif text-sm sm:text-base">
-                    "{currentPage?.ocr_text}"
+                    &ldquo;{currentPage?.ocr_text}&rdquo;
                   </p>
                 </div>
                 <p className="text-xs text-zinc-600">
@@ -333,11 +365,11 @@ export default function ReaderClient() {
         </div>
 
         {/* Right Column: Verified Transcribed OCR & Translation (Col 6) */}
-        <div className="lg:col-span-6 bg-white rounded-3xl border border-stone-300 p-6 sm:p-8 shadow-sm flex flex-col space-y-5 min-h-[580px]">
+        <div className={`lg:col-span-6 bg-white rounded-2xl sm:rounded-3xl border border-stone-300 p-4 sm:p-8 shadow-sm flex flex-col space-y-5 min-h-[460px] sm:min-h-[580px] ${mobileView === "scan" ? "hidden lg:flex" : "flex"}`}>
           <div className="flex items-center justify-between border-b border-stone-200 pb-3 text-xs">
             <span className="font-serif font-bold text-primary flex items-center gap-1.5">
               <FileText className="w-4 h-4 text-accent" />
-              <span>{showTranslation ? "Indic Neural Translation" : t.reader.ocrText}</span>
+              <span>{showTranslation ? (language === "mr" ? "मराठी भाषांतर" : language === "hi" ? "हिन्दी अनुवाद" : "Indic Neural Translation") : t.reader.ocrText}</span>
             </span>
             <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-200 text-[11px] flex items-center gap-1">
               <Check className="w-3 h-3 text-emerald-600" />
@@ -346,21 +378,21 @@ export default function ReaderClient() {
           </div>
 
           {/* Transcript Content */}
-          <div className="flex-1 space-y-4 font-sans text-sm sm:text-[15px] leading-relaxed text-zinc-800 bg-stone-50/60 p-6 rounded-2xl border border-stone-300">
+          <div className="flex-1 space-y-4 font-sans text-sm sm:text-[15px] leading-relaxed text-zinc-800 bg-stone-50/60 p-4 sm:p-6 rounded-2xl border border-stone-300">
             {showTranslation ? (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="text-xs font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
                   <Globe className="w-3.5 h-3.5" />
                   <span>
                     {language === "hi"
-                      ? "à¤¹à¤¿à¤‚à¤¦à¥€ à¤…à¤¨à¥à¤µà¤¾à¤¦ (à¤­à¤¾à¤·à¤¿à¤£à¥€ / IndicTrans2)"
+                      ? "हिन्दी अनुवाद (भाषिणी / IndicTrans2)"
                       : language === "mr"
-                      ? "à¤®à¤°à¤¾à¤ à¥€ à¤­à¤¾à¤·à¤¾à¤‚à¤¤à¤° (à¤­à¤¾à¤·à¤¿à¤£à¥€ / IndicTrans2)"
+                      ? "मराठी भाषांतर (भाषिणी / IndicTrans2)"
                       : "English Standard Translation"}
                   </span>
                 </div>
                 <blockquote className="p-4 rounded-xl bg-white border-l-4 border-primary text-zinc-900 leading-relaxed font-serif text-sm sm:text-base shadow-xs">
-                  {translationText || "à¤…à¤¨à¥à¤µà¤¾à¤¦ à¤²à¥‹à¤¡ à¤¹à¥‹à¤¤ à¤†à¤¹à¥‡..."}
+                  {translationText || "अनुवाद लोड होत आहे..."}
                 </blockquote>
                 <p className="text-xs text-zinc-500">
                   Translation verified by DAIC Archival Council for grammatical and conceptual fidelity.
@@ -375,8 +407,8 @@ export default function ReaderClient() {
                   {currentPage?.ocr_text}
                 </div>
                 <div className="pt-2 text-xs text-zinc-500 space-y-1">
-                  <p>â€¢ Verified against original master in Parliament Digital Archive.</p>
-                  <p>â€¢ Cleaned by human-in-the-loop review queue to eliminate ligature errors.</p>
+                  <p>• Verified against original master in Parliament Digital Archive.</p>
+                  <p>• Cleaned by human-in-the-loop review queue to eliminate ligature errors.</p>
                 </div>
               </div>
             )}
@@ -406,15 +438,15 @@ export default function ReaderClient() {
             <div className="flex items-center justify-between border-b border-stone-200 pb-3">
               <div className="flex items-center gap-2 text-purple-900">
                 <Sparkles className="w-5 h-5 text-purple-600" />
-                <h2 className="text-lg font-serif font-bold">One-Tap AI Executive Summary</h2>
+                <h2 className="text-lg font-serif font-bold">{t.reader.aiSummary}</h2>
               </div>
               <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800">
-                Labelled AI-Generated
+                {language === "mr" ? "एआय-निर्मित" : language === "hi" ? "एआई-जनित" : "Labelled AI-Generated"}
               </span>
             </div>
 
             <p className="text-sm text-zinc-800 leading-relaxed font-sans">
-              {summaryData?.text || "Generating verified archival summary..."}
+              {summaryData?.text || (language === "mr" ? "अभिलेख सारांश तयार होत आहे..." : language === "hi" ? "अभिलेखागार सारांश तैयार हो रहा है..." : "Generating verified archival summary...")}
             </p>
 
             <div className="text-xs text-zinc-500 pt-2 border-t border-stone-100 flex justify-between items-center">
@@ -439,7 +471,7 @@ export default function ReaderClient() {
         >
           <div className="bg-white rounded-3xl border-2 border-primary/20 shadow-2xl max-w-xl w-full p-6 sm:p-8 space-y-5">
             <div className="flex items-center justify-between border-b border-stone-200 pb-3">
-              <h2 className="text-lg font-serif font-bold text-primary">Export Archival Citation</h2>
+              <h2 className="text-lg font-serif font-bold text-primary">{t.reader.exportCitation}</h2>
               <div className="flex gap-1">
                 {(["APA", "MLA", "Chicago"] as const).map((fmt) => (
                   <button
@@ -486,7 +518,7 @@ export default function ReaderClient() {
                 className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-primary font-bold text-xs shadow-sm transition-colors cursor-pointer"
               >
                 {copiedCitation ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                <span>{copiedCitation ? "Copied to Clipboard!" : "Copy Citation"}</span>
+                <span>{copiedCitation ? t.reader.citationCopied : (language === "mr" ? "संदर्भ कॉपी करा" : language === "hi" ? "उद्धरण कॉपी करें" : "Copy Citation")}</span>
               </button>
 
               <button

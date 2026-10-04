@@ -110,60 +110,40 @@ export default function HomeClient() {
   });
 
   const sampleQueries = [
-    { label: "Article 32: Heart & Soul", query: "Article 32 Heart and Soul" },
-    { label: "Reserve Bank Foundation", query: "Problem of the Rupee RBI" },
-    { label: "Mahad Satyagraha 20/03/1927", query: "Mahad Chavdar Tale Satyagraha" },
-    { label: "Grammar of Anarchy 25/11/1949", query: "Grammar of Anarchy Nov 25 1949" }
+    {
+      label: language === "mr" ? "कलम ३२: आत्मा व हृदय" : language === "hi" ? "अनुच्छेद 32: आत्मा और हृदय" : "Article 32: Heart & Soul",
+      query: "Article 32 Heart and Soul",
+    },
+    {
+      label: language === "mr" ? "रिझर्व्ह बँक स्थापना" : language === "hi" ? "रिज़र्व बैंक की स्थापना" : "Reserve Bank Foundation",
+      query: "Problem of the Rupee RBI",
+    },
+    {
+      label: language === "mr" ? "महाड सत्याग्रह २०/०३/१९२७" : language === "hi" ? "महाड सत्याग्रह 20/03/1927" : "Mahad Satyagraha 20/03/1927",
+      query: "Mahad Chavdar Tale Satyagraha",
+    },
+    {
+      label: language === "mr" ? "अराजकतेचे व्याकरण २५/११/१९४९" : language === "hi" ? "अराजकता का व्याकरण 25/11/1949" : "Grammar of Anarchy 25/11/1949",
+      query: "Grammar of Anarchy Nov 25 1949",
+    },
   ];
 
   const categories = [
-    { id: "all", label: t.search.allTypes, icon: null },
-    { id: "book", label: "Books (BAWS)", icon: BookOpen },
-    { id: "debate", label: "CAD Debates", icon: FileText },
-    { id: "speech", label: "Speeches", icon: Mic },
-    { id: "manuscript", label: "Manuscripts", icon: Landmark },
-    { id: "photo", label: "Photographs", icon: Image },
-    { id: "audio", label: "Audio / Video", icon: Volume2 },
+    { id: "all", label: t.home.catalogCategories.all, icon: null },
+    { id: "book", label: t.home.catalogCategories.book, icon: BookOpen },
+    { id: "debate", label: t.home.catalogCategories.debate, icon: FileText },
+    { id: "speech", label: t.home.catalogCategories.speech, icon: Mic },
+    { id: "manuscript", label: t.home.catalogCategories.manuscript, icon: Landmark },
+    { id: "photo", label: t.home.catalogCategories.photo, icon: Image },
+    { id: "audio", label: t.home.catalogCategories.audio, icon: Volume2 },
   ];
 
-  // Key historic epochs with strict DD/MM/YYYY formatting
-  const historicEpochs = [
-    {
-      symbol: TorchOfLiberty,
-      title: "The Mahad Satyagraha",
-      subtitle: "Water as a Universal Human Right",
-      date: "20/03/1927",
-      href: "/stories/mahad-satyagraha",
-      badge: "Civil Dignity",
-      description: "Historic assertion of civic equality at Chavdar Lake, declaring public watering places open to all humanity."
-    },
-    {
-      symbol: ConstitutionalQuill,
-      title: "Architect of the Constitution",
-      subtitle: "Constitution Hall Debates & Final Warning",
-      date: "25/11/1949",
-      href: "/reader/item-cad-final-speech",
-      badge: "Constitutional Law",
-      description: "Dr. Ambedkar's monumental defense of Liberty, Equality, Fraternity and his prophetic warning against political Bhakti."
-    },
-    {
-      symbol: ScalesOfJustice,
-      title: "Heart and Soul of the Constitution",
-      subtitle: "Constituent Assembly Article 32 Intervention",
-      date: "09/12/1948",
-      href: "/reader/item-cad-art32",
-      badge: "Fundamental Rights",
-      description: "The pivotal declaration that the right to constitutional remedies is the very core without which the charter is a nullity."
-    },
-    {
-      symbol: BodhiLeaf,
-      title: "Deekshabhoomi & Navayana",
-      subtitle: "Spiritual Renaissance & Social Morality",
-      date: "14/10/1956",
-      href: "/stories/conversion-at-nagpur",
-      badge: "Social Liberation",
-      description: "Historic religious transformation in Nagpur, rejecting ritual hierarchy in favor of an egalitarian moral philosophy."
-    }
+  const epochIcons = [TorchOfLiberty, ConstitutionalQuill, ScalesOfJustice, BodhiLeaf];
+  const epochHrefs = [
+    "/stories/mahad-satyagraha",
+    "/reader/item-cad-final-speech",
+    "/reader/item-cad-art32",
+    "/stories/conversion-at-nagpur",
   ];
 
   return (
@@ -173,17 +153,17 @@ export default function HomeClient() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-wrap items-center justify-between gap-3 p-3.5 px-6 rounded-2xl bg-white border border-stone-300 shadow-xs text-xs"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 px-4 sm:px-6 rounded-2xl bg-white border border-stone-300 shadow-xs text-xs"
       >
         <div className="flex items-center gap-3">
-          <LionCapital size={26} className="text-primary" />
+          <LionCapital size={26} className="text-primary shrink-0" />
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
             <span className="font-bold text-primary tracking-wide">
-              Government of India • Ministry of Social Justice & Empowerment
+              {t.home.govBar}
             </span>
             <span className="hidden sm:inline text-zinc-300">|</span>
             <span className="text-zinc-600 font-medium">
-              Dr. Ambedkar International Centre (DAIC)
+              {t.home.institution}
             </span>
           </div>
         </div>
@@ -191,9 +171,9 @@ export default function HomeClient() {
         <div className="flex items-center gap-4 text-[11px] text-zinc-500 font-mono">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Archive Ingest: 03/10/2026</span>
+            <span>{t.home.ingestStatus}</span>
           </span>
-          <span className="hidden md:inline">ISO/IEC 27001 • STQC Audited</span>
+          <span className="hidden md:inline">{t.home.securityAudit}</span>
         </div>
       </motion.div>
 
@@ -202,20 +182,20 @@ export default function HomeClient() {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-br from-[#0B2A6F] via-[#0D3485] to-[#081E50] rounded-3xl p-8 sm:p-14 text-white shadow-xl border-2 border-accent/30 relative overflow-hidden"
+        className="bg-gradient-to-br from-[#0B2A6F] via-[#0D3485] to-[#081E50] rounded-2xl sm:rounded-3xl p-6 sm:p-14 text-white shadow-xl border-2 border-accent/30 relative overflow-hidden"
       >
-        <div className="max-w-3xl space-y-5 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-accent/40 text-accent text-xs font-bold tracking-wide uppercase shadow-xs">
-            <AshokaChakra size={16} className="text-accent" animate={true} />
-            <span>National Digital Heritage Archive • PS 26096</span>
+        <div className="max-w-3xl space-y-4 sm:space-y-5 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-accent/40 text-accent text-[11px] sm:text-xs font-bold tracking-wide uppercase shadow-xs">
+            <AshokaChakra size={16} className="text-accent shrink-0" animate={true} />
+            <span>{t.home.nationalArchiveBadge}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight leading-tight text-white drop-shadow-sm">
-            Dr. B. R. Ambedkar Digital Heritage Archive
+          <h1 className="text-2xl sm:text-5xl font-serif font-bold tracking-tight leading-tight text-white drop-shadow-sm">
+            {t.home.heroTitle}
           </h1>
 
-          <p className="text-sm sm:text-base text-zinc-200 leading-relaxed max-w-2xl font-sans">
-            Preserving 22 authenticated volumes of Dr. Ambedkar Writings & Speeches (BAWS), verbatim Constituent Assembly Debates, synchronized historic audio recordings, and museum kiosk exhibits.
+          <p className="text-xs sm:text-base text-zinc-200 leading-relaxed max-w-2xl font-sans">
+            {t.home.heroSubtitle}
           </p>
 
           {/* Search Form */}
@@ -227,13 +207,13 @@ export default function HomeClient() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.search.placeholder}
-                className="w-full h-14 pl-12 pr-32 rounded-2xl bg-white text-zinc-900 placeholder:text-zinc-400 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-accent/40 shadow-lg"
+                className="w-full h-14 pl-12 pr-28 sm:pr-32 rounded-2xl bg-white text-zinc-900 placeholder:text-zinc-400 text-base sm:text-sm font-medium focus:outline-none focus:ring-4 focus:ring-accent/40 shadow-lg"
               />
               <button
                 type="submit"
-                className="absolute right-2 h-10 px-5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+                className="absolute right-2 h-10 px-4 sm:px-5 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
               >
-                <span>Search</span>
+                <span>{t.home.searchButton}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-accent" />
               </button>
             </div>
@@ -265,12 +245,12 @@ export default function HomeClient() {
       </motion.section>
 
       {/* Live Animated Statistics Counter */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
-          { label: "BAWS Volumes", value: "22", sub: "Complete Writings & Speeches", icon: BookOpen, color: "text-primary bg-primary/10" },
-          { label: "Facsimile Scans", value: "14,200+", sub: "600 DPI Archival Pages", icon: FileText, color: "text-amber-800 bg-amber-100" },
-          { label: "Chronological Span", value: "1891–1956", sub: "Mhow to Mahaparinirvan", icon: Calendar, color: "text-emerald-800 bg-emerald-100" },
-          { label: "Grounded Citations", value: "100%", sub: "Verifiable Primary Proof", icon: ShieldCheck, color: "text-purple-800 bg-purple-100" }
+          { label: t.home.stats.bawsVolumes, value: "22", sub: t.home.stats.bawsSub, icon: BookOpen, color: "text-primary bg-primary/10" },
+          { label: t.home.stats.scans, value: "14,200+", sub: t.home.stats.scansSub, icon: FileText, color: "text-amber-800 bg-amber-100" },
+          { label: t.home.stats.span, value: "1891–1956", sub: t.home.stats.spanSub, icon: Calendar, color: "text-emerald-800 bg-emerald-100" },
+          { label: t.home.stats.citations, value: "100%", sub: t.home.stats.citationsSub, icon: ShieldCheck, color: "text-purple-800 bg-purple-100" }
         ].map((stat, idx) => {
           const Icon = stat.icon;
           return (
@@ -299,20 +279,21 @@ export default function HomeClient() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-300 pb-4">
           <div>
             <span className="text-xs font-bold text-accent uppercase tracking-widest block">
-              Curated Heritage Exhibits
+              {t.home.epochsBadge}
             </span>
             <h2 className="text-2xl font-serif font-bold text-primary">
-              Pivotal Epochs & Constitutional Architecture
+              {t.home.epochsTitle}
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-zinc-500 max-w-md sm:text-right">
-            Milestones grounded in primary documents, speeches, and legal folios.
+            {t.home.epochsSubtitle}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {historicEpochs.map((epoch, idx) => {
-            const SymbolComponent = epoch.symbol;
+          {t.home.epochs.map((epoch, idx) => {
+            const SymbolComponent = epochIcons[idx] || BodhiLeaf;
+            const href = epochHrefs[idx] || "/timeline";
             return (
               <motion.div
                 key={idx}
@@ -337,7 +318,7 @@ export default function HomeClient() {
                     <h3 className="text-lg font-serif font-bold text-primary mt-2 group-hover:text-primary-hover transition-colors">
                       {epoch.title}
                     </h3>
-                    <p className="text-xs font-medium text-accent-light text-[#8F6B1E] mt-0.5">
+                    <p className="text-xs font-medium text-[#8F6B1E] mt-0.5">
                       {epoch.subtitle}
                     </p>
                   </div>
@@ -349,10 +330,10 @@ export default function HomeClient() {
 
                 <div className="pt-3 border-t border-stone-200">
                   <Link
-                    href={epoch.href}
+                    href={href}
                     className="inline-flex items-center justify-between w-full p-2.5 rounded-xl bg-stone-50 hover:bg-primary hover:text-white text-primary text-xs font-bold transition-all group-hover:bg-primary group-hover:text-white"
                   >
-                    <span>Inspect Primary Scan</span>
+                    <span>{t.common.inspectScan}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-accent" />
                   </Link>
                 </div>
@@ -363,7 +344,7 @@ export default function HomeClient() {
       </section>
 
       {/* Surface Features Navigation */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <Link
           href="/reader/item-cad-art32"
           className="p-5 rounded-2xl bg-white border border-stone-300 shadow-sm hover:border-primary hover:shadow-md transition-all group flex flex-col justify-between"
@@ -372,9 +353,9 @@ export default function HomeClient() {
             <BookOpen className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-serif font-bold text-base text-primary mb-1">Archival Reader</h2>
+            <h2 className="font-serif font-bold text-base text-primary mb-1">{t.home.features.readerTitle}</h2>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              Split OCR transcript beside 600 DPI original facsimile scans.
+              {t.home.features.readerDesc}
             </p>
           </div>
         </Link>
@@ -387,9 +368,9 @@ export default function HomeClient() {
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif font-bold text-base text-primary mb-1">1891–1956 Timeline</h2>
+            <h2 className="font-serif font-bold text-base text-primary mb-1">{t.home.features.timelineTitle}</h2>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              25 milestones across 6 categories with dates in DD/MM/YYYY.
+              {t.home.features.timelineDesc}
             </p>
           </div>
         </Link>
@@ -402,9 +383,9 @@ export default function HomeClient() {
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif font-bold text-base text-primary mb-1">AI Assistant</h2>
+            <h2 className="font-serif font-bold text-base text-primary mb-1">{t.home.features.assistantTitle}</h2>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              Zero-hallucination RAG with mandatory document and page citations.
+              {t.home.features.assistantDesc}
             </p>
           </div>
         </Link>
@@ -417,9 +398,9 @@ export default function HomeClient() {
             <CheckCircle2 className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-serif font-bold text-base text-primary mb-1">Quote Verifier</h2>
+            <h2 className="font-serif font-bold text-base text-primary mb-1">{t.home.features.verifierTitle}</h2>
             <p className="text-xs text-zinc-500 leading-relaxed">
-              Paste attributed quotes to check authenticity against BAWS & CAD.
+              {t.home.features.verifierDesc}
             </p>
           </div>
         </Link>
@@ -430,10 +411,10 @@ export default function HomeClient() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-300 pb-4">
           <div>
             <h2 className="text-2xl font-serif font-bold text-primary">
-              Authenticated Primary Source Catalog
+              {t.home.catalogTitle}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-500">
-              30 Seeded Public-Domain Records from Dr. Ambedkar Writings & Speeches (BAWS) and Constituent Assembly Debates
+              {t.home.catalogSubtitle}
             </p>
           </div>
 
@@ -496,7 +477,7 @@ export default function HomeClient() {
                     href={`/reader/${item.id}`}
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
                   >
-                    <span>Read Folio</span>
+                    <span>{t.common.readFolio}</span>
                     <ArrowRight className="w-3.5 h-3.5 text-accent" />
                   </Link>
                 </div>

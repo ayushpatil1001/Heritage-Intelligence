@@ -7,11 +7,14 @@ import { Navigation } from "@/components/Navigation";
 import { AccessibilityPanel } from "@/components/AccessibilityPanel";
 import { KioskIdleGuard } from "@/components/KioskIdleGuard";
 import { SurfaceFloatingSwitcher } from "@/components/SurfaceFloatingSwitcher";
+import { useApp } from "@/context/AppContext";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isDisplay = pathname.startsWith("/display");
   const isKiosk = pathname.startsWith("/kiosk");
+
+  const { language, t } = useApp();
 
   // --------------------------------------------------------------------------
   // 1. DISPLAY WALL MODE (1920x1080 Ambient Museum Video Wall)
@@ -58,38 +61,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SurfaceFloatingSwitcher />
 
       {/* Institutional Sitemapped Footer with Internal Links */}
-      <footer className="w-full bg-[#0B2A6F] text-white border-t border-[#C8A24A]/30 py-12 text-xs">
+      <footer className="w-full bg-[#0B2A6F] text-white border-t border-[#C8A24A]/30 py-10 sm:py-12 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {/* Column 1: Archival Works */}
             <div>
               <h2 className="text-sm font-serif font-bold text-[#C8A24A] uppercase tracking-wider mb-3">
-                Archival Treatises
+                {t.footer.treatisesTitle}
               </h2>
-              <ul className="space-y-2 text-stone-200">
+              <ul className="space-y-1.5 sm:space-y-2 text-stone-200">
                 <li>
-                  <Link href="/reader/item-baws-01-caste" className="hover:text-[#C8A24A] transition-colors">
-                    Castes in India (1916)
+                  <Link href="/reader/item-baws-01-caste" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {language === "mr" ? "कास्ट्स इन इंडिया (१९१६)" : language === "hi" ? "कास्ट्स इन इंडिया (1916)" : "Castes in India (1916)"}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/reader/item-baws-01-aoc" className="hover:text-[#C8A24A] transition-colors">
-                    Annihilation of Caste (1936)
+                  <Link href="/reader/item-baws-01-aoc" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {language === "mr" ? "जातीचे निर्मूलन (१९३६)" : language === "hi" ? "जाति का विनाश (1936)" : "Annihilation of Caste (1936)"}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/reader/item-cad-art32" className="hover:text-[#C8A24A] transition-colors">
-                    Article 32 Debates (CAD Vol. VII)
+                  <Link href="/reader/item-cad-art32" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {language === "mr" ? "कलम ३२ संविधान सभा चर्चा" : language === "hi" ? "अनुच्छेद 32 संविधान सभा बहस" : "Article 32 Debates (CAD Vol. VII)"}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/reader/item-baws-06-rupee" className="hover:text-[#C8A24A] transition-colors">
-                    The Problem of the Rupee (1923)
+                  <Link href="/reader/item-baws-06-rupee" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {language === "mr" ? "रुपयाची समस्या (१९२३)" : language === "hi" ? "रुपये की समस्या (1923)" : "The Problem of the Rupee (1923)"}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/search" className="hover:text-[#C8A24A] transition-colors">
-                    All 30 Primary Works & Papers →
+                  <Link href="/search" className="hover:text-[#C8A24A] transition-colors py-1 inline-block font-semibold text-gold-300">
+                    {t.footer.allTreatises}
                   </Link>
                 </li>
               </ul>
@@ -98,32 +101,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {/* Column 2: Exploration & Visualizations */}
             <div>
               <h2 className="text-sm font-serif font-bold text-[#C8A24A] uppercase tracking-wider mb-3">
-                Interactive Discovery
+                {t.footer.interactiveTitle}
               </h2>
-              <ul className="space-y-2 text-stone-200">
+              <ul className="space-y-1.5 sm:space-y-2 text-stone-200">
                 <li>
-                  <Link href="/timeline" className="hover:text-[#C8A24A] transition-colors">
-                    1891–1956 Life Timeline
+                  <Link href="/timeline" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.timeline}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/map" className="hover:text-[#C8A24A] transition-colors">
-                    Geospatial Heritage Map
+                  <Link href="/map" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.map}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/graph" className="hover:text-[#C8A24A] transition-colors">
-                    Semantic Knowledge Graph
+                  <Link href="/graph" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.graph}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/stories" className="hover:text-[#C8A24A] transition-colors">
-                    Curated Exhibition Visual Essays
+                  <Link href="/stories" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.stories}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/media" className="hover:text-[#C8A24A] transition-colors">
-                    Audiovisual & WebVTT Speeches
+                  <Link href="/media" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.media}
                   </Link>
                 </li>
               </ul>
@@ -132,27 +135,27 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {/* Column 3: Verification & Tools */}
             <div>
               <h2 className="text-sm font-serif font-bold text-[#C8A24A] uppercase tracking-wider mb-3">
-                Grounded AI & Research
+                {t.footer.researchTitle}
               </h2>
-              <ul className="space-y-2 text-stone-200">
+              <ul className="space-y-1.5 sm:space-y-2 text-stone-200">
                 <li>
-                  <Link href="/assistant" className="hover:text-[#C8A24A] transition-colors">
-                    Grounded AI Research Assistant
+                  <Link href="/assistant" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.assistant}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/quotes/verify" className="hover:text-[#C8A24A] transition-colors">
-                    Quotation Provenance Verifier
+                  <Link href="/quotes/verify" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.quoteVerifier}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/collections" className="hover:text-[#C8A24A] transition-colors">
-                    Personal Collection & 7-Day QR
+                  <Link href="/collections" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.myCollection}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/admin" className="hover:text-[#C8A24A] transition-colors">
-                    Archivist Ingest & Fixity Console
+                  <Link href="/admin" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.admin}
                   </Link>
                 </li>
               </ul>
@@ -161,27 +164,27 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {/* Column 4: Museum Hardware Surfaces & Technical */}
             <div>
               <h2 className="text-sm font-serif font-bold text-[#C8A24A] uppercase tracking-wider mb-3">
-                Exhibition Surfaces & SEO
+                {t.footer.surfacesTitle}
               </h2>
-              <ul className="space-y-2 text-stone-200">
+              <ul className="space-y-1.5 sm:space-y-2 text-stone-200">
                 <li>
-                  <Link href="/kiosk" className="hover:text-[#C8A24A] transition-colors">
-                    1080×1920 Kiosk Mode
+                  <Link href="/kiosk" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.kioskMode}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/display" className="hover:text-[#C8A24A] transition-colors">
-                    1920×1080 Grand Display Wall
+                  <Link href="/display" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.nav.displayWall}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/sitemap.xml" className="hover:text-[#C8A24A] transition-colors">
-                    Sitemap XML
+                  <Link href="/sitemap.xml" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.footer.sitemap}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/robots.txt" className="hover:text-[#C8A24A] transition-colors">
-                    Robots TXT
+                  <Link href="/robots.txt" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                    {t.footer.robots}
                   </Link>
                 </li>
               </ul>
@@ -189,14 +192,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Institutional Attribution Line */}
-          <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-300">
+          <div className="pt-6 sm:pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-stone-300">
             <div>
-              <span className="font-semibold text-white">Dr. Ambedkar International Centre (DAIC)</span>
+              <span className="font-semibold text-white">{t.footer.institution}</span>
               <span className="mx-2">•</span>
-              <span>Ministry of Social Justice and Empowerment, Government of India</span>
+              <span>{t.footer.govMinistry}</span>
             </div>
             <div>
-              <span>Smart India Hackathon 2026 • Problem Statement ID 26096</span>
+              <span>{t.footer.hackathonTag}</span>
             </div>
           </div>
         </div>

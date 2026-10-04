@@ -9,7 +9,7 @@ import { STORIES_DATA } from "@/lib/storiesData";
 
 
 export default function StoriesClient() {
-  const { language } = useApp();
+  const { language, t } = useApp();
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -17,17 +17,13 @@ export default function StoriesClient() {
       <div className="mb-8 border-b border-navy-900/10 pb-6 text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold-700 bg-gold-50 px-3 py-1 rounded-full border border-gold-200 mb-3">
           <ScrollText className="w-3.5 h-3.5" />
-          <span>Curated Scroll-Driven Narratives</span>
+          <span>{t.stories.badge}</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-navy-900 leading-tight">
-          {language === "mr" ? "निवडक ऐतिहासिक कथा व आख्यान" : language === "hi" ? "संयोजित ऐतिहासिक वृत्तांत" : "Exhibition Narratives & Guided Histories"}
+          {t.stories.title}
         </h1>
         <p className="text-sm md:text-base text-navy-800/75 mt-3 leading-relaxed">
-          {language === "mr"
-            ? "डॉ. आंबेडकरांच्या जीवनातील चार युगप्रवर्तक टप्पे, मूळ दस्तऐवज आणि फॅसिमिली स्कॅन्ससह मांडलेले संवादात्मक आख्यान."
-            : language === "hi"
-            ? "डॉ. आंबेडकर के जीवन के चार महत्वपूर्ण चरण, मूल दस्तावेजों और दुर्लभ पुरालेखीय प्रतियों के साथ।"
-            : "Four immersive, scrollytelling visual essays woven from verified historical source materials, original facsimiles, and parliamentary records."}
+          {t.stories.subtitle}
         </p>
       </div>
 
@@ -54,7 +50,7 @@ export default function StoriesClient() {
                     </span>
                     <span className="flex items-center gap-1">
                       <BookOpen className="w-3.5 h-3.5" />
-                      {story.chaptersCount} Chapters
+                      {story.chaptersCount} {t.stories.chapters}
                     </span>
                   </div>
                 </div>
@@ -83,7 +79,7 @@ export default function StoriesClient() {
                   href={`/stories/${story.slug}`}
                   className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 transition-colors"
                 >
-                  <span>Experience Interactive Story</span>
+                  <span>{t.stories.experienceButton}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

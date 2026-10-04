@@ -15,22 +15,38 @@ import OnScreenKeyboard from "@/components/OnScreenKeyboard";
 const ROTATING_QUOTES = [
   {
     quote: "“Educate, Agitate, Organize. Have faith in yourselves. With justice on our side, I do not see how we can lose our battle.”",
+    quote_hi: "“शिक्षित बनो, आंदोलन करो, संगठित रहो। अपने आप में विश्वास रखो। जब न्याय हमारे पक्ष में है, तो मुझे नहीं लगता कि हम अपनी लड़ाई हार सकते हैं।”",
+    quote_mr: "“शिका, संघटित व्हा आणि संघर्ष करा. स्वतःवर विश्वास ठेवा. न्याय आपल्या बाजूने असताना आपण ही लढाई हरूच शकत नाही.”",
     context: "All-India Depressed Classes Conference, Nagpur",
+    context_hi: "अखिल भारतीय दलित वर्ग परिषद, नागपुर",
+    context_mr: "अखिल भारतीय दलित वर्ग परिषद, नागपूर",
     date: "20/07/1942",
   },
   {
     quote: "“Constitutional morality is not a natural sentiment. It has to be cultivated. We must realize that our people have yet to learn it.”",
+    quote_hi: "“संवैधानिक नैतिकता कोई प्राकृतिक भावना नहीं है। इसे विकसित करना होता है। हमें यह समझना चाहिए कि हमारे लोगों को अभी इसे सीखना बाकी है।”",
+    quote_mr: "“घटनात्मक नैतिकता ही काही नैसर्गिक भावना नव्हे; तिची जोपासना करावी लागते. आपल्या लोकांना ती अजून शिकायची आहे हे आपण लक्षात घेतले पाहिजे.”",
     context: "Constituent Assembly of India (Draft Constitution Debate)",
+    context_hi: "भारत की संविधान सभा (प्रारूप संविधान वादविवाद)",
+    context_mr: "भारतीय संविधान सभा (मसुदा राज्यघटना वादविवाद)",
     date: "04/11/1948",
   },
   {
     quote: "“I measure the progress of a community by the degree of progress which women have achieved.”",
+    quote_hi: "“मैं किसी समुदाय की प्रगति को महिलाओं द्वारा हासिल की गई प्रगति की मात्रा से मापता हूँ।”",
+    quote_mr: "“एखाद्या समाजाची प्रगती मी त्या समाजातील स्त्रियांनी केलेल्या प्रगतीवरून मोजतो.”",
     context: "Second All-India Depressed Classes Women's Conference",
+    context_hi: "द्वितीय अखिल भारतीय दलित महिला सम्मेलन",
+    context_mr: "दुसरी अखिल भारतीय दलित महिला परिषद",
     date: "20/07/1942",
   },
   {
     quote: "“Cultivation of mind should be the ultimate aim of human existence.”",
+    quote_hi: "“मन का विकास मानव अस्तित्व का अंतिम लक्ष्य होना चाहिए।”",
+    quote_mr: "“मनाचा विकास हेच मानवी अस्तित्वाचे अंतिम ध्येय असले पाहिजे.”",
     context: "Annihilation of Caste & Columbia University Lectures",
+    context_hi: "जाति का विनाश और कोलंबिया विश्वविद्यालय व्याख्यान",
+    context_mr: "जातीचे निर्मूलन आणि कोलंबिया विद्यापीठ व्याख्याने",
     date: "15/05/1936",
   },
 ];
@@ -181,7 +197,7 @@ export default function KioskClient() {
             title="Toggle High Contrast for Accessibility"
           >
             <Eye className="w-4 h-4 text-accent" />
-            <span className="hidden xs:inline">High Contrast</span>
+            <span className="hidden xs:inline">{t.kiosk.highContrast}</span>
           </button>
         </div>
       </header>
@@ -190,17 +206,17 @@ export default function KioskClient() {
       <section className="bg-white border border-stone-300 rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
         <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent bg-accent/15 px-3.5 py-1 rounded-full border border-accent/30 mb-3">
           <Sparkles className="w-3.5 h-3.5 text-accent" />
-          <span>Interactive Exhibition Mode</span>
+          <span>{t.kiosk.interactiveMode}</span>
           <span className="text-zinc-400">•</span>
           <span className="font-mono text-primary font-bold">{currentQuote.date}</span>
         </div>
 
         <blockquote className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-primary max-w-3xl mx-auto leading-relaxed">
-          {currentQuote.quote}
+          {language === "hi" ? currentQuote.quote_hi : language === "mr" ? currentQuote.quote_mr : currentQuote.quote}
         </blockquote>
 
         <p className="text-xs sm:text-sm text-[#8F6B1E] font-semibold mt-3 font-sans">
-          — {currentQuote.context}
+          — {language === "hi" ? currentQuote.context_hi : language === "mr" ? currentQuote.context_mr : currentQuote.context}
         </p>
 
         {/* Audio Narration & Slide Dots */}
@@ -211,7 +227,7 @@ export default function KioskClient() {
             title="Read quote aloud"
           >
             <Volume2 className={`w-4 h-4 ${isSpeaking ? "text-accent animate-pulse" : "text-primary"}`} />
-            <span>{isSpeaking ? "Stop Narration" : "Listen (Speech Narration)"}</span>
+            <span>{isSpeaking ? t.kiosk.stopSpeech : t.kiosk.listenSpeech}</span>
           </button>
 
           <div className="flex items-center gap-1.5">
@@ -239,7 +255,7 @@ export default function KioskClient() {
               value={searchQuery}
               onFocus={() => setShowKeyboard(true)}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Touch here to search speeches, CAD debates, or writings..."
+              placeholder={t.kiosk.touchSearchPlaceholder}
               className="w-full h-16 pl-14 pr-4 rounded-2xl bg-stone-50 border border-stone-300 text-base sm:text-lg font-medium text-zinc-900 focus:outline-none focus:border-primary focus:bg-white transition-all shadow-inner"
             />
           </div>
@@ -378,7 +394,7 @@ export default function KioskClient() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-primary font-semibold border border-stone-300 cursor-pointer"
           >
             <QrCode className="w-4 h-4 text-accent" />
-            <span>Mobile Transfer QR</span>
+            <span>{language === "mr" ? "मोबाईल ट्रान्सफर क्यूआर" : language === "hi" ? "मोबाइल ट्रांसफर क्यूआर" : "Mobile Transfer QR"}</span>
           </button>
 
           <button
@@ -390,7 +406,7 @@ export default function KioskClient() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold transition-colors cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5 text-accent" />
-            <span>Reset Kiosk Session</span>
+            <span>{t.kiosk.resetNow}</span>
           </button>
         </div>
       </div>

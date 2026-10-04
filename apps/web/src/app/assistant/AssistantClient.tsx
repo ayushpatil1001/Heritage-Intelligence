@@ -103,9 +103,9 @@ export default function AssistantClient() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-stone-300 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-stone-300 shadow-sm">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-800 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-800 shadow-xs shrink-0">
             <Sparkles className="w-6 h-6" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export default function AssistantClient() {
               </h1>
               <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Zero Hallucination</span>
+                <span>{language === "mr" ? "शून्य-भ्रम प्रमाणीकरण" : language === "hi" ? "शून्य-भ्रम प्रमाणीकरण" : "Zero Hallucination"}</span>
               </span>
             </div>
             <p className="text-xs text-zinc-500 mt-0.5">{t.assistant.subtitle}</p>
@@ -123,10 +123,10 @@ export default function AssistantClient() {
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex bg-stone-100 p-1 rounded-xl border border-stone-300 text-xs">
+        <div className="flex bg-stone-100 p-1 rounded-xl border border-stone-300 text-xs w-full sm:w-auto">
           <button
             onClick={() => setMode("scholarly")}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
               mode === "scholarly" ? "bg-primary text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"
             }`}
           >
@@ -134,7 +134,7 @@ export default function AssistantClient() {
           </button>
           <button
             onClick={() => setMode("explain_simply")}
-            className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+            className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
               mode === "explain_simply" ? "bg-primary text-white shadow-xs" : "text-zinc-600 hover:text-zinc-900"
             }`}
           >
@@ -156,12 +156,14 @@ export default function AssistantClient() {
           >
             <div className="flex items-center justify-between text-xs text-zinc-400">
               <span className="font-bold uppercase tracking-wider text-primary">
-                {m.role === "user" ? "Your Inquiry" : "Grounded Archival Assistant"}
+                {m.role === "user" 
+                  ? (language === "mr" ? "आपला प्रश्न" : language === "hi" ? "आपका प्रश्न" : "Your Inquiry") 
+                  : (language === "mr" ? "पुराभिलेख एआय सहाय्यक" : language === "hi" ? "पुरालेखीय एआई सहायक" : "Grounded Archival Assistant")}
               </span>
               {m.verified && (
                 <span className="text-emerald-700 font-semibold flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Verified Citation Active</span>
+                  <span>{language === "mr" ? "प्रमाणित संदर्भ सक्रिय" : language === "hi" ? "प्रमाणित संदर्भ सक्रिय" : "Verified Citation Active"}</span>
                 </span>
               )}
             </div>
@@ -216,7 +218,7 @@ export default function AssistantClient() {
                           href={c.deep_link}
                           className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-bold text-xs shadow-xs"
                         >
-                          <span>Open in Reader</span>
+                          <span>{t.common.readFolio}</span>
                           <ArrowRight className="w-3 h-3 text-accent" />
                         </Link>
                       </div>
@@ -230,7 +232,9 @@ export default function AssistantClient() {
 
         {isLoading && (
           <div className="bg-white rounded-2xl border border-stone-300 p-6 mr-8 animate-pulse space-y-2">
-            <span className="text-xs font-bold text-purple-700">Verifying citations in BAWS & CAD...</span>
+            <span className="text-xs font-bold text-purple-700">
+              {language === "mr" ? "बीएडब्ल्यूएस व सीएडी मध्ये संदर्भांची पडताळणी सुरू आहे..." : language === "hi" ? "बीएडब्ल्यूएस और सीएडी में संदर्भों का सत्यापन हो रहा है..." : "Verifying citations in BAWS & CAD..."}
+            </span>
             <div className="h-4 bg-stone-200 rounded w-3/4" />
             <div className="h-4 bg-stone-200 rounded w-1/2" />
           </div>
@@ -239,7 +243,9 @@ export default function AssistantClient() {
 
       {/* Suggested Inquiries */}
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className="text-zinc-500 font-medium">Sample Inquiries:</span>
+        <span className="text-zinc-500 font-medium">
+          {language === "mr" ? "नमुनेदार प्रश्न:" : language === "hi" ? "नमूना प्रश्न:" : "Sample Inquiries:"}
+        </span>
         {t.assistant.sampleQuestions.map((sq, i) => (
           <button
             key={i}
@@ -264,12 +270,12 @@ export default function AssistantClient() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={t.assistant.inputPlaceholder}
-          className="w-full h-14 pl-5 pr-32 rounded-2xl bg-white border-2 border-stone-300 text-sm font-medium text-zinc-900 focus:outline-none focus:border-primary shadow-sm"
+          className="w-full h-14 pl-4 sm:pl-5 pr-28 sm:pr-32 rounded-2xl bg-white border-2 border-stone-300 text-base sm:text-sm font-medium text-zinc-900 focus:outline-none focus:border-primary shadow-sm"
         />
         <button
           type="submit"
           disabled={isLoading || !inputValue.trim()}
-          className="absolute right-2 h-10 px-5 bg-primary hover:bg-primary-hover disabled:bg-stone-300 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+          className="absolute right-2 h-10 px-4 sm:px-5 bg-primary hover:bg-primary-hover disabled:bg-stone-300 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
         >
           <span>{t.assistant.send}</span>
           <Send className="w-3.5 h-3.5 text-accent" />

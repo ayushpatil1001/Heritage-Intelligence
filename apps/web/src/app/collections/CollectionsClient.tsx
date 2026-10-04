@@ -6,7 +6,7 @@ import { useApp } from "@/context/AppContext";
 import { Bookmark, QrCode, Printer, Trash2, BookOpen, Share2, Copy, Check, Download, ShieldCheck } from "lucide-react";
 
 export default function CollectionsClient() {
-  const { language, savedItems, removeSavedItem } = useApp();
+  const { language, savedItems, removeSavedItem, t } = useApp();
   const [tokenCopied, setTokenCopied] = useState(false);
   const [ephemeralToken] = useState(() => "tok_" + Math.random().toString(36).substring(2, 10));
 
@@ -53,17 +53,13 @@ export default function CollectionsClient() {
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-gold-600 uppercase tracking-wider">
             <Bookmark className="w-3.5 h-3.5" />
-            <span>Personal Archival Binder</span>
+            <span>{t.collections.badge}</span>
           </div>
           <h1 className="text-3xl font-serif font-bold text-navy-900 mt-1">
-            {language === "mr" ? "माझा वैयक्तिक संग्रह (My Collection)" : language === "hi" ? "मेरा व्यक्तिगत संग्रह (My Collection)" : "My Archival Collection"}
+            {t.collections.title}
           </h1>
           <p className="text-sm text-navy-800/75 mt-1">
-            {language === "mr"
-              ? "आपण जतन केलेले दस्तऐवज, संदर्भ आणि ७ दिवसांचा तात्पुरता क्यूआर (QR) कोड."
-              : language === "hi"
-              ? "आपके द्वारा सहेजे गए ऐतिहासिक दस्तावेज, उद्धरण और 7 दिवसीय मोबाइल ट्रांसफर टोकन।"
-              : "Saved treatises, citations, and ephemeral 7-day transfer token to take your research from kiosk to mobile."}
+            {t.collections.subtitle}
           </p>
         </div>
 
@@ -74,14 +70,14 @@ export default function CollectionsClient() {
             className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-navy-900/20 text-xs font-semibold text-navy-900 hover:bg-parchment-200 transition-colors shadow-sm"
           >
             <Printer className="w-4 h-4" />
-            <span>Print Bibliography</span>
+            <span>{t.collections.printBibliography}</span>
           </button>
           <button
             onClick={handleCopyToken}
             className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 transition-colors shadow-sm"
           >
             {tokenCopied ? <Check className="w-4 h-4 text-green-400" /> : <Share2 className="w-4 h-4 text-gold-400" />}
-            <span>{tokenCopied ? "Link Copied!" : "Export 7-Day Link"}</span>
+            <span>{tokenCopied ? t.collections.linkCopied : t.collections.exportToken}</span>
           </button>
         </div>
       </div>
@@ -90,8 +86,8 @@ export default function CollectionsClient() {
         {/* Saved Items List (8 cols) */}
         <div className="lg:col-span-8 space-y-4">
           <div className="flex items-center justify-between text-xs font-bold text-navy-800/60 uppercase tracking-wider mb-2">
-            <span>Saved Records ({displayItems.length})</span>
-            <span>Citations Grounded</span>
+            <span>{t.collections.savedRecords} ({displayItems.length})</span>
+            <span>{t.collections.citationsGrounded}</span>
           </div>
 
           {displayItems.map((item) => (
@@ -119,7 +115,7 @@ export default function CollectionsClient() {
                       href={`/reader/${item.id}`}
                       className="text-gold-700 font-semibold hover:underline inline-flex items-center gap-1"
                     >
-                      <span>Open Deep Zoom Reader</span>
+                      <span>{t.collections.readSource}</span>
                       <span>→</span>
                     </Link>
                   </div>
@@ -129,7 +125,7 @@ export default function CollectionsClient() {
               <button
                 onClick={() => removeSavedItem(item.id)}
                 className="p-2 text-navy-800/40 hover:text-red-600 transition-colors rounded-lg hover:bg-red-50 shrink-0"
-                title="Remove from collection"
+                title={t.collections.remove}
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -142,7 +138,7 @@ export default function CollectionsClient() {
           <div className="bg-white border border-navy-900/10 rounded-xl p-6 shadow-sm text-center">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-gold-700 uppercase tracking-wider bg-gold-50 px-3 py-1 rounded-full border border-gold-200 mb-4">
               <QrCode className="w-3.5 h-3.5" />
-              <span>Zero-Login Phone Handover</span>
+              <span>{t.collections.qrTitle}</span>
             </div>
 
             {/* QR Code SVG Representation */}
@@ -168,16 +164,16 @@ export default function CollectionsClient() {
             </div>
 
             <h2 className="text-base font-serif font-bold text-navy-900">
-              Scan with Smartphone
+              {t.collections.qrTitle}
             </h2>
             <p className="text-xs text-navy-800/70 mt-1 leading-relaxed">
-              No login or password required. This ephemeral token transfers your reading list directly to your mobile browser and remains valid for 7 days.
+              {t.collections.qrSubtitle}
             </p>
 
             <div className="mt-4 p-2 bg-parchment-200 rounded-lg text-xs font-mono text-navy-800/80 flex items-center justify-between">
               <span>Token: {ephemeralToken}</span>
               <span className="text-[10px] bg-green-200 text-green-800 px-1.5 py-0.5 rounded font-bold">
-                7 Days Active
+                {language === "mr" ? "७ दिवस सक्रिय" : language === "hi" ? "7 दिन सक्रिय" : "7 Days Active"}
               </span>
             </div>
           </div>
@@ -185,10 +181,14 @@ export default function CollectionsClient() {
           <div className="bg-parchment-100 rounded-xl p-5 border border-navy-900/10 text-xs space-y-2">
             <div className="font-bold text-navy-900 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-gold-600" />
-              <span>Privacy & Citation Guarantee</span>
+              <span>{language === "mr" ? "गोपनीयता आणि संदर्भ हमी" : language === "hi" ? "गोपनीयता और संदर्भ गारंटी" : "Privacy & Citation Guarantee"}</span>
             </div>
             <p className="text-navy-800/75 leading-relaxed">
-              Exported bibliographies strictly adhere to scholarly Chicago and APA citation styles, mapping directly to Government of Maharashtra Dr. Babasaheb Ambedkar Writings and Speeches volumes.
+              {language === "mr"
+                ? "निर्यात केलेले संदर्भ शिकागो आणि एपीए (APA) नियमांनुसार थेट महाराष्ट्र शासनाच्या डॉ. बाबासाहेब आंबेडकर ग्रंथमालेशी जोडलेले आहेत."
+                : language === "hi"
+                ? "निर्यात किए गए संदर्भ शिकागो और एपीए (APA) नियमावली के अनुसार सीधे महाराष्ट्र शासन के डॉ. बाबासाहेब आंबेडकर ग्रंथावली से संबद्ध हैं।"
+                : "Exported bibliographies strictly adhere to scholarly Chicago and APA citation styles, mapping directly to Government of Maharashtra Dr. Babasaheb Ambedkar Writings and Speeches volumes."}
             </p>
           </div>
         </div>

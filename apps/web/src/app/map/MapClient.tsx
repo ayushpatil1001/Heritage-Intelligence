@@ -173,7 +173,7 @@ const LOCATIONS: HeritageLocation[] = [
 ];
 
 export default function MapClient() {
-  const { language } = useApp();
+  const { language, t } = useApp();
   const [selectedLocation, setSelectedLocation] = useState<HeritageLocation>(LOCATIONS[4]); // Mahad default
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [mapScope, setMapScope] = useState<"india" | "global">("india");
@@ -206,14 +206,10 @@ export default function MapClient() {
             <span>Geo-Spatial Archive Explorer</span>
           </div>
           <h1 className="text-3xl font-serif font-bold text-navy-900 mt-1">
-            {language === "mr" ? "ऐतिहासिक स्थळे व भूगोलाचा नकाशा" : language === "hi" ? "ऐतिहासिक स्थल और भू-मानचित्र" : "Historical Places & Geospatial Cartography"}
+            {t.map.title}
           </h1>
           <p className="text-sm text-navy-800/70 mt-1">
-            {language === "mr" 
-              ? "डॉ. आंबेडकरांच्या जीवनातील संघर्ष, शिक्षण, शासन व धम्मदीक्षेची ऐतिहासिक स्थाने आणि संबंधित पुरावे."
-              : language === "hi" 
-              ? "डॉ. आंबेडकर के जीवन के संघर्ष, शिक्षा, शासन और धम्मदीक्षा के ऐतिहासिक स्थल एवं संबंधित अभिलेख।"
-              : "Explore the pivotal places across India, the United States, and Great Britain linked to Dr. Ambedkar's life and archival documents."}
+            {t.map.subtitle}
           </p>
         </div>
 
@@ -226,7 +222,7 @@ export default function MapClient() {
                 mapScope === "india" ? "bg-navy-900 text-white" : "text-navy-800 hover:bg-parchment-200"
               }`}
             >
-              {language === "mr" ? "भारत" : language === "hi" ? "भारत" : "India Sites"}
+              {t.map.scopeIndia}
             </button>
             <button
               onClick={() => setMapScope("global")}
@@ -234,7 +230,7 @@ export default function MapClient() {
                 mapScope === "global" ? "bg-navy-900 text-white" : "text-navy-800 hover:bg-parchment-200"
               }`}
             >
-              {language === "mr" ? "जागतिक" : language === "hi" ? "वैश्विक" : "Global Sites"}
+              {t.map.scopeGlobal}
             </button>
           </div>
         </div>
@@ -243,12 +239,12 @@ export default function MapClient() {
       {/* Category Filter Bar */}
       <div className="flex flex-wrap gap-2 mb-6">
         {[
-          { id: "all", label: "All Sites" },
-          { id: "struggle", label: "Mass Movements & Struggles" },
-          { id: "education", label: "Higher Education & Academics" },
-          { id: "governance", label: "Constitutional Governance" },
-          { id: "spiritual", label: "Dhammadeeksha & Philosophy" },
-          { id: "birth", label: "Birthplace" },
+          { id: "all", label: language === "mr" ? "सर्व स्थाने" : language === "hi" ? "सभी स्थल" : "All Sites" },
+          { id: "struggle", label: t.map.legendStruggles },
+          { id: "education", label: t.map.legendEducation },
+          { id: "governance", label: t.map.legendGovernance },
+          { id: "spiritual", label: t.map.legendSpiritual },
+          { id: "birth", label: language === "mr" ? "जन्मस्थान" : language === "hi" ? "जन्मस्थली" : "Birthplace" },
         ].map((cat) => (
           <button
             key={cat.id}
@@ -368,29 +364,29 @@ export default function MapClient() {
 
             {/* Map Legend */}
             <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm border border-navy-900/15 rounded-md p-2.5 shadow-sm text-xs space-y-1.5 pointer-events-none">
-              <div className="font-semibold text-navy-900 text-[11px] uppercase tracking-wider mb-1">Legend</div>
+              <div className="font-semibold text-navy-900 text-[11px] uppercase tracking-wider mb-1">{t.map.legendTitle}</div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-red-700"></span>
-                <span className="text-navy-800">Mass Struggles & Civil Rights</span>
+                <span className="text-navy-800">{t.map.legendStruggles}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-700"></span>
-                <span className="text-navy-800">Academic & Overseas Degrees</span>
+                <span className="text-navy-800">{t.map.legendEducation}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-navy-900"></span>
-                <span className="text-navy-800">Constitutional & Statecraft</span>
+                <span className="text-navy-800">{t.map.legendGovernance}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
-                <span className="text-navy-800">Spiritual Rebirth (Deeksha)</span>
+                <span className="text-navy-800">{t.map.legendSpiritual}</span>
               </div>
             </div>
           </div>
 
           {/* Quick Location Slider / Mini List */}
           <div className="mt-4 pt-3 border-t border-navy-900/10 flex items-center gap-2 overflow-x-auto pb-1">
-            <span className="text-xs font-semibold text-navy-800/60 uppercase whitespace-nowrap">Jump to:</span>
+            <span className="text-xs font-semibold text-navy-800/60 uppercase whitespace-nowrap">{t.map.jumpTo}:</span>
             {LOCATIONS.map((loc) => (
               <button
                 key={loc.id}
@@ -434,7 +430,7 @@ export default function MapClient() {
             <div className="mt-5">
               <h3 className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-navy-800/60" />
-                Key Milestones at this Site
+                {t.map.keyMilestones}
               </h3>
               <ul className="space-y-2 text-xs text-navy-800/80">
                 {selectedLocation.keyEvents.map((ev, idx) => (
@@ -449,7 +445,7 @@ export default function MapClient() {
             {selectedLocation.relatedItemId && (
               <div className="mt-6 pt-4 border-t border-navy-900/10">
                 <span className="text-xs font-bold text-navy-900 uppercase tracking-wider block mb-2">
-                  Connected Archival Work
+                  {t.map.connectedWork}
                 </span>
                 <Link
                   href={`/reader/${selectedLocation.relatedItemId}`}
@@ -460,7 +456,7 @@ export default function MapClient() {
                     <ArrowRight className="w-3.5 h-3.5 shrink-0 ml-1" />
                   </div>
                   <span className="text-[11px] text-navy-800/60 mt-0.5 block">
-                    Read original text & facsimile in Deep Zoom Reader
+                    {t.map.readZoom}
                   </span>
                 </Link>
               </div>
@@ -472,13 +468,13 @@ export default function MapClient() {
               href="/timeline"
               className="flex-1 text-center py-2 px-3 text-xs font-semibold rounded-md border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white transition-colors"
             >
-              Open in Timeline
+              {t.timeline.title}
             </Link>
             <Link
               href={`/search?q=${encodeURIComponent(selectedLocation.nameEn)}`}
               className="flex-1 text-center py-2 px-3 text-xs font-semibold rounded-md bg-navy-900 text-white hover:bg-navy-800 transition-colors"
             >
-              Search Records
+              {t.nav.search}
             </Link>
           </div>
         </div>

@@ -133,7 +133,7 @@ const HISTORIC_RECORDINGS: HistoricRecording[] = [
 ];
 
 export default function MediaClient() {
-  const { language } = useApp();
+  const { language, t } = useApp();
   const [selectedRec, setSelectedRec] = useState<HistoricRecording>(HISTORIC_RECORDINGS[0]);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [currentTimeSec, setCurrentTimeSec] = useState<number>(0);
@@ -190,21 +190,13 @@ export default function MediaClient() {
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-gold-600 uppercase tracking-wider">
             <Bookmark className="w-3.5 h-3.5" />
-            <span>Audiovisual Heritage Archive</span>
+            <span>{t.media?.historicalAudio || "Audiovisual Heritage Archive"}</span>
           </div>
           <h1 className="text-3xl font-serif font-bold text-navy-900 mt-1">
-            {language === "mr"
-              ? "ऐतिहासिक ध्वनी व भाषण पुराभिलेख"
-              : language === "hi"
-              ? "ऐतिहासिक ध्वनि और भाषण पुरालेख"
-              : "Historic Speeches & Synchronized Audio Archive"}
+            {t.media?.title || "Historic Speeches & Synchronized Audio Archive"}
           </h1>
           <p className="text-sm text-navy-800/75 mt-1">
-            {language === "mr"
-              ? "वेब-व्हीटीटी (WebVTT) आधारित समक्रमित उतारा (Transcript) सह डॉ. आंबेडकरांची मूळ भाषणे ऐका."
-              : language === "hi"
-              ? "वेब-वीटीटी आधारित समक्रमित पाठ के साथ डॉ. आंबेडकर के मूल भाषण और साक्षात्कार सुनें।"
-              : "Listen to authenticated historic recordings with phrase-level synchronized multilingual transcripts and chapter jump points."}
+            {t.media?.subtitle || "Listen to authenticated historic recordings with phrase-level synchronized multilingual transcripts and chapter jump points."}
           </p>
         </div>
 
@@ -319,7 +311,7 @@ export default function MediaClient() {
               </div>
 
               <div className="text-xs text-parchment-200/60 font-semibold">
-                Historical Audio
+                {t.media?.historicalAudioBadge || "Historical Audio"}
               </div>
             </div>
           </div>
@@ -328,7 +320,7 @@ export default function MediaClient() {
           <div className="bg-white border border-navy-900/10 rounded-xl p-5 shadow-sm">
             <h3 className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-gold-600" />
-              <span>Chapter Cue Points</span>
+              <span>{t.media?.chapterCuePoints || "Chapter Cue Points"}</span>
             </h3>
             <div className="space-y-2">
               {selectedRec.chapters.map((ch, idx) => {
@@ -359,17 +351,17 @@ export default function MediaClient() {
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-gold-600" />
                 <h3 className="text-sm font-bold text-navy-900 uppercase tracking-wider">
-                  Synchronized Multilingual Transcript
+                  {t.media?.syncTranscript || "Synchronized Multilingual Transcript"}
                 </h3>
               </div>
               <span className="text-[11px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" />
-                WebVTT Active
+                {t.media?.webvttActive || "WebVTT Active"}
               </span>
             </div>
 
             <p className="text-xs text-navy-800/60 mb-4">
-              Click any sentence to jump the audio playback directly to that speech timestamp.
+              {t.media?.clickToJump || "Click any sentence to jump the audio playback directly to that speech timestamp."}
             </p>
 
             {/* Transcript lines list */}
@@ -409,9 +401,9 @@ export default function MediaClient() {
             </div>
 
             <div className="mt-6 pt-4 border-t border-navy-900/10 flex items-center justify-between text-xs text-navy-800/60">
-              <span>Source: National Archives & All India Radio Records</span>
+              <span>{t.media?.sourceArchives || "Source: National Archives & All India Radio Records"}</span>
               <Link href="/quotes/verify" className="text-gold-700 font-semibold hover:underline">
-                Verify this excerpt in Quote Verifier →
+                {t.media?.verifyInQuotes || "Verify this excerpt in Quote Verifier →"}
               </Link>
             </div>
           </div>

@@ -86,23 +86,25 @@ export default function QuotesVerifyClient() {
       </div>
 
       {/* Input Box */}
-      <div className="bg-white rounded-3xl border border-stone-300 p-6 sm:p-8 shadow-sm space-y-4">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-stone-300 p-4 sm:p-8 shadow-sm space-y-4">
         <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 block">
-          Enter Quote to Verify Against Primary Sources:
+          {t.quoteVerifier.inputLabel}
         </label>
         <textarea
           rows={3}
           value={quoteInput}
           onChange={(e) => setQuoteInput(e.target.value)}
           placeholder={t.quoteVerifier.placeholder}
-          className="w-full p-4 rounded-2xl bg-stone-50 border border-stone-300 text-sm font-serif text-zinc-900 focus:outline-none focus:border-primary focus:bg-white leading-relaxed"
+          className="w-full p-4 rounded-xl sm:rounded-2xl bg-stone-50 border border-stone-300 text-base sm:text-sm font-serif text-zinc-900 focus:outline-none focus:border-primary focus:bg-white leading-relaxed"
         />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
           {/* Preset Buttons */}
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-zinc-500 font-medium">Test Samples:</span>
-            {sampleTestQuotes.map((sq, i) => (
+            <span className="text-zinc-500 font-medium">
+              {language === "mr" ? "चाचणी नमुने:" : language === "hi" ? "परीक्षण नमूने:" : "Test Samples:"}
+            </span>
+            {t.quoteVerifier.sampleQuotes.map((sq, i) => (
               <button
                 key={i}
                 type="button"
@@ -110,7 +112,7 @@ export default function QuotesVerifyClient() {
                   setQuoteInput(sq.quote);
                   handleVerify(sq.quote);
                 }}
-                className="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-stone-200 text-zinc-700 text-[11px] font-medium border border-stone-300 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-zinc-700 text-[11px] font-medium border border-stone-300 cursor-pointer"
               >
                 {sq.label}
               </button>
@@ -120,9 +122,9 @@ export default function QuotesVerifyClient() {
           <button
             onClick={() => handleVerify()}
             disabled={isLoading || !quoteInput.trim()}
-            className="w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary-hover disabled:bg-stone-300 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-primary hover:bg-primary-hover disabled:bg-stone-300 text-white rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>{isLoading ? "Verifying..." : t.quoteVerifier.verifyButton}</span>
+            <span>{isLoading ? (language === "mr" ? "पडताळणी सुरू आहे..." : language === "hi" ? "सत्यापन हो रहा है..." : "Verifying...") : t.quoteVerifier.verifyButton}</span>
             <Search className="w-3.5 h-3.5 text-accent" />
           </button>
         </div>
@@ -130,7 +132,7 @@ export default function QuotesVerifyClient() {
 
       {/* Verification Result Card */}
       {verificationResult && (
-        <div className="bg-white rounded-3xl border border-stone-300 p-6 sm:p-8 shadow-sm space-y-5 animate-in fade-in zoom-in duration-200">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-stone-300 p-4 sm:p-8 shadow-sm space-y-5 animate-in fade-in zoom-in duration-200">
           <div className="flex items-center justify-between border-b border-stone-200 pb-4">
             <div className="flex items-center gap-3">
               {verificationResult.status === "Verified" ? (
@@ -156,14 +158,14 @@ export default function QuotesVerifyClient() {
                     : t.quoteVerifier.verdictNotFound}
                 </h2>
                 <span className="text-xs text-zinc-500 font-mono">
-                  Similarity Score: {(verificationResult.similarity * 100).toFixed(1)}%
+                  {t.quoteVerifier.matchConfidence}: {(verificationResult.similarity * 100).toFixed(1)}%
                 </span>
               </div>
             </div>
 
             {verificationResult.status === "Verified" && (
               <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                100% Authentic
+                {language === "mr" ? "१००% अस्सल" : language === "hi" ? "100% प्रामाणिक" : "100% Authentic"}
               </span>
             )}
           </div>
@@ -171,7 +173,7 @@ export default function QuotesVerifyClient() {
           {verificationResult.matched_quote && (
             <div className="space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">
-                Original Verbatim Archival Passage:
+                {t.quoteVerifier.matchedExcerpt}:
               </span>
               <blockquote className="p-5 rounded-2xl bg-stone-50 border-l-4 border-primary text-zinc-900 font-serif italic text-sm sm:text-base leading-relaxed">
                 "{verificationResult.matched_quote}"
@@ -182,7 +184,7 @@ export default function QuotesVerifyClient() {
           {verificationResult.source && (
             <div className="p-4 rounded-xl bg-stone-50 border border-stone-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div>
-                <span className="font-bold text-primary block mb-0.5">Primary Source Citation:</span>
+                <span className="font-bold text-primary block mb-0.5">{t.quoteVerifier.sourceAuthority}:</span>
                 <span className="text-zinc-600">{verificationResult.source}</span>
               </div>
 
@@ -191,7 +193,7 @@ export default function QuotesVerifyClient() {
                   href={`/reader/${verificationResult.citation.item_id}`}
                   className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg font-bold shadow-xs transition-colors shrink-0"
                 >
-                  <span>Inspect Scan</span>
+                  <span>{t.common.inspectScan}</span>
                   <ArrowRight className="w-3.5 h-3.5 text-accent" />
                 </Link>
               )}

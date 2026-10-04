@@ -49,38 +49,38 @@ export function Navigation() {
     return (
       <nav
         aria-label="Kiosk Touch Navigation Bar"
-        className="fixed bottom-0 left-0 right-0 z-50 bg-[#0B2A6F] text-white border-t border-[#C8A24A]/40 shadow-2xl px-4 sm:px-6 py-2.5 flex items-center justify-between min-h-[72px] overflow-hidden select-none"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-[#0B2A6F] text-white border-t border-[#C8A24A]/40 shadow-2xl px-2 sm:px-6 py-2 flex items-center justify-between min-h-[64px] sm:min-h-[72px] overflow-hidden select-none"
       >
         {/* Left: Navigation Controls */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={() => router.back()}
-            className="flex items-center justify-center gap-1.5 px-4 h-14 min-w-[56px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            className="flex items-center justify-center gap-1 px-2.5 sm:px-4 h-12 sm:h-14 min-w-[44px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
             aria-label="Go Back"
           >
-            <ArrowLeft className="w-5 h-5 text-accent" />
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
             <span className="hidden sm:inline">{t.nav.back}</span>
           </button>
 
           <Link
             href="/kiosk"
-            className="flex items-center justify-center gap-1.5 px-4 h-14 min-w-[56px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            className="flex items-center justify-center gap-1 px-2.5 sm:px-4 h-12 sm:h-14 min-w-[44px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
           >
-            <Landmark className="w-5 h-5 text-accent" />
+            <Landmark className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
             <span className="hidden sm:inline">{t.nav.home}</span>
           </Link>
 
           <Link
             href="/search"
-            className="flex items-center justify-center gap-1.5 px-4 h-14 min-w-[56px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            className="flex items-center justify-center gap-1 px-2.5 sm:px-4 h-12 sm:h-14 min-w-[44px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
           >
-            <Search className="w-5 h-5 text-accent" />
+            <Search className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
             <span className="hidden sm:inline">{t.nav.search}</span>
           </Link>
         </div>
 
         {/* Center: Institutional Minimal Emblem */}
-        <div className="hidden md:flex items-center gap-2.5 px-2 shrink-0">
+        <div className="hidden lg:flex items-center gap-2.5 px-2 shrink-0">
           <AshokaChakra size={24} className="text-accent" animate={true} />
           <span className="font-serif font-bold text-sm text-stone-100 tracking-wide">
             {t.appName}
@@ -88,14 +88,14 @@ export function Navigation() {
         </div>
 
         {/* Right side: Language, Accessibility, Collection, Ask AI */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Language Switcher */}
-          <div className="flex bg-white/10 rounded-xl p-0.5 border border-white/15 h-14 items-center">
+          <div className="flex bg-white/10 rounded-xl p-0.5 border border-white/15 h-12 sm:h-14 items-center">
             {(["en", "hi", "mr"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLanguage(l)}
-                className={`h-12 px-3 rounded-lg font-bold text-xs transition-all cursor-pointer ${
+                className={`h-10 sm:h-12 px-2 sm:px-3 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                   language === l ? "bg-[#C8A24A] text-navy-950 shadow-sm font-black" : "text-white/80 hover:text-white"
                 }`}
               >
@@ -107,22 +107,22 @@ export function Navigation() {
           {/* Accessibility Panel Trigger */}
           <button
             onClick={() => setIsAccessibilityOpen(true)}
-            className="flex items-center justify-center p-3 h-14 min-w-[52px] bg-white/10 active:bg-white/20 rounded-xl font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            className="flex items-center justify-center p-2.5 sm:p-3 h-12 sm:h-14 min-w-[44px] sm:min-w-[52px] bg-white/10 active:bg-white/20 rounded-xl font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
             aria-label="Accessibility Options"
             title={t.accessibility.title}
           >
-            <Sliders className="w-5 h-5 text-accent" />
+            <Sliders className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
           </button>
 
           {/* My Collection */}
           <Link
             href="/collections"
-            className="relative flex items-center justify-center p-3 h-14 min-w-[52px] bg-white/10 active:bg-white/20 rounded-xl font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            className="relative flex items-center justify-center p-2.5 sm:p-3 h-12 sm:h-14 min-w-[44px] sm:min-w-[52px] bg-white/10 active:bg-white/20 rounded-xl font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
             title={t.nav.myCollection}
           >
-            <Bookmark className="w-5 h-5 text-accent" />
+            <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
             {myCollection.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center">
                 {myCollection.length}
               </span>
             )}
@@ -131,9 +131,9 @@ export function Navigation() {
           {/* Ask AI touch button */}
           <Link
             href="/assistant"
-            className="flex items-center justify-center gap-1.5 px-4 h-14 bg-[#C8A24A] text-navy-950 rounded-xl font-bold text-xs sm:text-sm shadow-md cursor-pointer transition-transform active:scale-95 shrink-0"
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 h-12 sm:h-14 bg-[#C8A24A] text-navy-950 rounded-xl font-bold text-xs sm:text-sm shadow-md cursor-pointer transition-transform active:scale-95 shrink-0"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>{t.nav.ask}</span>
           </Link>
         </div>
@@ -150,9 +150,9 @@ export function Navigation() {
     { href: "/graph", label: t.nav.graph },
     { href: "/stories", label: t.nav.stories },
     { href: "/media", label: t.nav.media },
-    { href: "/kiosk", label: "Kiosk Mode" },
-    { href: "/display", label: "Display Wall" },
-    { href: "/admin", label: "Archivist Console" },
+    { href: "/kiosk", label: t.nav.kioskMode },
+    { href: "/display", label: t.nav.displayWall },
+    { href: "/admin", label: t.nav.admin },
   ];
 
   const isExploreActive = ["/map", "/graph", "/stories", "/media", "/admin"].some((p) =>
@@ -161,16 +161,16 @@ export function Navigation() {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-stone-950/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
           
           {/* Brand: Clean Minimalist Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-[#0B2A6F] text-[#C8A24A] flex items-center justify-center font-serif font-black text-base shadow-xs group-hover:bg-[#12368c] transition-colors">
+          <Link href="/" className="flex items-center gap-2 group shrink-0 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#0B2A6F] text-[#C8A24A] flex items-center justify-center font-serif font-black text-base shadow-xs group-hover:bg-[#12368c] transition-colors shrink-0">
               अ
             </div>
-            <div className="flex flex-col">
-              <span className="font-serif font-bold text-base text-zinc-900 dark:text-stone-100 tracking-tight leading-tight">
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif font-bold text-sm sm:text-base text-zinc-900 dark:text-stone-100 tracking-tight leading-tight truncate max-w-[140px] xs:max-w-[200px] sm:max-w-none">
                 {t.appName}
               </span>
             </div>
@@ -212,7 +212,7 @@ export function Navigation() {
                 }`}
                 aria-expanded={exploreOpen}
               >
-                <span>Explore</span>
+                <span>{t.nav.explore}</span>
                 <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${exploreOpen ? "rotate-180" : ""}`} />
               </button>
 
@@ -313,7 +313,7 @@ export function Navigation() {
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-zinc-700 dark:text-stone-300 hover:text-zinc-900 p-1 cursor-pointer transition-colors"
+              className="md:hidden text-zinc-700 dark:text-stone-300 hover:text-zinc-900 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer transition-colors rounded-xl active:bg-stone-100"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -324,19 +324,19 @@ export function Navigation() {
 
       {/* Clean Minimalist Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-stone-200 dark:border-stone-800 bg-white/98 dark:bg-stone-950/98 backdrop-blur-md px-6 py-5 space-y-4 shadow-md animate-in slide-in-from-top-2 duration-150">
+        <div className="md:hidden border-t border-stone-200 dark:border-stone-800 bg-white/98 dark:bg-stone-950/98 backdrop-blur-md px-4 py-4 space-y-4 shadow-lg animate-in slide-in-from-top-2 duration-150 max-h-[calc(100vh-4rem)] overflow-y-auto">
           {/* Mobile Language Switcher */}
           <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-stone-800">
-            <span className="text-xs text-zinc-500">Language / भाषा:</span>
-            <div className="flex gap-2">
+            <span className="text-xs text-zinc-500 font-semibold">Language / भाषा:</span>
+            <div className="flex gap-1.5">
               {(["en", "hi", "mr"] as const).map((l) => (
                 <button
                   key={l}
                   onClick={() => setLanguage(l)}
-                  className={`text-xs px-2 py-0.5 rounded transition-all ${
+                  className={`text-xs min-h-[36px] px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                     language === l
-                      ? "text-[#0B2A6F] font-bold bg-stone-100"
-                      : "text-zinc-600 hover:text-zinc-900"
+                      ? "text-[#0B2A6F] bg-stone-100 border border-stone-300"
+                      : "text-zinc-600 hover:text-zinc-900 bg-stone-50"
                   }`}
                 >
                   {l === "en" ? "EN" : l === "hi" ? "हिन्दी" : "मराठी"}
@@ -346,7 +346,7 @@ export function Navigation() {
           </div>
 
           {/* Navigation Links List */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             {[
               { href: "/search", label: t.nav.search },
               { href: "/timeline", label: t.nav.timeline },
@@ -356,8 +356,9 @@ export function Navigation() {
               { href: "/media", label: t.nav.media },
               { href: "/assistant", label: t.nav.assistant },
               { href: "/quotes/verify", label: t.nav.quoteVerifier },
-              { href: "/kiosk", label: "Kiosk Mode" },
-              { href: "/display", label: "Display Wall" },
+              { href: "/kiosk", label: t.nav.kioskMode },
+              { href: "/display", label: t.nav.displayWall },
+              { href: "/admin", label: t.nav.admin },
             ].map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -365,10 +366,10 @@ export function Navigation() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-1.5 text-xs transition-colors ${
+                  className={`flex items-center min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     isActive
-                      ? "text-[#0B2A6F] font-bold"
-                      : "text-zinc-700 hover:text-zinc-900"
+                      ? "text-[#0B2A6F] bg-stone-100 dark:bg-stone-800 font-bold border-l-4 border-primary"
+                      : "text-zinc-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-900"
                   }`}
                 >
                   {item.label}

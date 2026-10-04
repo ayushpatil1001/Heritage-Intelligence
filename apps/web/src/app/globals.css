@@ -37,10 +37,17 @@ img, svg, video {
   height: auto;
 }
 
-/* Mobile Touch Target minimums (WCAG 2.5.5 / Core Web Vitals FID/INP) */
+/* Mobile Touch Target minimums & iOS zoom prevention */
 @media (max-width: 768px) {
-  button, a, input, select {
+  /* Prevent iOS automatic zoom on focus by enforcing 16px minimum font size */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Safe tap target heights for interactive control elements without distorting inline text links */
+  button, select, input[type="text"], input[type="search"], input[type="email"], input[type="password"] {
     min-height: 44px;
+    touch-action: manipulation;
   }
 }
 

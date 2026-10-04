@@ -136,7 +136,7 @@ export default function StoryReaderClient() {
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
-  const { language } = useApp();
+  const { language, t } = useApp();
 
   const storyMeta = STORIES_DATA.find((s) => s.slug === slug) || STORIES_DATA[0];
   const chapters = CHAPTERS_BY_SLUG[slug] || CHAPTERS_BY_SLUG["mahad-satyagraha"];
@@ -165,17 +165,19 @@ export default function StoryReaderClient() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-900 hover:text-gold-700 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to All Exhibition Stories</span>
+          <span>{t.stories?.backToStories || "Back to All Exhibition Stories"}</span>
         </Link>
         <span className="text-xs text-navy-800/60 font-medium">
-          Chapter {currentChapterIndex + 1} of {chapters.length}
+          {(t.stories?.chapterProgress || "Chapter {current} of {total}")
+            .replace("{current}", (currentChapterIndex + 1).toString())
+            .replace("{total}", chapters.length.toString())}
         </span>
       </div>
 
       {/* Story Banner */}
       <div className="bg-navy-900 text-white rounded-xl p-6 md:p-8 shadow-md mb-8">
         <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest block mb-1">
-          Historical Visual Essay • {storyMeta.period}
+          {t.stories?.visualEssay || "Historical Visual Essay"} • {storyMeta.period}
         </span>
         <h1 className="text-2xl md:text-3xl font-serif font-bold leading-tight">
           {language === "mr" ? storyMeta.titleMr : language === "hi" ? storyMeta.titleHi : storyMeta.titleEn}
@@ -222,7 +224,7 @@ export default function StoryReaderClient() {
               </p>
               <div className="mt-2 text-[11px] font-bold text-gold-800 flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-gold-600" />
-                <span>Verified Source: {chapter.citation}</span>
+                <span>{(t.stories?.verifiedSource || "Verified Source:")} {chapter.citation}</span>
               </div>
             </div>
           </div>
@@ -235,14 +237,14 @@ export default function StoryReaderClient() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-navy-900/20 text-xs font-semibold text-navy-900 hover:bg-parchment-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span>Previous Chapter</span>
+              <span>{t.stories?.prevChapter || "Previous Chapter"}</span>
             </button>
             <button
               onClick={() => setCurrentChapterIndex((i) => Math.min(chapters.length - 1, i + 1))}
               disabled={currentChapterIndex === chapters.length - 1}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <span>Next Chapter</span>
+              <span>{t.stories?.nextChapter || "Next Chapter"}</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -252,9 +254,9 @@ export default function StoryReaderClient() {
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white border border-navy-900/10 rounded-xl p-5 shadow-sm">
             <div className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2 flex items-center justify-between">
-              <span>Archival Document Facsimile</span>
+              <span>{t.stories?.archivalFacsimile || "Archival Document Facsimile"}</span>
               <span className="text-[10px] bg-gold-100 text-gold-800 px-2 py-0.5 rounded font-bold">
-                Authentic Source
+                {t.stories?.authenticSource || "Authentic Source"}
               </span>
             </div>
 
@@ -279,7 +281,7 @@ export default function StoryReaderClient() {
                   {chapter.facsimileScanLabel}
                 </span>
                 <span className="text-[11px] text-navy-800/60 block mt-1">
-                  Reference: {chapter.citation}
+                  {(t.stories?.reference || "Reference:")} {chapter.citation}
                 </span>
               </div>
             </div>
@@ -292,7 +294,7 @@ export default function StoryReaderClient() {
                   className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Open Full Document in Deep Zoom Reader</span>
+                  <span>{t.stories?.openDeepZoom || "Open Full Document in Deep Zoom Reader"}</span>
                 </Link>
               </div>
             )}

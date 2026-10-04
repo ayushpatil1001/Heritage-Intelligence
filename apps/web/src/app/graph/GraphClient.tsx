@@ -68,7 +68,7 @@ const DEFAULT_EDGES: GraphEdge[] = [
 ];
 
 export default function GraphClient() {
-  const { language } = useApp();
+  const { language, t } = useApp();
   const [nodes, setNodes] = useState<GraphNode[]>(DEFAULT_NODES);
   const [edges, setEdges] = useState<GraphEdge[]>(DEFAULT_EDGES);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(DEFAULT_NODES[0]);
@@ -178,15 +178,15 @@ export default function GraphClient() {
         </div>
 
         {/* Search & Zoom Toolbar */}
-        <div className="flex items-center gap-3">
-          <div className="relative">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:flex-initial">
             <Search className="w-4 h-4 text-navy-800/50 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Find entity..."
+              placeholder={t.graph.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-3 py-1.5 text-xs rounded-lg border border-navy-900/20 bg-white focus:outline-none focus:ring-2 focus:ring-navy-900"
+              className="w-full sm:w-auto pl-9 pr-3 py-1.5 text-base sm:text-xs rounded-lg border border-navy-900/20 bg-white focus:outline-none focus:ring-2 focus:ring-navy-900"
             />
           </div>
           <div className="flex items-center rounded-lg border border-navy-900/20 bg-white p-0.5 shadow-sm">
@@ -218,12 +218,12 @@ export default function GraphClient() {
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2 mb-6">
         {[
-          { id: "all", label: "All Entities" },
-          { id: "person", label: "Key Figures & Mentors" },
-          { id: "work", label: "Treatises & Books" },
-          { id: "legislation", label: "Constitutional & Legal Acts" },
-          { id: "place", label: "Historical Places" },
-          { id: "organization", label: "Institutions & Sabhas" },
+          { id: "all", label: t.graph.entityTypes.all },
+          { id: "person", label: t.graph.entityTypes.person },
+          { id: "work", label: t.graph.entityTypes.work },
+          { id: "legislation", label: t.graph.entityTypes.legislation },
+          { id: "place", label: t.graph.entityTypes.place },
+          { id: "organization", label: t.graph.entityTypes.organization },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -242,7 +242,7 @@ export default function GraphClient() {
       {/* Main Graph Canvas and Side Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Canvas Area (8 Cols) */}
-        <div className="lg:col-span-8 bg-white border border-navy-900/10 rounded-xl shadow-sm overflow-hidden p-2 relative h-[650px] flex items-center justify-center bg-radial-pattern">
+        <div className="lg:col-span-8 bg-white border border-navy-900/10 rounded-xl shadow-sm overflow-hidden p-2 relative h-[380px] sm:h-[500px] lg:h-[650px] flex items-center justify-center bg-radial-pattern">
           <svg
             viewBox="0 0 900 640"
             className="w-full h-full cursor-grab active:cursor-grabbing select-none"
@@ -345,27 +345,27 @@ export default function GraphClient() {
           <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm border border-navy-900/10 rounded-lg p-2.5 shadow-sm text-[11px] grid grid-cols-2 gap-x-4 gap-y-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#0B2A6F" }}></span>
-              <span>People</span>
+              <span>{t.graph.entityTypes.person}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#C8A24A" }}></span>
-              <span>Works / Treatises</span>
+              <span>{t.graph.entityTypes.work}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#15803D" }}></span>
-              <span>Legislation</span>
+              <span>{t.graph.entityTypes.legislation}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#4338CA" }}></span>
-              <span>Institutions</span>
+              <span>{t.graph.entityTypes.organization}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#B91C1C" }}></span>
-              <span>Places</span>
+              <span>{t.graph.entityTypes.place}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#D97706" }}></span>
-              <span>Concepts</span>
+              <span>{t.graph.entityTypes.concept}</span>
             </div>
           </div>
         </div>
@@ -409,7 +409,7 @@ export default function GraphClient() {
               {/* Connected Entities List */}
               <div className="mt-5">
                 <h3 className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-3">
-                  Direct Semantic Relations ({connectedEdges.length})
+                  {t.graph.connectedEntities} ({connectedEdges.length})
                 </h3>
                 <div className="space-y-2">
                   {connectedEdges.map((edge, idx) => {
@@ -443,7 +443,7 @@ export default function GraphClient() {
           ) : (
             <div className="text-center py-16 text-navy-800/60">
               <Info className="w-10 h-10 mx-auto text-navy-800/40 mb-3" />
-              <p>Select any node in the graph to inspect relationships and archival citations.</p>
+              <p>{t.graph.canvasHint}</p>
             </div>
           )}
 
@@ -454,13 +454,13 @@ export default function GraphClient() {
                 href={`/search?q=${encodeURIComponent(selectedNode.name)}`}
                 className="w-full text-center py-2 px-3 text-xs font-semibold rounded-md bg-navy-900 text-white hover:bg-navy-800 transition-colors"
               >
-                Search Archival Items for &quot;{selectedNode.name}&quot;
+                {t.graph.inspectCitations}
               </Link>
               <Link
                 href="/timeline"
                 className="w-full text-center py-2 px-3 text-xs font-semibold rounded-md border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white transition-colors"
               >
-                View on Timeline
+                {t.timeline.title}
               </Link>
             </div>
           )}
