@@ -93,12 +93,40 @@ function SearchContent() {
   };
 
   const sampleQueries = [
-    "Article 32 Heart and Soul",
-    "Problem of the Rupee RBI",
-    "Mahad Chavdar Tale Satyagraha",
-    "Grammar of Anarchy Nov 25 1949",
-    "Annihilation of Caste division of labourers"
+    {
+      label: language === "mr" ? "कलम ३२ (आत्मा व हृदय)" : language === "hi" ? "अनुच्छेद 32 (आत्मा और हृदय)" : "Article 32 Heart & Soul",
+      query: "Article 32 Heart and Soul",
+    },
+    {
+      label: language === "mr" ? "द प्रॉब्लेम ऑफ द रुपी" : language === "hi" ? "द प्रॉब्लम ऑफ द रूपी" : "Problem of the Rupee",
+      query: "Problem of the Rupee",
+    },
+    {
+      label: language === "mr" ? "महाड सत्याग्रह" : language === "hi" ? "महाड सत्याग्रह" : "Mahad Satyagraha",
+      query: "Mahad Satyagraha",
+    },
+    {
+      label: language === "mr" ? "अराजकतेचे व्याकरण" : language === "hi" ? "अराजकता का व्याकरण" : "Grammar of Anarchy",
+      query: "Grammar of Anarchy",
+    },
+    {
+      label: language === "mr" ? "जातीचे निर्मूलन" : language === "hi" ? "जाति का विनाश" : "Annihilation of Caste",
+      query: "Annihilation of Caste",
+    },
+    {
+      label: language === "mr" ? "पूना करार" : language === "hi" ? "पूना पैक्ट" : "Poona Pact",
+      query: "Poona Pact",
+    },
+    {
+      label: language === "mr" ? "भगवान बुद्ध आणि त्यांचा धम्म" : language === "hi" ? "भगवान बुद्ध और उनका धम्म" : "Buddha and His Dhamma",
+      query: "Buddha and His Dhamma",
+    },
   ];
+
+  // Strictly remove suggested topics that have 0 records in the verified primary source catalog
+  const activeSuggestedTopics = sampleQueries.filter(
+    (sq) => searchCatalog(sq.query, "all", language).length > 0
+  );
 
   return (
     <div className="space-y-8">
@@ -137,22 +165,24 @@ function SearchContent() {
         </form>
 
         {/* Suggested Queries */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-          <span className="text-zinc-500 font-medium">{t.search.suggestedTopics}</span>
-          {sampleQueries.map((sq, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => {
-                setQuery(sq);
-                performSearch(sq, selectedType);
-              }}
-              className="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-zinc-700 border border-stone-300 rounded-full font-medium cursor-pointer transition-colors"
-            >
-              {sq}
-            </button>
-          ))}
-        </div>
+        {activeSuggestedTopics.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+            <span className="text-zinc-500 font-medium">{t.search.suggestedTopics}</span>
+            {activeSuggestedTopics.map((sq, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => {
+                  setQuery(sq.query);
+                  performSearch(sq.query, selectedType);
+                }}
+                className="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-zinc-700 border border-stone-300 rounded-full font-medium cursor-pointer transition-colors"
+              >
+                {sq.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Filter Tabs & Results Count */}

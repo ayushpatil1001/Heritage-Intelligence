@@ -20,7 +20,7 @@ import {
   FileText, Mic, Image, Landmark, ShieldCheck, Award,
   Calendar, Layers, Check
 } from "lucide-react";
-import { CATALOG_ITEMS } from "@/lib/catalogData";
+import { CATALOG_ITEMS, searchCatalog } from "@/lib/catalogData";
 
 interface ItemRecord {
   id: string;
@@ -101,22 +101,35 @@ export default function HomeClient() {
 
   const sampleQueries = [
     {
-      label: language === "mr" ? "कलम ३२: आत्मा व हृदय" : language === "hi" ? "अनुच्छेद 32: आत्मा और हृदय" : "Article 32: Heart & Soul",
+      label: language === "mr" ? "कलम ३२ (आत्मा व हृदय)" : language === "hi" ? "अनुच्छेद 32 (आत्मा और हृदय)" : "Article 32: Heart & Soul",
       query: "Article 32 Heart and Soul",
     },
     {
-      label: language === "mr" ? "रिझर्व्ह बँक स्थापना" : language === "hi" ? "रिज़र्व बैंक की स्थापना" : "Reserve Bank Foundation",
-      query: "Problem of the Rupee RBI",
+      label: language === "mr" ? "द प्रॉब्लेम ऑफ द रुपी" : language === "hi" ? "द प्रॉब्लम ऑफ द रूपी" : "Problem of the Rupee",
+      query: "Problem of the Rupee",
     },
     {
-      label: language === "mr" ? "महाड सत्याग्रह २०/०३/१९२७" : language === "hi" ? "महाड सत्याग्रह 20/03/1927" : "Mahad Satyagraha 20/03/1927",
-      query: "Mahad Chavdar Tale Satyagraha",
+      label: language === "mr" ? "महाड सत्याग्रह" : language === "hi" ? "महाड सत्याग्रह" : "Mahad Satyagraha",
+      query: "Mahad Satyagraha",
     },
     {
-      label: language === "mr" ? "अराजकतेचे व्याकरण २५/११/१९४९" : language === "hi" ? "अराजकता का व्याकरण 25/11/1949" : "Grammar of Anarchy 25/11/1949",
-      query: "Grammar of Anarchy Nov 25 1949",
+      label: language === "mr" ? "अराजकतेचे व्याकरण" : language === "hi" ? "अराजकता का व्याकरण" : "Grammar of Anarchy",
+      query: "Grammar of Anarchy",
+    },
+    {
+      label: language === "mr" ? "जातीचे निर्मूलन" : language === "hi" ? "जाति का विनाश" : "Annihilation of Caste",
+      query: "Annihilation of Caste",
+    },
+    {
+      label: language === "mr" ? "पूना करार" : language === "hi" ? "पूना पैक्ट" : "Poona Pact",
+      query: "Poona Pact",
     },
   ];
+
+  // Strictly remove suggested topics that have 0 records in the verified primary source catalog
+  const activeSuggestedTopics = sampleQueries.filter(
+    (sq) => searchCatalog(sq.query, "all", language).length > 0
+  );
 
   const categories = [
     { id: "all", label: t.home.catalogCategories.all, icon: null },
@@ -210,22 +223,24 @@ export default function HomeClient() {
           </form>
 
           {/* Quick Suggested Queries with Date Badges */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-            <span className="text-zinc-300 font-medium">{t.search.suggestedTopics}</span>
-            {sampleQueries.map((sq, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => {
-                  setSearchQuery(sq.query);
-                  router.push(`/search?q=${encodeURIComponent(sq.query)}`);
-                }}
-                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium cursor-pointer transition-colors"
-              >
-                {sq.label}
-              </button>
-            ))}
-          </div>
+          {activeSuggestedTopics.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+              <span className="text-zinc-300 font-medium">{t.search.suggestedTopics}</span>
+              {activeSuggestedTopics.map((sq, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery(sq.query);
+                    router.push(`/search?q=${encodeURIComponent(sq.query)}`);
+                  }}
+                  className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium cursor-pointer transition-colors"
+                >
+                  {sq.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Animated Background Ashoka Chakra Watermark */}

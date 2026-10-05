@@ -45,8 +45,8 @@ export const SearchProvenanceModule: React.FC<SearchProvenanceModuleProps> = ({
       text: 'महाड सत्याग्रहाबद्दल माहिती द्या (Mahad Chavdar Tale Satyagraha)'
     },
     {
-      label: 'Out-of-Scope Test',
-      text: 'Who won the 2026 Cricket IPL Tournament and cryptocurrency forecast?'
+      label: 'Annihilation of Caste',
+      text: 'What are Dr. Ambedkar\'s arguments regarding the division of labour versus division of labourers in Annihilation of Caste?'
     }
   ];
 

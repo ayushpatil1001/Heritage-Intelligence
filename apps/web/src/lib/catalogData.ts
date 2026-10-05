@@ -351,12 +351,12 @@ export const CATALOG_ITEMS: CatalogItem[] = [
     "rights": "Public Domain (BAWS Vol. 6)",
     "access_tier": "open",
     "status": "published",
-    "snippet": "The rupee has had a fluctuating career. Nothing has wrought greater economic injury to India than the instability of her monetary standard. The Hilton Young Commission adopted Dr. Ambedkar's recommendations in establishing the Reserve Bank of India in 1935....",
+    "snippet": "The rupee has had a fluctuating career. Nothing has wrought greater economic injury to India than the instability of her monetary standard. The Hilton Young Commission adopted Dr. Ambedkar's recommendations in establishing the Reserve Bank of India (RBI) in 1935....",
     "page_no": 1,
     "pages": [
       {
         "page_no": 1,
-        "ocr_text": "The rupee has had a fluctuating career. Nothing has wrought greater economic injury to India than the instability of her monetary standard. The Hilton Young Commission adopted Dr. Ambedkar's recommendations in establishing the Reserve Bank of India in 1935.",
+        "ocr_text": "The rupee has had a fluctuating career. Nothing has wrought greater economic injury to India than the instability of her monetary standard. The Hilton Young Commission adopted Dr. Ambedkar's recommendations in establishing the Reserve Bank of India (RBI) in 1935.",
         "ocr_confidence": 0.98,
         "lang": "en",
         "words": [
@@ -1822,6 +1822,9 @@ export function searchCatalog(query: string, typeFilter?: string, lang: string =
     const source = item.source.toLowerCase();
     const creator = item.creator.toLowerCase();
     const snippet = item.snippet.toLowerCase();
+    const provenance = (item.provenance || "").toLowerCase();
+    const dateStart = (item.date_start || "").toLowerCase();
+    const ocrText = (item.pages[0]?.ocr_text || "").toLowerCase();
 
     // Page translations
     const pageTransHi = (item.pages[0]?.translations?.hi || "").toLowerCase();
@@ -1835,6 +1838,9 @@ export function searchCatalog(query: string, typeFilter?: string, lang: string =
       source.includes(t) ||
       creator.includes(t) ||
       snippet.includes(t) ||
+      provenance.includes(t) ||
+      dateStart.includes(t) ||
+      ocrText.includes(t) ||
       pageTransHi.includes(t) ||
       pageTransMr.includes(t)
     );
