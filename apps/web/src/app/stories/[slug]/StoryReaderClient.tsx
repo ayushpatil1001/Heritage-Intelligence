@@ -159,15 +159,15 @@ export default function StoryReaderClient() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Back button and breadcrumbs */}
-      <div className="mb-6 flex items-center justify-between border-b border-navy-900/10 pb-4">
+      <div className="mb-6 flex items-center justify-between border-b border-stone-300 pb-4">
         <Link
           href="/stories"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-900 hover:text-gold-700 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0B2A6F] text-primary hover:text-[#C8A24A] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{t.stories?.backToStories || "Back to All Exhibition Stories"}</span>
         </Link>
-        <span className="text-xs text-navy-800/60 font-medium">
+        <span className="text-xs text-zinc-600 font-medium">
           {(t.stories?.chapterProgress || "Chapter {current} of {total}")
             .replace("{current}", (currentChapterIndex + 1).toString())
             .replace("{total}", chapters.length.toString())}
@@ -175,27 +175,27 @@ export default function StoryReaderClient() {
       </div>
 
       {/* Story Banner */}
-      <div className="bg-navy-900 text-white rounded-xl p-6 md:p-8 shadow-md mb-8">
-        <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest block mb-1">
+      <div className="bg-[#0B2A6F] bg-primary text-white rounded-2xl p-6 md:p-8 shadow-md mb-8 border border-primary/20">
+        <span className="text-[11px] font-bold text-[#F4DF9E] uppercase tracking-widest block mb-1">
           {t.stories?.visualEssay || "Historical Visual Essay"} • {storyMeta.period}
         </span>
-        <h1 className="text-2xl md:text-3xl font-serif font-bold leading-tight">
+        <h1 className="text-2xl md:text-3xl font-serif font-bold leading-tight text-white">
           {language === "mr" ? storyMeta.titleMr : language === "hi" ? storyMeta.titleHi : storyMeta.titleEn}
         </h1>
-        <p className="mt-2 text-sm text-parchment-200/90 max-w-3xl leading-relaxed">
+        <p className="mt-2 text-sm text-stone-200 max-w-3xl leading-relaxed">
           {language === "mr" ? storyMeta.subtitleMr : language === "hi" ? storyMeta.subtitleHi : storyMeta.subtitleEn}
         </p>
 
         {/* Chapter Progress Tabs */}
-        <div className="mt-6 flex flex-wrap gap-2 pt-4 border-t border-white/10">
+        <div className="mt-6 flex flex-wrap gap-2 pt-4 border-t border-white/15">
           {chapters.map((c, idx) => (
             <button
               key={c.id}
               onClick={() => setCurrentChapterIndex(idx)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 currentChapterIndex === idx
-                  ? "bg-gold-500 text-navy-950 shadow"
-                  : "bg-white/10 text-white hover:bg-white/20"
+                  ? "bg-[#C8A24A] text-[#061537] shadow-sm"
+                  : "bg-white/15 text-white hover:bg-white/25 border border-white/20"
               }`}
             >
               {getChapterTitle(c)}
@@ -208,22 +208,22 @@ export default function StoryReaderClient() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Narrative text (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white border border-navy-900/10 rounded-xl p-6 md:p-8 shadow-sm">
-            <h2 className="text-2xl font-serif font-bold text-navy-900 mb-4 pb-2 border-b border-navy-900/10">
+          <div className="bg-white border border-stone-300 rounded-2xl p-6 md:p-8 shadow-sm">
+            <h2 className="text-2xl font-serif font-bold text-[#0B2A6F] text-primary mb-4 pb-2 border-b border-stone-200">
               {getChapterTitle(chapter)}
             </h2>
-            <p className="text-base text-navy-900/90 leading-relaxed font-serif">
+            <p className="text-base text-zinc-800 leading-relaxed font-serif">
               {getChapterNarrative(chapter)}
             </p>
 
             {/* Direct Verified Historic Quotation Callout */}
-            <div className="mt-6 p-4 rounded-xl bg-parchment-100 border-l-4 border-gold-600 relative">
-              <Quote className="w-6 h-6 text-gold-600/40 absolute right-3 top-3 pointer-events-none" />
-              <p className="italic text-navy-950 font-serif text-sm leading-relaxed">
+            <div className="mt-6 p-4 rounded-xl bg-[#FDF8ED] border-l-4 border-[#C8A24A] relative">
+              <Quote className="w-6 h-6 text-[#C8A24A]/40 absolute right-3 top-3 pointer-events-none" />
+              <p className="italic text-zinc-900 font-serif text-sm leading-relaxed">
                 {chapter.directQuote}
               </p>
-              <div className="mt-2 text-[11px] font-bold text-gold-800 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-gold-600" />
+              <div className="mt-2 text-[11px] font-bold text-[#886524] flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#C8A24A]" />
                 <span>{(t.stories?.verifiedSource || "Verified Source:")} {chapter.citation}</span>
               </div>
             </div>
@@ -234,7 +234,7 @@ export default function StoryReaderClient() {
             <button
               onClick={() => setCurrentChapterIndex((i) => Math.max(0, i - 1))}
               disabled={currentChapterIndex === 0}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-navy-900/20 text-xs font-semibold text-navy-900 hover:bg-parchment-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-bold text-zinc-700 hover:bg-stone-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
               <span>{t.stories?.prevChapter || "Previous Chapter"}</span>
@@ -242,45 +242,45 @@ export default function StoryReaderClient() {
             <button
               onClick={() => setCurrentChapterIndex((i) => Math.min(chapters.length - 1, i + 1))}
               disabled={currentChapterIndex === chapters.length - 1}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0B2A6F] bg-primary text-white text-xs font-bold hover:bg-[#081E50] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs cursor-pointer"
             >
               <span>{t.stories?.nextChapter || "Next Chapter"}</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4 text-accent" />
             </button>
           </div>
         </div>
 
         {/* Facsimile & Archival Evidence Card (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white border border-navy-900/10 rounded-xl p-5 shadow-sm">
-            <div className="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2 flex items-center justify-between">
+          <div className="bg-white border border-stone-300 rounded-2xl p-5 shadow-sm">
+            <div className="text-xs font-bold text-[#0B2A6F] uppercase tracking-wider mb-2 flex items-center justify-between">
               <span>{t.stories?.archivalFacsimile || "Archival Document Facsimile"}</span>
-              <span className="text-[10px] bg-gold-100 text-gold-800 px-2 py-0.5 rounded font-bold">
+              <span className="text-[10px] bg-[#FDF8ED] text-[#886524] border border-[#F4DF9E] px-2 py-0.5 rounded font-bold">
                 {t.stories?.authenticSource || "Authentic Source"}
               </span>
             </div>
 
             {/* Facsimile Mock Viewer */}
-            <div className="aspect-[3/4] bg-parchment-100 border border-navy-900/15 rounded-lg p-4 flex flex-col justify-between relative overflow-hidden shadow-inner">
+            <div className="aspect-[3/4] bg-[#FAF7F0] border border-stone-300 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden shadow-inner">
               <div className="space-y-2 opacity-80 select-none">
-                <div className="h-4 bg-navy-900/15 rounded w-3/4 mx-auto mb-4"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-full"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-5/6"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-full"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-4/5"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-11/12"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-full"></div>
-                <div className="my-3 border-b border-navy-900/10"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-full"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-5/6"></div>
-                <div className="h-2 bg-navy-900/10 rounded w-3/4"></div>
+                <div className="h-4 bg-[#0B2A6F]/15 rounded w-3/4 mx-auto mb-4"></div>
+                <div className="h-2 bg-stone-300 rounded w-full"></div>
+                <div className="h-2 bg-stone-300 rounded w-5/6"></div>
+                <div className="h-2 bg-stone-300 rounded w-full"></div>
+                <div className="h-2 bg-stone-300 rounded w-4/5"></div>
+                <div className="h-2 bg-stone-300 rounded w-11/12"></div>
+                <div className="h-2 bg-stone-300 rounded w-full"></div>
+                <div className="my-3 border-b border-stone-300"></div>
+                <div className="h-2 bg-stone-300 rounded w-full"></div>
+                <div className="h-2 bg-stone-300 rounded w-5/6"></div>
+                <div className="h-2 bg-stone-300 rounded w-3/4"></div>
               </div>
 
-              <div className="bg-white/90 backdrop-blur-sm p-3 rounded-md border border-navy-900/10 text-center">
-                <span className="text-xs font-serif font-bold text-navy-900 block">
+              <div className="bg-white/95 backdrop-blur-sm p-3.5 rounded-lg border border-stone-200 text-center shadow-xs">
+                <span className="text-xs font-serif font-bold text-[#0B2A6F] block">
                   {chapter.facsimileScanLabel}
                 </span>
-                <span className="text-[11px] text-navy-800/60 block mt-1">
+                <span className="text-[11px] text-zinc-600 block mt-1">
                   {(t.stories?.reference || "Reference:")} {chapter.citation}
                 </span>
               </div>
@@ -291,9 +291,9 @@ export default function StoryReaderClient() {
               <div className="mt-4">
                 <Link
                   href={`/reader/${chapter.relatedItemId}`}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-navy-900 text-white text-xs font-semibold hover:bg-navy-800 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl bg-[#0B2A6F] bg-primary text-white text-xs font-bold hover:bg-[#081E50] transition-colors shadow-xs cursor-pointer"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ExternalLink className="w-3.5 h-3.5 text-accent" />
                   <span>{t.stories?.openDeepZoom || "Open Full Document in Deep Zoom Reader"}</span>
                 </Link>
               </div>

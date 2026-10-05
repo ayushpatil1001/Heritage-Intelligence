@@ -8,6 +8,7 @@ import {
   Search, Mic, Filter, ArrowRight, BookOpen, Volume2,
   FileText, Landmark, Image, MicOff, Check, Sparkles
 } from "lucide-react";
+import { searchCatalog, CATALOG_ITEMS } from "@/lib/catalogData";
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -17,7 +18,9 @@ function SearchContent() {
   const initialQuery = searchParams?.get("q") || "";
   const [query, setQuery] = useState(initialQuery);
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<any[]>(() =>
+    searchCatalog(initialQuery, "all", "en")
+  );
   const [isSearching, setIsSearching] = useState(false);
   const [isListeningMic, setIsListeningMic] = useState(false);
 
@@ -28,31 +31,21 @@ function SearchContent() {
       url += `&type=${typeFilter}`;
     }
 
+    // Always compute instant local results from the 30 authenticated records
+    const localResults = searchCatalog(searchTerm, typeFilter, language);
+
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setResults(data);
         } else {
-          setResults([]);
+          setResults(localResults);
         }
         setIsSearching(false);
       })
       .catch(() => {
-        // Deterministic fallback search
-        setResults([
-          {
-            id: "item-cad-art32",
-            item_id: "item-cad-art32",
-            type: "debate",
-            title: "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
-            snippet: "If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one.",
-            source: "Constituent Assembly Debates (Official Report)",
-            date: "1948-12-09",
-            page_no: 953,
-            score: 0.99
-          }
-        ]);
+        setResults(localResults);
         setIsSearching(false);
       });
   };

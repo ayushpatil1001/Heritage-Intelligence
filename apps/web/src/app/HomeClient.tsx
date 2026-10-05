@@ -20,6 +20,7 @@ import {
   FileText, Mic, Image, Landmark, ShieldCheck, Award,
   Calendar, Layers, Check
 } from "lucide-react";
+import { CATALOG_ITEMS } from "@/lib/catalogData";
 
 interface ItemRecord {
   id: string;
@@ -31,19 +32,29 @@ interface ItemRecord {
   rights: string;
 }
 
+const INITIAL_CATALOG: ItemRecord[] = CATALOG_ITEMS.map((d) => ({
+  id: d.id,
+  type: d.type,
+  title: d.title,
+  title_i18n: d.title_i18n,
+  source: d.source,
+  date_start: d.date_start,
+  rights: d.access_tier === "open" ? "Public Domain" : "On-Premises Access",
+}));
+
 export default function HomeClient() {
   const { language, t } = useApp();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
-  const [items, setItems] = useState<ItemRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState<ItemRecord[]>(INITIAL_CATALOG);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch("/api/v1/search?limit=30")
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setItems(
             data.map((d: any) => ({
               id: d.id,
@@ -51,7 +62,7 @@ export default function HomeClient() {
               title: d.title,
               title_i18n: d.title_i18n,
               source: d.source,
-              date_start: d.date,
+              date_start: d.date || d.date_start,
               rights: d.access_tier === "open" ? "Public Domain" : "On-Premises Access",
             }))
           );
@@ -59,35 +70,6 @@ export default function HomeClient() {
         setIsLoading(false);
       })
       .catch(() => {
-        setItems([
-          {
-            id: "item-baws-01-aoc",
-            type: "book",
-            title: "Annihilation of Caste",
-            title_i18n: { hi: "जाति का विनाश", mr: "जातीचे निर्मूलन" },
-            source: "Jat-Pat-Todak Mandal Presidential Address",
-            date_start: "15/05/1936",
-            rights: "Public Domain (BAWS Vol. 1)"
-          },
-          {
-            id: "item-cad-art32",
-            type: "debate",
-            title: "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
-            title_i18n: { hi: "अनुच्छेद 32 संविधान का हृदय और आत्मा", mr: "कलम 32 राज्यघटनेचा आत्मा आणि हृदय" },
-            source: "Constituent Assembly of India Debates",
-            date_start: "09/12/1948",
-            rights: "Parliament of India Digital Archive"
-          },
-          {
-            id: "item-baws-06-rupee",
-            type: "book",
-            title: "The Problem of the Rupee: Its Origin and Its Solution",
-            title_i18n: { hi: "रुपये की समस्या", mr: "रुपयाची समस्या" },
-            source: "London School of Economics D.Sc. Thesis",
-            date_start: "01/06/1923",
-            rights: "Public Domain (BAWS Vol. 6)"
-          }
-        ]);
         setIsLoading(false);
       });
   }, []);
@@ -100,7 +82,15 @@ export default function HomeClient() {
   };
 
   const filteredItems = items.filter((item) => {
-    const matchesType = selectedType === "all" || item.type === selectedType;
+    let matchesType = false;
+    if (selectedType === "all") {
+      matchesType = true;
+    } else if (selectedType === "book") {
+      matchesType = item.type === "book" || item.type === "article";
+    } else {
+      matchesType = item.type === selectedType;
+    }
+
     const localizedTitle = (item.title_i18n && item.title_i18n[language]) || item.title;
     const matchesSearch =
       !searchQuery ||

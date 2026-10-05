@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { formatCitation, toDDMMYYYY } from "@/lib/utils";
+import { getCatalogItemById } from "@/lib/catalogData";
 import {
   ZoomIn, ZoomOut, RotateCcw, Volume2, Globe, FileText,
   Bookmark, ArrowLeft, ArrowRight, Share2, Sparkles, Check,
@@ -52,24 +53,36 @@ export default function ReaderClient() {
         setLoading(false);
       })
       .catch(() => {
-        // Fallback demo state
-        const fallbackItem = {
-          id: itemId,
-          title: "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
-          source: "Constituent Assembly of India Debates (Official Report)",
-          date_start: "1948-12-09",
-          rights: "Public Domain (Parliament of India)",
-          type: "debate",
-          creator: "Dr. B. R. Ambedkar"
-        };
-        const fallbackPage = {
-          page_no: 953,
-          ocr_text: "If I was asked to name any particular article in this Constitution as the most importantâ€”an article without which this Constitution would be a nullityâ€”I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it.",
-          ocr_confidence: 0.99,
-          words: []
-        };
-        setItem(fallbackItem);
-        setCurrentPage(fallbackPage);
+        const catItem = getCatalogItemById(itemId);
+        if (catItem) {
+          setItem(catItem);
+          const pg = catItem.pages.find((p) => p.page_no === pageNo) || catItem.pages[0];
+          setCurrentPage({
+            page_no: pg?.page_no || pageNo,
+            ocr_text: pg?.ocr_text || catItem.snippet,
+            ocr_confidence: pg?.ocr_confidence || 0.98,
+            words: pg?.words || [],
+            image_uri: `/assets/scans/${catItem.id}_p${pg?.page_no || 1}.jpg`
+          });
+        } else {
+          const fallbackItem = {
+            id: itemId,
+            title: "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
+            source: "Constituent Assembly of India Debates (Official Report)",
+            date_start: "1948-12-09",
+            rights: "Public Domain (Parliament of India)",
+            type: "debate",
+            creator: "Dr. B. R. Ambedkar"
+          };
+          const fallbackPage = {
+            page_no: 953,
+            ocr_text: "If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it.",
+            ocr_confidence: 0.99,
+            words: []
+          };
+          setItem(fallbackItem);
+          setCurrentPage(fallbackPage);
+        }
         setLoading(false);
       });
   }, [itemId, pageNo]);
@@ -81,11 +94,17 @@ export default function ReaderClient() {
         .then((res) => res.json())
         .then((data) => setTranslationText(data.text))
         .catch(() => {
-          setTranslationText(
-            language === "hi"
-              ? "यदि मुझसे पूछा जाए कि इस संविधान का सबसे महत्वपूर्ण अनुच्छेद कौन सा है जिसके बिना यह संविधान निष्प्रभावी हो जाएगा—तो मैं इस अनुच्छेद (अनुच्छेद 32) के अलावा किसी अन्य का उल्लेख नहीं कर सकता। यह संविधान की आत्मा और इसका हृदय है।"
-              : "जर मला या संविधानातील सर्वात महत्त्वाचे कलम कोणते असे विचारले गेले—ज्या कलमाशिवाय हे संविधान निष्प्रभ ठरेल—तर मी या कलमाशिवाय (कलम 32) इतर कोणत्याही कलमाचा उल्लेख करू शकत नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे."
-          );
+          const catItem = getCatalogItemById(itemId);
+          const pg = catItem?.pages.find((p) => p.page_no === pageNo) || catItem?.pages[0];
+          if (pg?.translations && pg.translations[language]) {
+            setTranslationText(pg.translations[language]);
+          } else {
+            setTranslationText(
+              language === "hi"
+                ? "यदि मुझसे पूछा जाए कि इस संविधान का सबसे महत्वपूर्ण अनुच्छेद कौन सा है जिसके बिना यह संविधान निष्प्रभावी हो जाएगा—तो मैं इस अनुच्छेद (अनुच्छेद 32) के अलावा किसी अन्य का उल्लेख नहीं कर सकता। यह संविधान की आत्मा और इसका हृदय है।"
+                : "जर मला या संविधानातील सर्वात महत्त्वाचे कलम कोणते असे विचारले गेले—ज्या कलमाशिवाय हे संविधान निष्प्रभ ठरेल—तर मी या कलमाशिवाय (कलम 32) इतर कोणत्याही कलमाचा उल्लेख करू शकत नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे."
+            );
+          }
         });
     }
   }, [showTranslation, itemId, pageNo, language]);
@@ -98,9 +117,16 @@ export default function ReaderClient() {
         .then((res) => res.json())
         .then((data) => setSummaryData(data))
         .catch(() => {
+          const catItem = getCatalogItemById(itemId);
+          const title = catItem ? ((catItem.title_i18n && catItem.title_i18n[language]) || catItem.title) : "Article 32";
+          const summaryEn = `Scholarly authenticated archival treatise of "${title}". Preserved under ${catItem?.rights || "Public Domain"} in ${catItem?.source || "BAWS / CAD"}. Originally authored by ${catItem?.creator || "Dr. B. R. Ambedkar"}.`;
+          const summaryHi = `"${title}" का प्रामाणिक अभिलेखीय विद्वतापूर्ण अवलोकन। ${catItem?.source || "BAWS / CAD"} में संरक्षित। मूल लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}।`;
+          const summaryMr = `"${title}" चे अधिकृत अभिलेखागार संशोधन सार. ${catItem?.source || "BAWS / CAD"} मध्ये जतन. मूळ लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}.`;
+          const summary = language === "hi" ? summaryHi : language === "mr" ? summaryMr : summaryEn;
+
           setSummaryData({
             level: "scholarly",
-            text: "Dr. B. R. Ambedkar's decisive intervention on Article 32 establishes the Right to Constitutional Remedies as an inviolable cornerstone, ensuring that basic fundamental freedoms cannot be rendered illusory by legislative overreach.",
+            text: summary,
             model: "Gemini-Archival-RAG"
           });
         });
@@ -149,7 +175,7 @@ export default function ReaderClient() {
               <span className="text-xs text-zinc-500 font-medium">{item?.source} {item?.date_start ? ("• " + toDDMMYYYY(item.date_start)) : ""}</span>
             </div>
             <h1 className="text-lg sm:text-xl font-serif font-bold text-primary mt-0.5">
-              {item?.title || ("Document Record: " + (itemId ? itemId.toUpperCase() : "BAWS ARCHIVE"))}
+              {(item?.title_i18n && item.title_i18n[language]) || item?.title || ("Document Record: " + (itemId ? itemId.toUpperCase() : "BAWS ARCHIVE"))}
             </h1>
           </div>
         </div>
