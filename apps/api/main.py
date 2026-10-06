@@ -30,6 +30,18 @@ from schemas import (
 # Ensure tables exist
 Base.metadata.create_all(bind=engine)
 
+# Auto-seed if database is empty
+try:
+    from database import SessionLocal
+    _check_db = SessionLocal()
+    if _check_db.query(Item).count() == 0:
+        print("Database is empty on startup. Triggering auto-seed...")
+        from seed_runner import run_seed
+        run_seed()
+    _check_db.close()
+except Exception as _seed_err:
+    print(f"Auto-seed check note: {_seed_err}")
+
 PRIMARY_DOMAIN = "https://heritage-intelligence-drab.vercel.app"
 
 # Domain-aware Sliding Window Rate Limiter

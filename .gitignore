@@ -28,6 +28,7 @@ Thumbs.db
 .idea/
 
 # Database
-*.db
 *.sqlite
 *.sqlite3
+*.db
+!apps/api/ambedkarverse.db

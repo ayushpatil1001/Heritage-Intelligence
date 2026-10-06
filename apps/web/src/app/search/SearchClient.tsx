@@ -19,7 +19,7 @@ function SearchContent() {
   const [query, setQuery] = useState(initialQuery);
   const [selectedType, setSelectedType] = useState<string>("all");
   const [results, setResults] = useState<any[]>(() =>
-    searchCatalog(initialQuery, "all", "en")
+    searchCatalog(initialQuery, "all", language)
   );
   const [isSearching, setIsSearching] = useState(false);
   const [isListeningMic, setIsListeningMic] = useState(false);
@@ -35,9 +35,12 @@ function SearchContent() {
     const localResults = searchCatalog(searchTerm, typeFilter, language);
 
     fetch(url)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0 && data[0]?.title) {
           setResults(data);
         } else {
           setResults(localResults);

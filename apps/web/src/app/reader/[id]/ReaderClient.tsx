@@ -22,8 +22,20 @@ export default function ReaderClient() {
   const initialPageNo = parseInt(searchParams?.get("page") || "1", 10);
   const highlightWord = searchParams?.get("highlight") || "";
 
-  const [item, setItem] = useState<any>(null);
-  const [currentPage, setCurrentPage] = useState<any>(null);
+  const initialItem = getCatalogItemById(itemId);
+  const initialPg = initialItem?.pages?.find((p) => p.page_no === initialPageNo) || initialItem?.pages?.[0];
+  const initialPageObj = initialPg
+    ? {
+        page_no: initialPg.page_no,
+        ocr_text: initialPg.ocr_text,
+        ocr_confidence: initialPg.ocr_confidence,
+        words: initialPg.words || [],
+        image_uri: `/assets/scans/${initialItem?.id}_p${initialPg.page_no}.jpg`,
+      }
+    : null;
+
+  const [item, setItem] = useState<any>(initialItem || null);
+  const [currentPage, setCurrentPage] = useState<any>(initialPageObj || null);
   const [pageNo, setPageNo] = useState(initialPageNo);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [showTranslation, setShowTranslation] = useState(false);
@@ -35,53 +47,50 @@ export default function ReaderClient() {
   const [copiedCitation, setCopiedCitation] = useState(false);
   const [isPlayingTTS, setIsPlayingTTS] = useState(false);
   const [speechRate, setSpeechRate] = useState(1.0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [mobileView, setMobileView] = useState<"both" | "scan" | "text">("text");
 
-  // Fetch Item & Page Data
+  // Fetch Item & Page Data with resilient error handling
   useEffect(() => {
-    setLoading(true);
+    const catItem = getCatalogItemById(itemId);
+    const pg = catItem?.pages?.find((p) => p.page_no === pageNo) || catItem?.pages?.[0];
+    const localPageObj = pg
+      ? {
+          page_no: pg.page_no,
+          ocr_text: pg.ocr_text,
+          ocr_confidence: pg.ocr_confidence,
+          words: pg.words || [],
+          image_uri: `/assets/scans/${catItem?.id}_p${pg.page_no}.jpg`,
+        }
+      : null;
+
     fetch(`/api/v1/items/${itemId}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((data) => {
+        if (!data || data.detail || data.error || !data.title) {
+          throw new Error("Invalid item format");
+        }
         setItem(data);
         return fetch(`/api/v1/items/${itemId}/pages/${pageNo}`);
       })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((pData) => {
+        if (!pData || pData.detail || pData.error || !pData.ocr_text) {
+          throw new Error("Invalid page format");
+        }
         setCurrentPage(pData);
         setLoading(false);
       })
       .catch(() => {
-        const catItem = getCatalogItemById(itemId);
         if (catItem) {
           setItem(catItem);
-          const pg = catItem.pages.find((p) => p.page_no === pageNo) || catItem.pages[0];
-          setCurrentPage({
-            page_no: pg?.page_no || pageNo,
-            ocr_text: pg?.ocr_text || catItem.snippet,
-            ocr_confidence: pg?.ocr_confidence || 0.98,
-            words: pg?.words || [],
-            image_uri: `/assets/scans/${catItem.id}_p${pg?.page_no || 1}.jpg`
-          });
-        } else {
-          const fallbackItem = {
-            id: itemId,
-            title: "CAD Vol. VII: Article 32 Heart and Soul of the Constitution",
-            source: "Constituent Assembly of India Debates (Official Report)",
-            date_start: "1948-12-09",
-            rights: "Public Domain (Parliament of India)",
-            type: "debate",
-            creator: "Dr. B. R. Ambedkar"
-          };
-          const fallbackPage = {
-            page_no: 953,
-            ocr_text: "If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it.",
-            ocr_confidence: 0.99,
-            words: []
-          };
-          setItem(fallbackItem);
-          setCurrentPage(fallbackPage);
+          setCurrentPage(localPageObj);
         }
         setLoading(false);
       });
@@ -90,14 +99,27 @@ export default function ReaderClient() {
   // Fetch Translation when toggled
   useEffect(() => {
     if (showTranslation) {
+      const catItem = getCatalogItemById(itemId);
+      const pg = catItem?.pages?.find((p) => p.page_no === pageNo) || catItem?.pages?.[0];
+      const localTrans = pg?.translations?.[language];
+
       fetch(`/api/v1/items/${itemId}/translation?lang=${language}&page_no=${pageNo}`)
-        .then((res) => res.json())
-        .then((data) => setTranslationText(data.text))
+        .then((res) => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then((data) => {
+          if (data && data.text && !data.detail && !data.error) {
+            setTranslationText(data.text);
+          } else if (localTrans) {
+            setTranslationText(localTrans);
+          } else {
+            setTranslationText(pg?.ocr_text || catItem?.snippet || "");
+          }
+        })
         .catch(() => {
-          const catItem = getCatalogItemById(itemId);
-          const pg = catItem?.pages.find((p) => p.page_no === pageNo) || catItem?.pages[0];
-          if (pg?.translations && pg.translations[language]) {
-            setTranslationText(pg.translations[language]);
+          if (localTrans) {
+            setTranslationText(localTrans);
           } else {
             setTranslationText(pg?.ocr_text || catItem?.snippet || "");
           }
@@ -108,26 +130,40 @@ export default function ReaderClient() {
   // Fetch Summary when modal opened
   const handleOpenSummary = () => {
     setIsSummaryOpen(true);
-    if (!summaryData) {
-      fetch(`/api/v1/items/${itemId}/summary?lang=${language}`)
-        .then((res) => res.json())
-        .then((data) => setSummaryData(data))
-        .catch(() => {
-          const catItem = getCatalogItemById(itemId);
-          const specSum = catItem?.summary?.[language] || catItem?.summary?.["en"];
-          const title = catItem ? ((catItem.title_i18n && catItem.title_i18n[language]) || catItem.title) : "Archival Record";
-          const summaryEn = `Scholarly authenticated archival treatise of "${title}". Preserved under ${catItem?.rights || "Public Domain"} in ${catItem?.source || "BAWS / CAD"}. Originally authored by ${catItem?.creator || "Dr. B. R. Ambedkar"}.`;
-          const summaryHi = `"${title}" का प्रामाणिक अभिलेखीय विद्वतापूर्ण अवलोकन। ${catItem?.source || "BAWS / CAD"} में संरक्षित। मूल लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}।`;
-          const summaryMr = `"${title}" चे अधिकृत अभिलेखागार संशोधन सार. ${catItem?.source || "BAWS / CAD"} मध्ये जतन. मूळ लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}.`;
-          const fallbackSummary = language === "hi" ? summaryHi : language === "mr" ? summaryMr : summaryEn;
+    const catItem = getCatalogItemById(itemId);
+    const specSum = catItem?.summary?.[language] || catItem?.summary?.["en"];
+    const title = catItem
+      ? (catItem.title_i18n && catItem.title_i18n[language]) || catItem.title
+      : "Archival Record";
+    const summaryEn = `Scholarly authenticated archival treatise of "${title}". Preserved under ${catItem?.rights || "Public Domain"} in ${catItem?.source || "BAWS / CAD"}. Originally authored by ${catItem?.creator || "Dr. B. R. Ambedkar"}.`;
+    const summaryHi = `"${title}" का प्रामाणिक अभिलेखीय विद्वतापूर्ण अवलोकन। ${catItem?.source || "BAWS / CAD"} में संरक्षित। मूल लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}।`;
+    const summaryMr = `"${title}" चे अधिकृत अभिलेखागार संशोधन सार. ${catItem?.source || "BAWS / CAD"} मध्ये जतन. मूळ लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}.`;
+    const fallbackSummary =
+      specSum || (language === "hi" ? summaryHi : language === "mr" ? summaryMr : summaryEn);
 
+    fetch(`/api/v1/items/${itemId}/summary?lang=${language}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.text && !data.detail && !data.error) {
+          setSummaryData(data);
+        } else {
           setSummaryData({
             level: "scholarly",
-            text: specSum || fallbackSummary,
-            model: "Gemini-Archival-RAG"
+            text: fallbackSummary,
+            model: "Gemini-Archival-RAG",
           });
+        }
+      })
+      .catch(() => {
+        setSummaryData({
+          level: "scholarly",
+          text: fallbackSummary,
+          model: "Gemini-Archival-RAG",
         });
-    }
+      });
   };
 
   // Web Speech API for TTS

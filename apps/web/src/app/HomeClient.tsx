@@ -52,9 +52,12 @@ export default function HomeClient() {
 
   useEffect(() => {
     fetch("/api/v1/search?limit=30")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0 && data[0]?.title) {
           setItems(
             data.map((d: any) => ({
               id: d.id,

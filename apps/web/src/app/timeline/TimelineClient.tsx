@@ -8,21 +8,25 @@ import {
   Clock, Calendar, BookOpen, MapPin, Award,
   ArrowRight, Filter, Bookmark, ExternalLink
 } from "lucide-react";
+import { TIMELINE_EVENTS } from "@/lib/timelineData";
 
 export default function TimelineClient() {
   const { language, t, addToCollection } = useApp();
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>(TIMELINE_EVENTS);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<any>(TIMELINE_EVENTS[0] || null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetch("/api/v1/timeline")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0 && data[0]?.title_i18n) {
           setEvents(data);
-          setSelectedEvent(data[0] || null);
+          setSelectedEvent((prev: any) => prev || data[0]);
         }
         setIsLoading(false);
       })

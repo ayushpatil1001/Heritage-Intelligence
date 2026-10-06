@@ -26,8 +26,12 @@ export default function QuotesVerifyClient() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, lang: language })
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
       .then((data) => {
+        if (!data || data.detail || data.error) throw new Error("Invalid response");
         setVerificationResult(data);
         setIsLoading(false);
       })

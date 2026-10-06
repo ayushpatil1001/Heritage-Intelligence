@@ -16,7 +16,16 @@ def run_seed():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
-    seed_file = os.path.join(os.path.dirname(__file__), "../../data/seed/seed_data.json")
+    seed_file_candidates = [
+        os.path.join(os.path.dirname(__file__), "seed_data.json"),
+        os.path.join(os.path.dirname(__file__), "data/seed/seed_data.json"),
+        os.path.join(os.path.dirname(__file__), "../../data/seed/seed_data.json"),
+    ]
+    seed_file = next((p for p in seed_file_candidates if os.path.exists(p)), None)
+    if not seed_file:
+        print(f"Warning: No seed_data.json found in candidate paths: {seed_file_candidates}")
+        return
+
     with open(seed_file, "r", encoding="utf-8") as f:
         data = json.load(f)
 
