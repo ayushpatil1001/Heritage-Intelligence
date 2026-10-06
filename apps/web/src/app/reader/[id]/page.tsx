@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ReaderClient from "./ReaderClient";
+import { getCatalogItemById } from "@/lib/catalogData";
 
 type Props = {
   params: { id: string };
@@ -7,12 +8,13 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const itemId = params.id;
+  const item = getCatalogItemById(itemId);
   const readableName = itemId
     .replace(/^item-/, "")
     .replace(/-/g, " ")
     .toUpperCase();
-  const title = `Archival Document Reader: ${readableName}`;
-  const description = `Inspect high-resolution archival facsimile scans, side-by-side OCR transcriptions, grounded translations, and academic citations for record ${itemId}.`;
+  const title = item ? `${item.title} | Archival Document Reader` : `Archival Document Reader: ${readableName}`;
+  const description = item?.snippet || `Inspect high-resolution archival facsimile scans, side-by-side OCR transcriptions, grounded translations, and academic citations for record ${itemId}.`;
   const canonical = `https://heritage-intelligence-drab.vercel.app/reader/${itemId}`;
 
   return {

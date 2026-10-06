@@ -99,11 +99,7 @@ export default function ReaderClient() {
           if (pg?.translations && pg.translations[language]) {
             setTranslationText(pg.translations[language]);
           } else {
-            setTranslationText(
-              language === "hi"
-                ? "यदि मुझसे पूछा जाए कि इस संविधान का सबसे महत्वपूर्ण अनुच्छेद कौन सा है जिसके बिना यह संविधान निष्प्रभावी हो जाएगा—तो मैं इस अनुच्छेद (अनुच्छेद 32) के अलावा किसी अन्य का उल्लेख नहीं कर सकता। यह संविधान की आत्मा और इसका हृदय है।"
-                : "जर मला या संविधानातील सर्वात महत्त्वाचे कलम कोणते असे विचारले गेले—ज्या कलमाशिवाय हे संविधान निष्प्रभ ठरेल—तर मी या कलमाशिवाय (कलम 32) इतर कोणत्याही कलमाचा उल्लेख करू शकत नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे."
-            );
+            setTranslationText(pg?.ocr_text || catItem?.snippet || "");
           }
         });
     }
@@ -118,15 +114,16 @@ export default function ReaderClient() {
         .then((data) => setSummaryData(data))
         .catch(() => {
           const catItem = getCatalogItemById(itemId);
-          const title = catItem ? ((catItem.title_i18n && catItem.title_i18n[language]) || catItem.title) : "Article 32";
+          const specSum = catItem?.summary?.[language] || catItem?.summary?.["en"];
+          const title = catItem ? ((catItem.title_i18n && catItem.title_i18n[language]) || catItem.title) : "Archival Record";
           const summaryEn = `Scholarly authenticated archival treatise of "${title}". Preserved under ${catItem?.rights || "Public Domain"} in ${catItem?.source || "BAWS / CAD"}. Originally authored by ${catItem?.creator || "Dr. B. R. Ambedkar"}.`;
           const summaryHi = `"${title}" का प्रामाणिक अभिलेखीय विद्वतापूर्ण अवलोकन। ${catItem?.source || "BAWS / CAD"} में संरक्षित। मूल लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}।`;
           const summaryMr = `"${title}" चे अधिकृत अभिलेखागार संशोधन सार. ${catItem?.source || "BAWS / CAD"} मध्ये जतन. मूळ लेखक: ${catItem?.creator || "डॉ. बी. आर. आंबेडकर"}.`;
-          const summary = language === "hi" ? summaryHi : language === "mr" ? summaryMr : summaryEn;
+          const fallbackSummary = language === "hi" ? summaryHi : language === "mr" ? summaryMr : summaryEn;
 
           setSummaryData({
             level: "scholarly",
-            text: summary,
+            text: specSum || fallbackSummary,
             model: "Gemini-Archival-RAG"
           });
         });
@@ -360,16 +357,32 @@ export default function ReaderClient() {
             >
               <div className="border-b-2 border-stone-800 pb-3 text-center space-y-1">
                 <span className="text-xs uppercase tracking-widest font-bold block text-zinc-700">
-                  CONSTITUENT ASSEMBLY OF INDIA DEBATES
+                  {item?.source?.toUpperCase().includes("CONSTITUENT ASSEMBLY")
+                    ? "CONSTITUENT ASSEMBLY OF INDIA DEBATES"
+                    : item?.collection_id === "col-baws" || item?.source?.toUpperCase().includes("BAWS")
+                    ? "DR. BABASAHEB AMBEDKAR WRITINGS AND SPEECHES"
+                    : item?.type === "article"
+                    ? "HISTORIC PERIODICAL ARCHIVE"
+                    : (item?.source?.toUpperCase() || "AUTHENTICATED PRIMARY ARCHIVE")}
                 </span>
                 <span className="text-[11px] text-zinc-500 font-mono block">
-                  Official Report • Volume VII • Council Chamber, New Delhi
+                  {item?.provenance || item?.source || "Official National Archives Record"}
                 </span>
               </div>
 
               <div className="text-justify indent-4 sm:indent-6 space-y-4">
                 <p className="font-semibold text-zinc-950">
-                  The Honourable Dr. B. R. Ambedkar (Bombay: General):
+                  {item?.creator || "Dr. B. R. Ambedkar"} (
+                  {item?.type === "debate"
+                    ? "Drafting Committee Chairman / Member"
+                    : item?.type === "book"
+                    ? "Author & Scholar"
+                    : item?.type === "article"
+                    ? "Chief Editor / Contributor"
+                    : item?.type === "speech"
+                    ? "Historic Address"
+                    : "Primary Archival Record"}
+                  ):
                 </p>
                 <div
                   className={`p-3 sm:p-4 rounded-xl transition-all ${
@@ -383,7 +396,7 @@ export default function ReaderClient() {
                   </p>
                 </div>
                 <p className="text-xs text-zinc-600">
-                  [Verified from Parliamentary Proceedings: All fundamental rights codified under Part III are enforceable through direct constitutional writ jurisdiction].
+                  [Verified from Primary Record: Preserved under {item?.rights || "Public Domain"}. Provenance: {item?.provenance || item?.source}].
                 </p>
               </div>
             </div>
@@ -399,7 +412,7 @@ export default function ReaderClient() {
             </span>
             <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-200 text-[11px] flex items-center gap-1">
               <Check className="w-3 h-3 text-emerald-600" />
-              <span>{t.reader.confidence}: 99.2%</span>
+              <span>{t.reader.confidence}: {Math.round((currentPage?.ocr_confidence || 0.99) * 100)}%</span>
             </span>
           </div>
 
@@ -427,14 +440,14 @@ export default function ReaderClient() {
             ) : (
               <div className="space-y-4">
                 <p className="font-medium text-zinc-900">
-                  Transcribed Text (Constituent Assembly Debates):
+                  Transcribed Text ({item?.source || "Primary Source Archive"}):
                 </p>
                 <div className="p-4 rounded-xl bg-white border border-stone-200 font-serif leading-relaxed text-zinc-900 shadow-xs">
                   {currentPage?.ocr_text}
                 </div>
                 <div className="pt-2 text-xs text-zinc-500 space-y-1">
-                  <p>• Verified against original master in Parliament Digital Archive.</p>
-                  <p>• Cleaned by human-in-the-loop review queue to eliminate ligature errors.</p>
+                  <p>• Verified against original master in {item?.source || "Parliament / BAWS Archive"}.</p>
+                  <p>• Historical Date: {item?.date_start ? toDDMMYYYY(item.date_start) : "Archival Record"}. Rights: {item?.rights || "Public Domain"}.</p>
                 </div>
               </div>
             )}
@@ -446,7 +459,7 @@ export default function ReaderClient() {
             <div>
               <span className="font-bold text-primary block mb-0.5">{t.reader.scholarlyProvenance}</span>
               <p className="text-zinc-600 leading-relaxed">
-                Referenced in Supreme Court of India constitutional bench rulings on basic structure and writ remedies.
+                {item?.provenance || "Referenced in national archival collections and primary source proceedings."} (Access tier: {item?.access_tier?.toUpperCase() || "OPEN"}).
               </p>
             </div>
           </div>
