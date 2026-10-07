@@ -178,14 +178,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/sitemap.xml" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                  <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
                     {t.footer.sitemap}
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="/robots.txt" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
+                  <a href="/robots.txt" target="_blank" rel="noopener noreferrer" className="hover:text-[#C8A24A] transition-colors py-1 inline-block">
                     {t.footer.robots}
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

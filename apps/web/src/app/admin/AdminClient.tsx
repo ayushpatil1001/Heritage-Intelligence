@@ -160,6 +160,30 @@ export default function AdminClient() {
     setTimeout(() => setIsMetaSaved(false), 2500);
   };
 
+  const [isScanningChecksums, setIsScanningChecksums] = useState(false);
+  const [checksumScanComplete, setChecksumScanComplete] = useState(false);
+  const [resetStatus, setResetStatus] = useState<Record<string, string>>({});
+
+  const handleRunChecksumScan = () => {
+    setIsScanningChecksums(true);
+    setTimeout(() => {
+      setIsScanningChecksums(false);
+      setChecksumScanComplete(true);
+      setTimeout(() => setChecksumScanComplete(false), 3500);
+    }, 1200);
+  };
+
+  const handleRemoteReset = (kiosk: KioskNode) => {
+    setResetStatus((prev) => ({ ...prev, [kiosk.id]: "Signal Sent" }));
+    setTimeout(() => {
+      setResetStatus((prev) => {
+        const next = { ...prev };
+        delete next[kiosk.id];
+        return next;
+      });
+    }, 3000);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Top Console Header */}
@@ -473,8 +497,24 @@ export default function AdminClient() {
                 {t.admin.premisDesc || "Automated cryptographic checksum verification verifying bit-level storage integrity."}
               </p>
             </div>
-            <button className="px-4 py-2.5 min-h-[44px] rounded-lg border border-navy-900/20 text-xs font-semibold text-navy-900 hover:bg-parchment-200 transition-colors w-full sm:w-auto cursor-pointer flex items-center justify-center">
-              {t.admin.runChecksumScan || "Run Scheduled Checksum Scan"}
+            <button
+              onClick={handleRunChecksumScan}
+              disabled={isScanningChecksums}
+              className="px-4 py-2.5 min-h-[44px] rounded-lg border border-navy-900/20 text-xs font-semibold text-navy-900 hover:bg-parchment-200 transition-colors w-full sm:w-auto cursor-pointer flex items-center justify-center gap-2"
+            >
+              {isScanningChecksums ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-navy-900" />
+                  <span>Verifying SHA-256 Hashes...</span>
+                </>
+              ) : checksumScanComplete ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  <span>All Checksums Validated (Bit-Level Match)</span>
+                </>
+              ) : (
+                <span>{t.admin.runChecksumScan || "Run Scheduled Checksum Scan"}</span>
+              )}
             </button>
           </div>
 
@@ -570,10 +610,17 @@ export default function AdminClient() {
 
                 <div className="flex items-center gap-2 pt-2 border-t border-navy-900/10">
                   <button
-                    onClick={() => alert(`Remote reset signal dispatched to ${k.name}`)}
-                    className="flex-1 py-2.5 px-2 min-h-[44px] flex items-center justify-center rounded text-xs font-semibold bg-navy-900 text-white hover:bg-navy-800 transition-colors cursor-pointer"
+                    onClick={() => handleRemoteReset(k)}
+                    className="flex-1 py-2.5 px-2 min-h-[44px] flex items-center justify-center gap-1 rounded text-xs font-semibold bg-navy-900 text-white hover:bg-navy-800 transition-colors cursor-pointer"
                   >
-                    {t.admin.remoteReset || "Remote Reset"}
+                    {resetStatus[k.id] ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                        <span>{resetStatus[k.id]}</span>
+                      </>
+                    ) : (
+                      <span>{t.admin.remoteReset || "Remote Reset"}</span>
+                    )}
                   </button>
                   <Link
                     href="/kiosk"

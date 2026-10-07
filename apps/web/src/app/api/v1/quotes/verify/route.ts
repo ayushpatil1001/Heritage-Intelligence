@@ -36,14 +36,14 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    if (text.includes("educate") && text.includes("agitate") && text.includes("organise")) {
+    if (text.includes("educate") && text.includes("agitate") && (text.includes("organise") || text.includes("organize"))) {
       return NextResponse.json({
         status: "Verified",
         similarity: 0.99,
-        source: "All-India Depressed Classes Conference, Nagpur, July 20, 1942",
+        source: "All-India Depressed Classes Conference, Nagpur, July 20, 1942 (BAWS Vol. 17, Part III)",
         matched_quote: "My final words of advice to you are: Educate, Agitate and Organise; have faith in yourselves.",
         citation: {
-          item_id: "item-speech-nagpur-1942",
+          item_id: "item-editorial-bahishkrit",
           volume: "BAWS Vol. 17",
           page: 120,
           verified: true
