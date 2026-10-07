@@ -11,6 +11,7 @@ import {
   Globe, ArrowRight, Hand, Calendar, CheckCircle2, ChevronRight
 } from "lucide-react";
 import OnScreenKeyboard from "@/components/OnScreenKeyboard";
+import QRCodeModal from "@/components/QRCodeModal";
 
 const ROTATING_QUOTES = [
   {
@@ -412,42 +413,28 @@ export default function KioskClient() {
       </div>
 
       {/* Mobile QR Transfer Modal */}
-      {qrModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-stone-300 p-8 max-w-sm w-full text-center space-y-4 shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-lg font-serif font-bold text-primary">Transfer Session to Mobile</h3>
-            <p className="text-xs text-zinc-600">
-              Scan this QR code with your phone camera to continue browsing on your mobile device.
-            </p>
-            <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 flex justify-center">
-              <svg viewBox="0 0 80 80" className="w-40 h-40 text-primary" role="img" aria-label="Kiosk Handover QR">
-                <rect x="5" y="5" width="22" height="22" fill="currentColor" />
-                <rect x="9" y="9" width="14" height="14" fill="white" />
-                <rect x="12" y="12" width="8" height="8" fill="currentColor" />
-                <rect x="53" y="5" width="22" height="22" fill="currentColor" />
-                <rect x="57" y="9" width="14" height="14" fill="white" />
-                <rect x="60" y="12" width="8" height="8" fill="currentColor" />
-                <rect x="5" y="53" width="22" height="22" fill="currentColor" />
-                <rect x="9" y="57" width="14" height="14" fill="white" />
-                <rect x="12" y="60" width="8" height="8" fill="currentColor" />
-                {/* Pattern dots */}
-                <rect x="35" y="10" width="8" height="8" fill="currentColor" />
-                <rect x="35" y="24" width="6" height="6" fill="currentColor" />
-                <rect x="32" y="36" width="16" height="8" fill="currentColor" />
-                <rect x="35" y="50" width="8" height="14" fill="currentColor" />
-                <rect x="55" y="38" width="16" height="8" fill="currentColor" />
-                <rect x="55" y="55" width="12" height="12" fill="currentColor" />
-              </svg>
-            </div>
-            <button
-              onClick={() => setQrModalOpen(false)}
-              className="w-full py-2.5 rounded-xl bg-primary text-white font-bold text-xs cursor-pointer hover:bg-primary-hover"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      <QRCodeModal
+        isOpen={qrModalOpen}
+        onClose={() => setQrModalOpen(false)}
+        url={
+          searchQuery
+            ? `https://heritage-intelligence-drab.vercel.app/search?q=${encodeURIComponent(searchQuery)}`
+            : "https://heritage-intelligence-drab.vercel.app/kiosk"
+        }
+        title={
+          language === "mr"
+            ? "आंबेडकर हेरिटेज मोबाईल पोर्टल"
+            : language === "hi"
+            ? "आंबेडकर हेरिटेज मोबाइल पोर्टल"
+            : "Ambedkar Heritage Mobile Portal"
+        }
+        subtitle={
+          searchQuery
+            ? `Search: "${searchQuery}" • Continue on Smartphone`
+            : "Continue interactive exploration seamlessly on your personal smartphone"
+        }
+        badge="Museum Kiosk Handover"
+      />
     </div>
   );
 }

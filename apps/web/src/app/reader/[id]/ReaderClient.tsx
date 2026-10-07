@@ -9,8 +9,10 @@ import { getCatalogItemById } from "@/lib/catalogData";
 import {
   ZoomIn, ZoomOut, RotateCcw, Volume2, Globe, FileText,
   Bookmark, ArrowLeft, ArrowRight, Share2, Sparkles, Check,
-  BookOpen, Copy, Info, CheckCircle2, VolumeX
+  BookOpen, Copy, Info, CheckCircle2, VolumeX, QrCode, Smartphone
 } from "lucide-react";
+import QRCodeModal from "@/components/QRCodeModal";
+import ResearchDossierModal from "@/components/ResearchDossierModal";
 
 export default function ReaderClient() {
   const params = useParams();
@@ -43,6 +45,8 @@ export default function ReaderClient() {
   const [summaryData, setSummaryData] = useState<any>(null);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isCitationOpen, setIsCitationOpen] = useState(false);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [isDossierModalOpen, setIsDossierModalOpen] = useState(false);
   const [citationFormat, setCitationFormat] = useState<"APA" | "MLA" | "Chicago">("APA");
   const [copiedCitation, setCopiedCitation] = useState(false);
   const [isPlayingTTS, setIsPlayingTTS] = useState(false);
@@ -222,6 +226,26 @@ export default function ReaderClient() {
           >
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span>{t.reader.aiSummary}</span>
+          </button>
+
+          {/* Research Dossier Export Button */}
+          <button
+            onClick={() => setIsDossierModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0B2A6F] border border-blue-200 text-xs font-bold transition-colors cursor-pointer"
+            title="Download Academic Research Dossier / PDF"
+          >
+            <FileText className="w-4 h-4 text-accent" />
+            <span>{language === "hi" ? "शोध डोजियर (PDF)" : language === "mr" ? "संशोधन डोजियर (PDF)" : "Research Dossier"}</span>
+          </button>
+
+          {/* Send to Mobile / QR Code Button */}
+          <button
+            onClick={() => setIsQrModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-zinc-700 border border-stone-300 text-xs font-bold transition-colors cursor-pointer"
+            title="Open on Smartphone via QR Code"
+          >
+            <QrCode className="w-4 h-4 text-accent" />
+            <span>{language === "hi" ? "फोन पर भेजें" : language === "mr" ? "फोनवर पाठवा" : "Send to Phone"}</span>
           </button>
 
           {/* Citation Button */}
@@ -606,6 +630,24 @@ export default function ReaderClient() {
           </div>
         </div>
       )}
+
+      {/* Send to Phone QR Code Modal */}
+      <QRCodeModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        url={`https://heritage-intelligence-drab.vercel.app/reader/${item?.id || itemId}?page=${currentPage?.page_no || pageNo}`}
+        title={(item?.title_i18n && item.title_i18n[language]) || item?.title || "Archival Document"}
+        subtitle={`Page ${currentPage?.page_no || pageNo} • ${item?.source || "BAWS / CAD Archive"}`}
+      />
+
+      {/* Research Dossier Modal */}
+      <ResearchDossierModal
+        isOpen={isDossierModalOpen}
+        onClose={() => setIsDossierModalOpen(false)}
+        item={item}
+        currentPage={currentPage}
+        language={language}
+      />
     </div>
   );
 }

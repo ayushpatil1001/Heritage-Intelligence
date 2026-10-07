@@ -1,14 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import QRCode from "qrcode";
 import { useApp } from "@/context/AppContext";
-import { Bookmark, QrCode, Printer, Trash2, BookOpen, Share2, Copy, Check, Download, ShieldCheck } from "lucide-react";
+import { Bookmark, QrCode, Printer, Trash2, BookOpen, Share2, Copy, Check, Download, ShieldCheck, FileText, Smartphone } from "lucide-react";
+import QRCodeModal from "@/components/QRCodeModal";
+import ResearchDossierModal from "@/components/ResearchDossierModal";
+import { getCatalogItemById } from "@/lib/catalogData";
 
 export default function CollectionsClient() {
   const { language, savedItems, removeSavedItem, t } = useApp();
   const [tokenCopied, setTokenCopied] = useState(false);
   const [ephemeralToken] = useState(() => "tok_" + Math.random().toString(36).substring(2, 10));
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [selectedDossierItem, setSelectedDossierItem] = useState<any>(null);
+
+  const shareUrl = `https://heritage-intelligence-drab.vercel.app/collections?token=${ephemeralToken}`;
+
+  useEffect(() => {
+    QRCode.toDataURL(shareUrl, {
+      width: 280,
+      margin: 1,
+      color: { dark: "#0B2A6F", light: "#FFFFFF" }
+    })
+      .then((dataUri) => setQrDataUrl(dataUri))
+      .catch((err) => console.error("QR generation error:", err));
+  }, [shareUrl]);
 
   // Sample seed items if empty for demonstration
   const displayItems = savedItems.length > 0 ? savedItems : [
@@ -110,14 +129,25 @@ export default function CollectionsClient() {
                   <h2 className="text-base font-serif font-bold text-navy-900 hover:text-gold-700 transition-colors">
                     <Link href={`/reader/${item.id}`}>{item.title}</Link>
                   </h2>
-                  <div className="flex items-center gap-2 mt-2 text-xs">
+                  <div className="flex flex-wrap items-center gap-3 mt-2 text-xs">
                     <Link
                       href={`/reader/${item.id}`}
-                      className="text-gold-700 font-semibold hover:underline inline-flex items-center gap-1"
+                      className="text-primary font-bold hover:underline inline-flex items-center gap-1"
                     >
                       <span>{t.collections.readSource}</span>
                       <span>→</span>
                     </Link>
+
+                    <button
+                      onClick={() => {
+                        const cat = getCatalogItemById(item.id) || item;
+                        setSelectedDossierItem(cat);
+                      }}
+                      className="text-zinc-600 hover:text-primary font-semibold inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-accent" />
+                      <span>{language === "hi" ? "शोध डोजियर" : language === "mr" ? "संशोधन डोजियर" : "Research Dossier"}</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -141,26 +171,27 @@ export default function CollectionsClient() {
               <span>{t.collections.qrTitle}</span>
             </div>
 
-            {/* QR Code SVG Representation */}
-            <div className="bg-parchment-100 p-4 rounded-xl border border-navy-900/10 inline-block shadow-inner mb-4">
-              <svg viewBox="0 0 100 100" className="w-36 h-36 mx-auto text-navy-900">
-                <rect x="10" y="10" width="25" height="25" fill="currentColor" />
-                <rect x="15" y="15" width="15" height="15" fill="white" />
-                <rect x="18" y="18" width="9" height="9" fill="currentColor" />
-                <rect x="65" y="10" width="25" height="25" fill="currentColor" />
-                <rect x="70" y="15" width="15" height="15" fill="white" />
-                <rect x="73" y="18" width="9" height="9" fill="currentColor" />
-                <rect x="10" y="65" width="25" height="25" fill="currentColor" />
-                <rect x="15" y="70" width="15" height="15" fill="white" />
-                <rect x="18" y="73" width="9" height="9" fill="currentColor" />
-                {/* Patterns */}
-                <rect x="42" y="15" width="12" height="8" fill="currentColor" />
-                <rect x="42" y="30" width="8" height="12" fill="currentColor" />
-                <rect x="42" y="50" width="16" height="8" fill="currentColor" />
-                <rect x="42" y="68" width="12" height="18" fill="currentColor" />
-                <rect x="68" y="45" width="18" height="12" fill="currentColor" />
-                <rect x="68" y="70" width="16" height="16" fill="currentColor" />
-              </svg>
+            {/* Real SCANNABLE QR Code */}
+            <div
+              onClick={() => setIsQrModalOpen(true)}
+              className="bg-white p-3 rounded-2xl border-2 border-stone-300 inline-block shadow-sm hover:shadow-md transition-all cursor-pointer group mb-3 relative"
+              title="Click to view full screen QR"
+            >
+              {qrDataUrl ? (
+                <img
+                  src={qrDataUrl}
+                  alt="Collection Sync QR Code"
+                  className="w-36 h-36 mx-auto rounded-lg object-contain"
+                />
+              ) : (
+                <div className="w-36 h-36 flex items-center justify-center bg-stone-100 rounded-lg">
+                  <QrCode className="w-8 h-8 animate-pulse text-zinc-400" />
+                </div>
+              )}
+              <div className="mt-1 text-[10px] text-primary font-bold group-hover:underline flex items-center justify-center gap-1">
+                <Smartphone className="w-3 h-3 text-accent" />
+                <span>Tap to Expand</span>
+              </div>
             </div>
 
             <h2 className="text-base font-serif font-bold text-navy-900">
@@ -193,6 +224,26 @@ export default function CollectionsClient() {
           </div>
         </div>
       </div>
+
+      {/* Send to Phone QR Code Modal */}
+      <QRCodeModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        url={shareUrl}
+        title="Mobile Research Collection Sync"
+        subtitle={`Token: ${ephemeralToken} • ${displayItems.length} Saved Records`}
+        badge="Sync to Smartphone"
+      />
+
+      {/* Research Dossier Modal */}
+      {selectedDossierItem && (
+        <ResearchDossierModal
+          isOpen={!!selectedDossierItem}
+          onClose={() => setSelectedDossierItem(null)}
+          item={selectedDossierItem}
+          language={language}
+        />
+      )}
     </div>
   );
 }

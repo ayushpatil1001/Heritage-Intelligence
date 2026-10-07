@@ -99,3 +99,18 @@ img, svg, video {
   background-image: radial-gradient(rgba(11, 42, 111, 0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+/* Print optimization for Academic Research Dossier & Citations */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  header, nav, footer, .no-print, [role="navigation"], button:not(.print-include) {
+    display: none !important;
+  }
+  @page {
+    margin: 15mm 15mm 15mm 15mm;
+  }
+}
+

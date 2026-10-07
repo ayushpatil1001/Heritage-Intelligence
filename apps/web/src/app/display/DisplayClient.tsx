@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import QRCode from "qrcode";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
+import QRCodeModal from "@/components/QRCodeModal";
 import {
   Sparkles, Maximize2, Minimize2, QrCode, ShieldCheck,
   Database, Users, BookOpen, ArrowRight, ArrowLeft,
   Calendar, Clock, CheckCircle2, ChevronRight, ChevronLeft,
-  Play, Pause, Volume2, VolumeX
+  Play, Pause, Volume2, VolumeX, Smartphone
 } from "lucide-react";
 
 interface DisplayQuoteCard {
@@ -140,6 +142,18 @@ export default function DisplayClient() {
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+
+  useEffect(() => {
+    QRCode.toDataURL("https://heritage-intelligence-drab.vercel.app/display", {
+      width: 240,
+      margin: 1,
+      color: { dark: "#0B2A6F", light: "#FFFFFF" }
+    })
+      .then((uri) => setQrDataUrl(uri))
+      .catch((err) => console.error("Display QR generation error:", err));
+  }, []);
 
   // Auto-advance quote card every 10 seconds with progress tick (pauses when user holds)
   useEffect(() => {
@@ -407,30 +421,28 @@ export default function DisplayClient() {
       {/* Bottom Bar: QR Mobile Handover & Quick Switchers */}
       <footer className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/15 pt-4 sm:pt-6">
         <div className="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
-          {/* Simulated QR Code for mobile handover */}
-          <div className="bg-white p-2 rounded-xl shadow-lg flex items-center justify-center shrink-0">
-            <svg viewBox="0 0 80 80" className="w-12 h-12 sm:w-14 sm:h-14 text-navy-950" role="img" aria-label="QR Code to continue on mobile">
-              <rect x="5" y="5" width="22" height="22" fill="currentColor" />
-              <rect x="9" y="9" width="14" height="14" fill="white" />
-              <rect x="12" y="12" width="8" height="8" fill="currentColor" />
-              <rect x="53" y="5" width="22" height="22" fill="currentColor" />
-              <rect x="57" y="9" width="14" height="14" fill="white" />
-              <rect x="60" y="12" width="8" height="8" fill="currentColor" />
-              <rect x="5" y="53" width="22" height="22" fill="currentColor" />
-              <rect x="9" y="57" width="14" height="14" fill="white" />
-              <rect x="12" y="60" width="8" height="8" fill="currentColor" />
-              {/* Pattern dots */}
-              <rect x="35" y="10" width="8" height="8" fill="currentColor" />
-              <rect x="35" y="24" width="6" height="6" fill="currentColor" />
-              <rect x="32" y="36" width="16" height="8" fill="currentColor" />
-              <rect x="35" y="50" width="8" height="14" fill="currentColor" />
-              <rect x="55" y="38" width="16" height="8" fill="currentColor" />
-              <rect x="55" y="55" width="12" height="12" fill="currentColor" />
-            </svg>
+          {/* Real Scannable QR Code for mobile handover */}
+          <div
+            onClick={() => setIsQrModalOpen(true)}
+            className="bg-white p-1.5 rounded-xl shadow-lg flex items-center justify-center shrink-0 cursor-pointer hover:scale-105 transition-transform"
+            title="Scan to open on smartphone"
+          >
+            {qrDataUrl ? (
+              <img
+                src={qrDataUrl}
+                alt="Display Mobile Handover QR"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-contain"
+              />
+            ) : (
+              <QrCode className="w-12 h-12 sm:w-14 sm:h-14 text-navy-950 p-2" />
+            )}
           </div>
 
-          <div className="text-left flex-1">
-            <div className="flex items-center gap-1.5 text-gold-400 font-bold text-xs uppercase tracking-wide">
+          <div
+            onClick={() => setIsQrModalOpen(true)}
+            className="text-left flex-1 cursor-pointer group"
+          >
+            <div className="flex items-center gap-1.5 text-gold-400 font-bold text-xs uppercase tracking-wide group-hover:underline">
               <QrCode className="w-4 h-4 shrink-0" />
               <span>{t.display.continueOnMobile}</span>
             </div>
@@ -455,6 +467,16 @@ export default function DisplayClient() {
           </Link>
         </div>
       </footer>
+
+      {/* Mobile QR Transfer Modal */}
+      <QRCodeModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        url="https://heritage-intelligence-drab.vercel.app/display"
+        title="AmbedkarVerse Grand Display Wall"
+        subtitle="Continuous ambient exhibition stream • Tap to read on your phone"
+        badge="Exhibition Display Handover"
+      />
     </div>
   );
 }
