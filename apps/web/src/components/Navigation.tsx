@@ -54,12 +54,18 @@ export function Navigation() {
         {/* Left: Navigation Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
-            onClick={() => router.back()}
-            className="flex items-center justify-center gap-1 px-2.5 sm:px-4 h-12 sm:h-14 min-w-[44px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
-            aria-label="Go Back"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push("/kiosk");
+              }
+            }}
+            className="flex items-center justify-center gap-1.5 px-3 sm:px-4 h-12 sm:h-14 min-w-[56px] sm:min-w-[64px] bg-white/10 active:bg-white/20 rounded-xl text-xs sm:text-sm font-semibold border border-white/15 cursor-pointer transition-transform active:scale-95"
+            aria-label={t.nav.back}
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
-            <span className="hidden sm:inline">{t.nav.back}</span>
+            <span className="font-bold">{t.nav.back}</span>
           </button>
 
           <Link

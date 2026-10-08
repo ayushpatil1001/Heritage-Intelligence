@@ -18,7 +18,7 @@ export default function ReaderClient() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { language, t, addToCollection, myCollection } = useApp();
+  const { language, t, addToCollection, myCollection, kioskMode } = useApp();
 
   const itemId = (params?.id as string) || "item-cad-art32";
   const initialPageNo = parseInt(searchParams?.get("page") || "1", 10);
@@ -198,8 +198,14 @@ export default function ReaderClient() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-stone-300 shadow-sm">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => router.back()}
-            className="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-zinc-700 cursor-pointer transition-colors"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push(kioskMode ? "/kiosk" : "/");
+              }
+            }}
+            className="p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-zinc-700 cursor-pointer transition-colors"
             aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5" />

@@ -2,25 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import QRCode from "qrcode";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
-import QRCodeModal from "@/components/QRCodeModal";
 import {
-  Sparkles, Maximize2, Minimize2, QrCode, ShieldCheck,
-  Database, Users, BookOpen, ArrowRight, ArrowLeft,
-  Calendar, Clock, CheckCircle2, ChevronRight, ChevronLeft,
-  Play, Pause, Volume2, VolumeX, Smartphone
+  Sparkles, Maximize2, Minimize2, ArrowLeft,
 } from "lucide-react";
-
-interface DisplayQuoteCard {
-  quote: string;
-  author: string;
-  source: string;
-  year: string;
-  category: string;
-  historicalContext: string;
-}
 
 interface DisplayQuoteCard {
   quote: string;
@@ -61,6 +47,24 @@ const EXHIBITION_QUOTES: DisplayQuoteCard[] = [
     historicalContext_mr: "संविधान सभागृह, नवी दिल्ली येथे भारतीय राज्यघटना स्वीकारण्यावेळचे ऐतिहासिक समारोपाचे भाषण.",
   },
   {
+    quote: "“Educate, Agitate, Organize. Have faith in yourselves. With justice on our side, I do not see how we can lose our battle.”",
+    quote_hi: "“शिक्षित बनो, आंदोलन करो, संगठित रहो। अपने आप में विश्वास रखो। जब न्याय हमारे पक्ष में है, तो मुझे नहीं लगता कि हम अपनी लड़ाई हार सकते हैं।”",
+    quote_mr: "“शिका, संघटित व्हा आणि संघर्ष करा. स्वतःवर विश्वास ठेवा. न्याय आपल्या बाजूने असताना आपण ही लढाई हरूच शकत नाही.”",
+    author: "Dr. B. R. Ambedkar",
+    author_hi: "डॉ. बी. आर. आंबेडकर",
+    author_mr: "डॉ. बी. आर. आंबेडकर",
+    source: "All-India Depressed Classes Conference, Nagpur",
+    source_hi: "अखिल भारतीय दलित वर्ग परिषद, नागपुर",
+    source_mr: "अखिल भारतीय दलित वर्ग परिषद, नागपूर",
+    year: "20/07/1942",
+    category: "Call to Action",
+    category_hi: "चेतना का आह्वान",
+    category_mr: "जागृतीचे रणशिंग",
+    historicalContext: "Address rallying the oppressed masses toward self-reliance, solidarity, and constitutional agitation.",
+    historicalContext_hi: "स्वावलंबन, एकजुटता और संवैधानिक संघर्ष के लिए दलित वर्ग को किया गया ऐतिहासिक संबोधन।",
+    historicalContext_mr: "स्वावलंबन, ऐक्य आणि न्याय्य संघर्षासाठी जनतेला दिलेला अमर संदेश.",
+  },
+  {
     quote: "“At Mahad, we do not want to go to the tank merely to drink water. We want to go to the tank to assert that we are human beings. Lost rights are never regained by begging, but by relentless struggle.”",
     quote_hi: "“महाड में हम केवल पानी पीने के लिए तालाब पर नहीं जा रहे हैं। हम यह सिद्ध करने जा रहे हैं कि हम भी मनुष्य हैं। छीने गए अधिकार कभी भी भीख मांगने से नहीं मिलते, बल्कि निरंतर संघर्ष से ही पुनः प्राप्त होते हैं।”",
     quote_mr: "“महाड येथे आपण केवळ पाणी पिण्यासाठी चवदार तळ्यावर जात नाही आहोत. आपणही मानवी व्यक्ती आहोत हे सिद्ध करण्यासाठी आपण जात आहोत. गमावलेले हक्क याचना करून नव्हे, तर अविरत संघर्षानेच परत मिळतात.”",
@@ -68,8 +72,8 @@ const EXHIBITION_QUOTES: DisplayQuoteCard[] = [
     author_hi: "डॉ. बी. आर. आंबेडकर",
     author_mr: "डॉ. बी. आर. आंबेडकर",
     source: "Speech to the Depressed Classes, Mahad Satyagraha",
-    source_hi: "महाड सत्याग्रह भाषण, 20/03/1927",
-    source_mr: "महाड सत्याग्रह भाषण, २०/०३/१९२७",
+    source_hi: "महाड सत्याग्रह भाषण",
+    source_mr: "महाड सत्याग्रह भाषण",
     year: "20/03/1927",
     category: "Human Rights & Civil Dignity",
     category_hi: "मानवाधिकार और नागरिक सम्मान",
@@ -77,6 +81,24 @@ const EXHIBITION_QUOTES: DisplayQuoteCard[] = [
     historicalContext: "Historic declaration asserting equal civic access to Chavdar Lake public drinking water.",
     historicalContext_hi: "चवदार तालाब के सार्वजनिक पेयजल के समान नागरिक अधिकार की ऐतिहासिक घोषणा।",
     historicalContext_mr: "चवदार तळ्याच्या सार्वजनिक पिण्याच्या पाण्याचा समान नागरी हक्क प्रस्थापित करणारी ऐतिहासिक घोषणा.",
+  },
+  {
+    quote: "“If I was asked to name any particular article in this Constitution as the most important—an article without which this Constitution would be a nullity—I could not refer to any other article except this one. It is the very soul of the Constitution and the very heart of it.”",
+    quote_hi: "“यदि मुझसे कोई पूछे कि इस संविधान में सबसे महत्वपूर्ण अनुच्छेद कौन सा है, जिसके बिना यह संविधान शून्य हो जाएगा, तो मैं इसके सिवा किसी अन्य अनुच्छेद का नाम नहीं ले सकता। यह संविधान की आत्मा और इसका हृदय है।”",
+    quote_mr: "“या संविधानातील सर्वात महत्त्वाचे कलम कोणते, ज्या कलमाशिवाय हे संविधान निरर्थक ठरेल, असा प्रश्न मला विचारला गेला, तर मी या कलमाशिवाय दुसऱ्या कोणत्याही कलमाचा उल्लेख करू शकणार नाही. हा संविधानाचा आत्मा आणि त्याचे हृदय आहे.”",
+    author: "Dr. B. R. Ambedkar",
+    author_hi: "डॉ. बी. आर. आंबेडकर",
+    author_mr: "डॉ. बी. आर. आंबेडकर",
+    source: "Constituent Assembly Debates, Vol. VII",
+    source_hi: "संविधान सभा वादविवाद, खंड VII",
+    source_mr: "संविधान सभा वादविवाद, खंड ७",
+    year: "09/12/1948",
+    category: "Fundamental Rights",
+    category_hi: "मौलिक अधिकार",
+    category_mr: "मूलभूत हक्क",
+    historicalContext: "Debate on Article 32 establishing direct Supreme Court remedies as the indispensable shield of liberty.",
+    historicalContext_hi: "अनुच्छेद 32 पर बहस, जिसने सर्वोच्च न्यायालय के सीधे उपचारों को स्वतंत्रता की अपरिहार्य ढाल बनाया।",
+    historicalContext_mr: "कलम ३२ वरील ऐतिहासिक चर्चा, ज्याने सर्वोच्च न्यायालयाच्या न्यायिक संरक्षणाला स्वातंत्र्याची सर्वोच्च ढाल बनवले.",
   },
   {
     quote: "“The trade of a country depends upon the stability of its currency. A fluctuating rupee is a tax on industry and commerce, and the worst enemy of social justice.”",
@@ -135,27 +157,14 @@ const EXHIBITION_QUOTES: DisplayQuoteCard[] = [
 ];
 
 export default function DisplayClient() {
-  const { language, t } = useApp();
+  const { language, setLanguage, t } = useApp();
   const [activeIdx, setActiveIdx] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [visitorCount, setVisitorCount] = useState(1420);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [qrDataUrl, setQrDataUrl] = useState<string>("");
-  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [fadeState, setFadeState] = useState<"in" | "out">("in");
 
-  useEffect(() => {
-    QRCode.toDataURL("https://heritage-intelligence-drab.vercel.app/display", {
-      width: 240,
-      margin: 1,
-      color: { dark: "#0B2A6F", light: "#FFFFFF" }
-    })
-      .then((uri) => setQrDataUrl(uri))
-      .catch((err) => console.error("Display QR generation error:", err));
-  }, []);
-
-  // Auto-advance quote card every 10 seconds with progress tick (pauses when user holds)
+  // Auto-advance quote card every 10 seconds with smooth progress tick
   useEffect(() => {
     if (isPaused) return;
 
@@ -166,8 +175,12 @@ export default function DisplayClient() {
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          setActiveIdx((curr) => (curr + 1) % EXHIBITION_QUOTES.length);
-          setVisitorCount((c) => c + Math.floor(Math.random() * 2));
+          // Trigger smooth fade transition
+          setFadeState("out");
+          setTimeout(() => {
+            setActiveIdx((curr) => (curr + 1) % EXHIBITION_QUOTES.length);
+            setFadeState("in");
+          }, 350);
           return 0;
         }
         return prev + step;
@@ -177,57 +190,35 @@ export default function DisplayClient() {
     return () => clearInterval(timer);
   }, [activeIdx, isPaused]);
 
-  // Web Speech API Ambient Narration
-  const toggleSpeech = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    } else {
-      window.speechSynthesis.cancel();
-      const currentQuote = EXHIBITION_QUOTES[activeIdx];
-      const textToRead = `${currentQuote.quote}. Stated by ${currentQuote.author}, from ${currentQuote.source}.`;
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      utterance.rate = 0.95;
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
-      window.speechSynthesis.speak(utterance);
-      setIsSpeaking(true);
-    }
-  };
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-    }
-  }, [activeIdx]);
-
-  useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
-  // Keyboard navigation for wall exhibition
+  // Subtle keyboard controls for unattended clickers / remote presenters
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
-        handleNext();
+        advanceQuote(1);
       } else if (e.key === "ArrowLeft") {
-        handlePrev();
+        advanceQuote(-1);
       } else if (e.key === " ") {
         e.preventDefault();
         setIsPaused((p) => !p);
+      } else if (e.key.toLowerCase() === "f") {
+        toggleFullscreen();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const advanceQuote = (direction: number) => {
+    setProgress(0);
+    setFadeState("out");
+    setTimeout(() => {
+      setActiveIdx((prev) => (prev + direction + EXHIBITION_QUOTES.length) % EXHIBITION_QUOTES.length);
+      setFadeState("in");
+    }, 250);
+  };
+
   const toggleFullscreen = () => {
+    if (typeof document === "undefined") return;
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {});
       setIsFullscreen(true);
@@ -237,246 +228,149 @@ export default function DisplayClient() {
     }
   };
 
-  const handleNext = () => {
-    setProgress(0);
-    setActiveIdx((prev) => (prev + 1) % EXHIBITION_QUOTES.length);
-  };
-
-  const handlePrev = () => {
-    setProgress(0);
-    setActiveIdx((prev) => (prev - 1 + EXHIBITION_QUOTES.length) % EXHIBITION_QUOTES.length);
-  };
-
   const current = EXHIBITION_QUOTES[activeIdx];
 
+  const localizedQuote =
+    language === "hi" ? current.quote_hi : language === "mr" ? current.quote_mr : current.quote;
+  const localizedAuthor =
+    language === "hi" ? current.author_hi : language === "mr" ? current.author_mr : current.author;
+  const localizedSource =
+    language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source;
+  const localizedCategory =
+    language === "hi" ? current.category_hi : language === "mr" ? current.category_mr : current.category;
+  const localizedContext =
+    language === "hi" ? current.historicalContext_hi : language === "mr" ? current.historicalContext_mr : current.historicalContext;
+
   return (
-    <div className="min-h-screen bg-navy-950 text-white flex flex-col justify-between p-4 sm:p-8 lg:p-12 relative overflow-hidden select-none">
-      {/* Background Radial Glow & Rotating Ashoka Chakra Watermark */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0B2A6F]/50 via-navy-950 to-black opacity-90 pointer-events-none" />
-      <div className="absolute -right-20 -bottom-24 opacity-5 pointer-events-none">
-        <AshokaChakra size={600} className="text-white" animate={true} />
+    <div className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 relative overflow-hidden select-none">
+      {/* Background Radial Glow & Slow Ambient Watermark */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0A2663]/40 via-[#040D21] to-[#020713] opacity-95 pointer-events-none" />
+      <div className="absolute -right-28 -bottom-32 opacity-[0.04] pointer-events-none">
+        <AshokaChakra size={700} className="text-white" animate={true} />
       </div>
 
-      {/* Top Header: Brand, Telemetry, and Fullscreen / Exit Controls */}
-      <header className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/15 pb-4 sm:pb-6">
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gold-500 text-navy-950 flex items-center justify-center font-serif font-black text-xl sm:text-2xl shadow-lg border border-gold-400 shrink-0">
+      {/* Top Standby Header: Minimal, Dignified & Discreet */}
+      <header className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4">
+        {/* Left: Emblem & Institutional Title */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gold-500/90 text-navy-950 flex items-center justify-center font-serif font-black text-xl shadow-md border border-gold-400/50 shrink-0">
             अ
           </div>
           <div>
-            <h1 className="text-lg sm:text-2xl font-serif font-bold tracking-wide text-white leading-tight">
-              {t.display.wallTitle}
+            <h1 className="text-sm sm:text-base font-serif font-bold tracking-wide text-white/90 leading-tight">
+              {t.appName}
             </h1>
-            <p className="text-[11px] sm:text-xs text-gold-400 font-mono tracking-wider uppercase flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span>{t.display.wallSubtitle}</span>
-              <span>•</span>
-              <span className="text-white bg-gold-500/20 px-1.5 py-0.2 rounded font-mono">03/10/2026</span>
+            <p className="text-[11px] text-gold-400/80 font-mono tracking-wider uppercase">
+              {t.display.wallSubtitle} • Standby Exhibition Mode
             </p>
           </div>
         </div>
 
-        {/* Live Counters and Controls */}
-        <div className="flex items-center justify-between md:justify-end gap-3 sm:gap-6 flex-wrap">
-          <div className="hidden lg:flex items-center gap-4 sm:gap-6">
-            <div className="text-right">
-              <div className="text-xl sm:text-2xl font-mono font-bold text-gold-400">30</div>
-              <div className="text-[10px] text-zinc-300 uppercase tracking-wider">{t.display.treatises}</div>
-            </div>
-            <div className="text-right">
-              <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400">100%</div>
-              <div className="text-[10px] text-zinc-300 uppercase tracking-wider">{t.display.integrity}</div>
-            </div>
-            <div className="text-right">
-              <div className="text-xl sm:text-2xl font-mono font-bold text-white">14,200+</div>
-              <div className="text-[10px] text-zinc-300 uppercase tracking-wider">{t.display.scans}</div>
-            </div>
-          </div>
-          <div className="text-right hidden sm:block">
-            <div className="text-lg sm:text-2xl font-mono font-bold text-gold-200">{visitorCount}</div>
-            <div className="text-[10px] text-zinc-300 uppercase tracking-wider">{t.display.visitors}</div>
+        {/* Right: Low-opacity unobtrusive controls for museum staff / attendants */}
+        <div className="flex items-center gap-3 opacity-30 hover:opacity-100 transition-opacity duration-300">
+          {/* Subtle Language Pills */}
+          <div className="inline-flex rounded-lg bg-white/10 p-0.5 border border-white/15 text-[11px]">
+            {(["en", "hi", "mr"] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLanguage(l)}
+                className={`px-2 py-1 rounded font-bold transition-all cursor-pointer ${
+                  language === l
+                    ? "bg-gold-500 text-navy-950 shadow-xs"
+                    : "text-white/70 hover:text-white"
+                }`}
+              >
+                {l === "en" ? "EN" : l === "hi" ? "हिं" : "मरा"}
+              </button>
+            ))}
           </div>
 
-          <div className="flex items-center gap-2 border-l border-white/20 pl-3 sm:pl-4">
-            <button
-              onClick={toggleFullscreen}
-              className="p-2.5 sm:p-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/15 cursor-pointer"
-              title={t.display.fullscreen}
-              aria-label={t.display.fullscreen}
-            >
-              {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
-            </button>
+          {/* Fullscreen Toggle */}
+          <button
+            onClick={toggleFullscreen}
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors border border-white/15 cursor-pointer"
+            title={isFullscreen ? "Exit Fullscreen (F)" : "Enter Fullscreen (F)"}
+            aria-label="Toggle Fullscreen"
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
 
-            <Link
-              href="/"
-              className="px-3.5 sm:px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-all border border-white/20"
-            >
-              {t.display.exitPortal}
-            </Link>
-          </div>
+          {/* Discreet Exit Link */}
+          <Link
+            href="/"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors border border-white/15 cursor-pointer"
+            title="Return to Home Portal"
+            aria-label="Return to Home Portal"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
         </div>
       </header>
 
-      {/* Main Feature: Grand Dynamic Quotation Display Card */}
-      <main className="relative z-10 my-auto py-10 max-w-5xl mx-auto text-center w-full px-4">
-        {/* Category & Date in DD/MM/YYYY */}
-        <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold-300 bg-gold-950/80 border border-gold-500/50 px-5 py-2 rounded-full mb-8 shadow-md">
-          <Sparkles className="w-4 h-4 text-gold-400 animate-pulse" />
-          <span>{language === "hi" ? current.category_hi : language === "mr" ? current.category_mr : current.category}</span>
-          <span className="text-gold-500">•</span>
-          <span className="font-mono text-white">{current.year}</span>
-        </div>
-
-        <blockquote className="text-2xl sm:text-4xl md:text-5xl font-serif font-medium text-stone-100 leading-snug tracking-tight min-h-[180px] flex items-center justify-center">
-          {language === "hi" ? current.quote_hi : language === "mr" ? current.quote_mr : current.quote}
-        </blockquote>
-
-        <div className="mt-8 space-y-1.5">
-          <div className="text-xl sm:text-2xl font-serif font-bold text-gold-400 tracking-wide">
-            {language === "hi" ? current.author_hi : language === "mr" ? current.author_mr : current.author}
-          </div>
-          <div className="text-sm sm:text-base text-zinc-300 font-mono">
-            {language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source}
-          </div>
-          <div className="text-xs sm:text-sm text-zinc-400 max-w-2xl mx-auto mt-2 italic font-sans leading-relaxed">
-            {language === "hi" ? current.historicalContext_hi : language === "mr" ? current.historicalContext_mr : current.historicalContext}
-          </div>
-        </div>
-
-        {/* Carousel Navigation & Auto-Progress Bar */}
-        <div className="mt-10 max-w-xl mx-auto space-y-3">
-          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-            <div
-              className={`bg-gold-400 h-full transition-all duration-100 ease-linear rounded-full ${
-                isPaused ? "opacity-50" : "opacity-100"
-              }`}
-              style={{ width: `${progress}%` }}
-            />
+      {/* Main Screen: Cinematic Quotation Standby Display */}
+      <main className="relative z-10 my-auto py-8 sm:py-12 max-w-5xl mx-auto text-center w-full px-4 flex flex-col items-center justify-center">
+        <div
+          className={`transition-all duration-500 ease-in-out w-full flex flex-col items-center ${
+            fadeState === "in" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+          }`}
+        >
+          {/* Category Badge & Historic Date strictly in DD/MM/YYYY */}
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold-300 bg-gold-950/70 border border-gold-500/40 px-5 py-1.5 rounded-full mb-8 shadow-md">
+            <Sparkles className="w-3.5 h-3.5 text-gold-400" />
+            <span>{localizedCategory}</span>
+            <span className="text-gold-500/60">•</span>
+            <span className="font-mono text-white/90">{current.year}</span>
           </div>
 
-          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 text-xs text-zinc-300 font-mono">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <button
-                onClick={handlePrev}
-                className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
-                title="Previous Quote (Left Arrow)"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
+          {/* The Hero Quotation */}
+          <blockquote className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-serif font-normal text-stone-100 leading-snug sm:leading-tight tracking-tight min-h-[160px] sm:min-h-[220px] flex items-center justify-center max-w-4xl mx-auto drop-shadow-sm">
+            {localizedQuote}
+          </blockquote>
 
-              <button
-                onClick={() => setIsPaused((p) => !p)}
-                className={`p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl transition-colors cursor-pointer border ${
-                  isPaused
-                    ? "bg-gold-500 text-navy-950 border-gold-400 font-bold"
-                    : "bg-white/10 hover:bg-white/20 text-white border-white/15"
-                }`}
-                title={isPaused ? "Resume slideshow (Space)" : "Pause slideshow (Space)"}
-              >
-                {isPaused ? <Play className="w-4 h-4 fill-current" /> : <Pause className="w-4 h-4" />}
-              </button>
-
-              <button
-                onClick={toggleSpeech}
-                className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl transition-colors cursor-pointer border ${
-                  isSpeaking
-                    ? "bg-gold-500 text-navy-950 border-gold-400 font-bold animate-pulse"
-                    : "bg-white/10 hover:bg-white/20 text-white border-white/15"
-                }`}
-                title="Audio Narration (TTS)"
-              >
-                <Volume2 className="w-4 h-4 shrink-0" />
-                <span className="text-[11px] font-sans font-semibold">
-                  {isSpeaking ? t.display.narrating : t.display.listen}
-                </span>
-              </button>
+          {/* Author & Citational Source */}
+          <div className="mt-8 sm:mt-10 space-y-2">
+            <div className="text-2xl sm:text-3xl font-serif font-bold text-gold-400 tracking-wide">
+              {localizedAuthor}
             </div>
-
-            <div className="flex items-center gap-1.5 sm:gap-2 mx-auto sm:mx-0">
-              {EXHIBITION_QUOTES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setProgress(0);
-                    setActiveIdx(i);
-                  }}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    activeIdx === i ? "w-6 sm:w-8 bg-gold-400" : "w-2 bg-white/20 hover:bg-white/40"
-                  }`}
-                  aria-label={`Slide ${i + 1}`}
-                />
-              ))}
+            <div className="text-sm sm:text-base text-stone-300 font-mono tracking-wide">
+              {localizedSource}
             </div>
-
-            <button
-              onClick={handleNext}
-              className="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
-              title="Next Quote (Right Arrow)"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            <div className="text-xs sm:text-sm text-stone-400/90 max-w-2xl mx-auto mt-2 italic font-sans leading-relaxed">
+              {localizedContext}
+            </div>
           </div>
         </div>
       </main>
 
-      {/* Bottom Bar: QR Mobile Handover & Quick Switchers */}
-      <footer className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/15 pt-4 sm:pt-6">
-        <div className="flex items-center gap-3 sm:gap-4 w-full md:w-auto">
-          {/* Real Scannable QR Code for mobile handover */}
+      {/* Bottom Screen: Quiet Auto-Rotation Progress Line & Indicator */}
+      <footer className="relative z-10 flex flex-col items-center justify-center gap-3 pt-4 border-t border-white/10">
+        {/* Subtle, Minimal Progress Bar */}
+        <div className="w-full max-w-xs sm:max-w-md bg-white/10 h-1 rounded-full overflow-hidden">
           <div
-            onClick={() => setIsQrModalOpen(true)}
-            className="bg-white p-1.5 rounded-xl shadow-lg flex items-center justify-center shrink-0 cursor-pointer hover:scale-105 transition-transform"
-            title="Scan to open on smartphone"
-          >
-            {qrDataUrl ? (
-              <img
-                src={qrDataUrl}
-                alt="Display Mobile Handover QR"
-                className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-contain"
-              />
-            ) : (
-              <QrCode className="w-12 h-12 sm:w-14 sm:h-14 text-navy-950 p-2" />
-            )}
-          </div>
-
-          <div
-            onClick={() => setIsQrModalOpen(true)}
-            className="text-left flex-1 cursor-pointer group"
-          >
-            <div className="flex items-center gap-1.5 text-gold-400 font-bold text-xs uppercase tracking-wide group-hover:underline">
-              <QrCode className="w-4 h-4 shrink-0" />
-              <span>{t.display.continueOnMobile}</span>
-            </div>
-            <p className="text-[11px] sm:text-xs text-zinc-300 mt-0.5 max-w-lg line-clamp-2 sm:line-clamp-none">
-              {t.display.continueSub}
-            </p>
-          </div>
+            className={`bg-gold-400 h-full transition-all duration-100 ease-linear rounded-full ${
+              isPaused ? "opacity-40" : "opacity-100"
+            }`}
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        <div className="flex items-center justify-stretch sm:justify-end gap-2.5 sm:gap-3 w-full md:w-auto">
-          <Link
-            href="/kiosk"
-            className="flex-1 sm:flex-initial text-center px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl bg-gold-500 hover:bg-gold-400 text-xs font-bold text-navy-950 transition-colors shadow-md"
-          >
-            {t.display.launchKiosk}
-          </Link>
-          <Link
-            href="/search"
-            className="flex-1 sm:flex-initial text-center px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl bg-white/15 hover:bg-white/25 text-xs font-semibold text-white transition-colors border border-white/20"
-          >
-            {t.display.searchArchive}
-          </Link>
+        {/* Subtle Slide Indicator Dots */}
+        <div className="flex items-center gap-2 pt-1">
+          {EXHIBITION_QUOTES.map((_, i) => (
+            <span
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                activeIdx === i ? "w-6 bg-gold-400" : "w-1.5 bg-white/20"
+              }`}
+            />
+          ))}
         </div>
+
+        {/* Subdued Standby Attribution */}
+        <p className="text-[10px] text-stone-500 font-mono tracking-wider uppercase">
+          National Digital Heritage Archive • Continuous Exhibition Stream
+        </p>
       </footer>
-
-      {/* Mobile QR Transfer Modal */}
-      <QRCodeModal
-        isOpen={isQrModalOpen}
-        onClose={() => setIsQrModalOpen(false)}
-        url="https://heritage-intelligence-drab.vercel.app/display"
-        title="AmbedkarVerse Grand Display Wall"
-        subtitle="Continuous ambient exhibition stream • Tap to read on your phone"
-        badge="Exhibition Display Handover"
-      />
     </div>
   );
 }

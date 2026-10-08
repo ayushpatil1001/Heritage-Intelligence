@@ -9,12 +9,14 @@ import { KioskIdleGuard } from "@/components/KioskIdleGuard";
 import { SurfaceFloatingSwitcher } from "@/components/SurfaceFloatingSwitcher";
 import { useApp } from "@/context/AppContext";
 
+import { KioskTopBar } from "@/components/KioskTopBar";
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDisplay = pathname.startsWith("/display");
-  const isKiosk = pathname.startsWith("/kiosk");
+  const { language, t, kioskMode } = useApp();
 
-  const { language, t } = useApp();
+  const isDisplay = pathname.startsWith("/display");
+  const isKiosk = pathname.startsWith("/kiosk") || kioskMode;
 
   // --------------------------------------------------------------------------
   // 1. DISPLAY WALL MODE (1920x1080 Ambient Museum Video Wall)
@@ -24,18 +26,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="w-full min-h-screen bg-navy-950 overflow-x-hidden selection:bg-gold-500 selection:text-navy-950">
         <main className="w-full min-h-screen">{children}</main>
-        <KioskIdleGuard />
       </div>
     );
   }
 
   // --------------------------------------------------------------------------
   // 2. KIOSK TOUCH SURFACE MODE (1080x1920 Portrait Touch Kiosk)
-  // Full portrait canvas, dedicated touch controls, no public footer
+  // Full portrait canvas, persistent top back bar on subpages, bottom touch dock
   // --------------------------------------------------------------------------
   if (isKiosk) {
+    const isSubPage = !pathname.startsWith("/kiosk") || pathname.length > 6;
     return (
       <div className="min-h-screen bg-[#FAF9F6] flex flex-col justify-between overflow-x-hidden select-none pb-24 selection:bg-accent selection:text-primary">
+        {isSubPage && <KioskTopBar />}
         <main className="flex-1 w-full max-w-[1080px] mx-auto p-4 sm:p-6">
           {children}
         </main>

@@ -53,7 +53,7 @@ export default function QuotesVerifyClient() {
       });
   };
 
-  const sampleTestQuotes = [
+  const sampleTestQuotes = t.quoteVerifier.sampleQuotes || [
     {
       label: "Authentic Quote 1",
       quote: "Caste is not just a division of labour, it is a division of labourers."

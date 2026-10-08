@@ -127,11 +127,41 @@ export interface Translations {
     attractTitle: string;
     attractSubtitle: string;
     kioskHeaderTitle: string;
+    kioskHeaderSubtitle: string;
     touchSearchPlaceholder: string;
+    searchButton: string;
     highContrast: string;
     interactiveMode: string;
     listenSpeech: string;
     stopSpeech: string;
+    readOriginalWorks: string;
+    readOriginalWorksDesc: string;
+    worksCount: string;
+    timelineTile: string;
+    timelineTileDesc: string;
+    verifyQuoteTile: string;
+    verifyQuoteTileDesc: string;
+    mapTile: string;
+    mapTileDesc: string;
+    assistantTile: string;
+    assistantTileDesc: string;
+    storiesTile: string;
+    storiesTileDesc: string;
+    nodeTelemetry: string;
+    statusOnline: string;
+    statusOffline: string;
+    mobileTransferQr: string;
+    allWorksTitle: string;
+    allWorksSubtitle: string;
+    allWorksFilterAll: string;
+    allWorksFilterBook: string;
+    allWorksFilterDebate: string;
+    allWorksFilterSpeech: string;
+    allWorksFilterEditorial: string;
+    openInReader: string;
+    closeCatalog: string;
+    backToKiosk: string;
+    kioskActiveBanner: string;
   };
   reader: {
     originalScan: string;
@@ -558,11 +588,41 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       attractSubtitle:
         "Explore manuscripts, debates, and historical speeches with verified citations.",
       kioskHeaderTitle: "Ambedkar Heritage Kiosk",
+      kioskHeaderSubtitle: "DAIC National Digital Heritage Archive • PS 26096",
       touchSearchPlaceholder: "Touch here to search speeches, CAD debates, or writings...",
+      searchButton: "Search",
       highContrast: "High Contrast",
       interactiveMode: "Interactive Exhibition Mode",
       listenSpeech: "Listen (Speech Narration)",
       stopSpeech: "Stop Narration",
+      readOriginalWorks: "Read Original Works",
+      readOriginalWorksDesc: "Browse All 30 Treatises, Speeches & CAD Debates",
+      worksCount: "30 Works",
+      timelineTile: "1891–1956 Timeline",
+      timelineTileDesc: "25 Life Milestones in DD/MM/YYYY",
+      verifyQuoteTile: "Verify a Quotation",
+      verifyQuoteTileDesc: "Instant Verbatim Fact-Check",
+      mapTile: "Historical Memorial Map",
+      mapTileDesc: "Mahad, Columbia, LSE, Nagpur",
+      assistantTile: "Archival AI Assistant",
+      assistantTileDesc: "Strict Citations & Audio Dialogue",
+      storiesTile: "Exhibition Stories",
+      storiesTileDesc: "4 Curated Archival Visual Essays",
+      nodeTelemetry: "Node: Central Hall Kiosk 01 • Telemetry:",
+      statusOnline: "Connected (Online)",
+      statusOffline: "Offline Cached",
+      mobileTransferQr: "Mobile Transfer QR",
+      allWorksTitle: "Authenticated Original Treatises & Primary Sources",
+      allWorksSubtitle: "Select from Dr. Ambedkar's complete published treatises, CAD volumes & historic manuscripts",
+      allWorksFilterAll: "All Treatises",
+      allWorksFilterBook: "Books & Treatises",
+      allWorksFilterDebate: "CAD Debates",
+      allWorksFilterSpeech: "Speeches",
+      allWorksFilterEditorial: "Editorials & Journals",
+      openInReader: "Open in Deep Zoom Reader →",
+      closeCatalog: "Close Catalog",
+      backToKiosk: "Return to Kiosk Home",
+      kioskActiveBanner: "Kiosk Mode Active • DAIC Archival Terminal",
     },
     reader: {
       originalScan: "Digitized 600 DPI Scan",
@@ -998,11 +1058,41 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       attractSubtitle:
         "सत्यापित संदर्भों के साथ मूल पांडुलिपियों, संविधान सभा बहसों और भाषणों का अन्वेषण करें।",
       kioskHeaderTitle: "आंबेडकर विरासत कियोस्क",
+      kioskHeaderSubtitle: "डीएआईसी राष्ट्रीय डिजिटल विरासत अभिलेखागार • पीएस 26096",
       touchSearchPlaceholder: "भाषण, संविधान सभा बहस या ग्रंथ खोजने के लिए यहाँ स्पर्श करें...",
+      searchButton: "खोजें",
       highContrast: "उच्च कंट्रास्ट",
       interactiveMode: "इंटरैक्टिव प्रदर्शनी मोड",
       listenSpeech: "सुनें (ध्वनि वाचन)",
       stopSpeech: "वाचन रोकें",
+      readOriginalWorks: "मूल रचनाएं व ग्रंथ पढ़ें",
+      readOriginalWorksDesc: "सभी 30 ऐतिहासिक ग्रंथों, भाषणों व संविधान बहसों का अन्वेषण करें",
+      worksCount: "30 रचनाएं",
+      timelineTile: "1891–1956 कालक्रम",
+      timelineTileDesc: "25 ऐतिहासिक मील के पत्थर (DD/MM/YYYY)",
+      verifyQuoteTile: "उद्धरण का सत्यापन करें",
+      verifyQuoteTileDesc: "तात्कालिक प्रामाणिक तथ्य-जांच",
+      mapTile: "ऐतिहासिक स्मारक मानचित्र",
+      mapTileDesc: "महाड, कोलंबिया, एलएसई, नागपुर",
+      assistantTile: "अभिलेखागार एआई सहायक",
+      assistantTileDesc: "कड़े संदर्भ और ध्वनि संवाद",
+      storiesTile: "प्रदर्शनी ऐतिहासिक गाथा",
+      storiesTileDesc: "4 प्रामाणिक ऐतिहासिक दृश्य निबंध",
+      nodeTelemetry: "नोड: सेंट्रल हॉल कियोस्क 01 • टेलीमेट्री:",
+      statusOnline: "सक्रिय (ऑनलाइन)",
+      statusOffline: "ऑफ़लाइन कैश्ड",
+      mobileTransferQr: "मोबाइल ट्रांसफर क्यूआर",
+      allWorksTitle: "प्रमाणित मूल ग्रंथ और प्राथमिक ऐतिहासिक स्रोत",
+      allWorksSubtitle: "डॉ. आंबेडकर के संपूर्ण प्रकाशित ग्रंथों, संविधान सभा खंडों और ऐतिहासिक पांडुलिपियों में से चुनें",
+      allWorksFilterAll: "सभी ग्रंथ",
+      allWorksFilterBook: "ग्रंथ व निबंध",
+      allWorksFilterDebate: "संविधान सभा बहस",
+      allWorksFilterSpeech: "भाषण",
+      allWorksFilterEditorial: "संपादकीय व पत्रिकाएं",
+      openInReader: "डीप ज़ूम रीडर में खोलें →",
+      closeCatalog: "सूची बंद करें",
+      backToKiosk: "कियोस्क मुख्य पृष्ठ पर वापस जाएं",
+      kioskActiveBanner: "कियोस्क मोड सक्रिय • डीएआईसी अभिलेखागार टर्मिनल",
     },
     reader: {
       originalScan: "मूल 600 डीपीआई स्कैन",
@@ -1447,11 +1537,41 @@ export const TRANSLATIONS: Record<Language, Translations> = {
       attractSubtitle:
         "सत्यापित संदर्भांसह हस्तलिखिते, घटना समिती चर्चा आणि ऐतिहासिक भाषणांचे अवलोकन करा.",
       kioskHeaderTitle: "आंबेडकर वारसा किओस्क",
+      kioskHeaderSubtitle: "डीएआयसी राष्ट्रीय डिजिटल वारसा अभिलेखागार • पीएस २६०९६",
       touchSearchPlaceholder: "भाषणे, घटना समिती वादविवाद किंवा ग्रंथ शोधण्यासाठी स्पर्श करा...",
+      searchButton: "शोधा",
       highContrast: "हाय कॉन्ट्रास्ट",
       interactiveMode: "संवादी प्रदर्शनी मोड",
       listenSpeech: "ऐका (ध्वनी वाचन)",
       stopSpeech: "वाचन थांबवा",
+      readOriginalWorks: "मूळ ग्रंथ व रचना वाचा",
+      readOriginalWorksDesc: "सर्व ३० ऐतिहासिक ग्रंथ, भाषणे व संविधान सभा चर्चांचे अवलोकन करा",
+      worksCount: "३० मूळ ग्रंथ",
+      timelineTile: "१८९१–१९५६ जीवनप्रवास कालरेषा",
+      timelineTileDesc: "२५ महत्त्वाचे ऐतिहासिक जीवन टप्पे (DD/MM/YYYY)",
+      verifyQuoteTile: "सुभाषितांची / अवतरणांची पडताळणी",
+      verifyQuoteTileDesc: "अचूक व अस्सल ऐतिहासिक पुरावा तपासणी",
+      mapTile: "ऐतिहासिक स्मारक नकाशा",
+      mapTileDesc: "महाड, कोलंबिया, लंडन, नागपूर",
+      assistantTile: "पुराभिलेख एआय सहाय्यक",
+      assistantTileDesc: "काटेकोर संदर्भ व संवादी मार्गदर्शन",
+      storiesTile: "प्रदर्शनी ऐतिहासिक कथा",
+      storiesTileDesc: "४ सचित्र ऐतिहासिक दृश्य निबंध",
+      nodeTelemetry: "नोड: सेंट्रल हॉल किओस्क ०१ • टेलिमेट्री:",
+      statusOnline: "सक्रिय (ऑनलाइन)",
+      statusOffline: "ऑफलाइन कॅश",
+      mobileTransferQr: "मोबाईल ट्रान्सफर क्यूआर",
+      allWorksTitle: "अधिकृत मूळ ग्रंथ आणि प्राथमिक ऐतिहासिक स्रोत",
+      allWorksSubtitle: "डॉ. बाबासाहेब आंबेडकरांचे संपूर्ण प्रकाशित ग्रंथ, संविधान सभा खंड आणि ऐतिहासिक हस्तलिखितांमधून निवडा",
+      allWorksFilterAll: "सर्व ग्रंथ",
+      allWorksFilterBook: "ग्रंथ व निबंध",
+      allWorksFilterDebate: "संविधान सभा चर्चा",
+      allWorksFilterSpeech: "भाषणे",
+      allWorksFilterEditorial: "अग्रलेख व नियतकालिके",
+      openInReader: "डीप झूम रीडरमध्ये उघडा →",
+      closeCatalog: "कॅटलॉग बंद करा",
+      backToKiosk: "किओस्क मुख्य पानावर परत जा",
+      kioskActiveBanner: "किओस्क मोड सक्रिय • डीएआयसी अभिलेखागार टर्मिनल",
     },
     reader: {
       originalScan: "मूळ ६०० DPI स्कॅन",
