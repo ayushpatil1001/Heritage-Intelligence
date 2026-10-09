@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
-import { Maximize2, Minimize2, ArrowLeft } from "lucide-react";
+import { Maximize2, Minimize2, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DisplayQuoteCard {
   quote: string;
@@ -256,9 +256,6 @@ export default function DisplayClient() {
             <h1 className="text-xs sm:text-sm font-serif font-bold tracking-wide text-white/90 leading-tight">
               {t.appName}
             </h1>
-            <p className="text-[10px] text-gold-400/70 font-mono tracking-wider">
-              {t.display.wallSubtitle}
-            </p>
           </div>
         </div>
 
@@ -303,31 +300,54 @@ export default function DisplayClient() {
         </div>
       </header>
 
-      {/* Main Screen: Refined Proportion Standby Quotation */}
-      <main className="relative z-10 my-auto py-6 sm:py-8 max-w-3xl mx-auto text-center w-full px-4 flex flex-col items-center justify-center">
-        <div
-          className={`transition-all duration-500 ease-in-out w-full flex flex-col items-center ${
-            fadeState === "in" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-          }`}
+      {/* Main Screen: Quotation Display with Left & Right Arrow Navigation */}
+      <main className="relative z-10 my-auto py-6 sm:py-8 max-w-5xl mx-auto w-full px-2 sm:px-4 flex items-center justify-between gap-3 sm:gap-6">
+        {/* Previous Quote Arrow */}
+        <button
+          onClick={() => advanceQuote(-1)}
+          className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white/70 hover:text-white transition-all cursor-pointer border border-white/15 shrink-0 shadow-sm"
+          title="Previous quote"
+          aria-label="Previous quote"
         >
-          {/* The Quotation: Elegantly sized & readable */}
-          <blockquote className="text-lg sm:text-2xl md:text-3xl font-serif font-normal text-stone-100 leading-relaxed sm:leading-relaxed tracking-normal min-h-[90px] sm:min-h-[120px] flex items-center justify-center max-w-2xl sm:max-w-3xl mx-auto drop-shadow-sm">
-            {localizedQuote}
-          </blockquote>
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
 
-          {/* Author & Source Attribution without bulky badge tags */}
-          <div className="mt-6 sm:mt-8 space-y-1.5">
-            <div className="text-base sm:text-lg font-serif font-bold text-gold-400 tracking-wide">
-              {localizedAuthor}
-            </div>
-            <div className="text-xs sm:text-sm text-stone-300/85 font-mono">
-              {localizedSource} • {current.year}
-            </div>
-            <div className="text-[11px] sm:text-xs text-stone-400/75 max-w-lg mx-auto mt-1 italic font-sans leading-relaxed">
-              {localizedContext}
+        {/* Center Quotation Content */}
+        <div className="flex-1 text-center flex flex-col items-center justify-center max-w-3xl mx-auto">
+          <div
+            className={`transition-all duration-500 ease-in-out w-full flex flex-col items-center ${
+              fadeState === "in" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+          >
+            {/* The Quotation: Elegantly sized & readable */}
+            <blockquote className="text-lg sm:text-2xl md:text-3xl font-serif font-normal text-stone-100 leading-relaxed sm:leading-relaxed tracking-normal min-h-[90px] sm:min-h-[120px] flex items-center justify-center max-w-2xl sm:max-w-3xl mx-auto drop-shadow-sm">
+              {localizedQuote}
+            </blockquote>
+
+            {/* Author & Source Attribution without bulky badge tags */}
+            <div className="mt-6 sm:mt-8 space-y-1.5">
+              <div className="text-base sm:text-lg font-serif font-bold text-gold-400 tracking-wide">
+                {localizedAuthor}
+              </div>
+              <div className="text-xs sm:text-sm text-stone-300/85 font-mono">
+                {localizedSource} • {current.year}
+              </div>
+              <div className="text-[11px] sm:text-xs text-stone-400/75 max-w-lg mx-auto mt-1 italic font-sans leading-relaxed">
+                {localizedContext}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Next Quote Arrow */}
+        <button
+          onClick={() => advanceQuote(1)}
+          className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white/70 hover:text-white transition-all cursor-pointer border border-white/15 shrink-0 shadow-sm"
+          title="Next quote"
+          aria-label="Next quote"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
       </main>
 
       {/* Bottom Screen: Quiet Auto-Rotation Progress Line & Indicator */}
