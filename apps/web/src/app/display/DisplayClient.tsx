@@ -4,9 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
-import {
-  Sparkles, Maximize2, Minimize2, ArrowLeft,
-} from "lucide-react";
+import { Maximize2, Minimize2, ArrowLeft } from "lucide-react";
 
 interface DisplayQuoteCard {
   quote: string;
@@ -236,45 +234,43 @@ export default function DisplayClient() {
     language === "hi" ? current.author_hi : language === "mr" ? current.author_mr : current.author;
   const localizedSource =
     language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source;
-  const localizedCategory =
-    language === "hi" ? current.category_hi : language === "mr" ? current.category_mr : current.category;
   const localizedContext =
     language === "hi" ? current.historicalContext_hi : language === "mr" ? current.historicalContext_mr : current.historicalContext;
 
   return (
-    <div className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-hidden select-none">
       {/* Background Radial Glow & Slow Ambient Watermark */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0A2663]/40 via-[#040D21] to-[#020713] opacity-95 pointer-events-none" />
-      <div className="absolute -right-28 -bottom-32 opacity-[0.04] pointer-events-none">
-        <AshokaChakra size={700} className="text-white" animate={true} />
+      <div className="absolute -right-28 -bottom-32 opacity-[0.03] pointer-events-none">
+        <AshokaChakra size={640} className="text-white" animate={true} />
       </div>
 
-      {/* Top Standby Header: Minimal, Dignified & Discreet */}
-      <header className="relative z-10 flex items-center justify-between border-b border-white/10 pb-4">
-        {/* Left: Emblem & Institutional Title */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gold-500/90 text-navy-950 flex items-center justify-center font-serif font-black text-xl shadow-md border border-gold-400/50 shrink-0">
+      {/* Top Standby Header: Compact, Dignified & Discreet */}
+      <header className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3">
+        {/* Left: Emblem & Title */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gold-500/90 text-navy-950 flex items-center justify-center font-serif font-black text-base shadow-sm border border-gold-400/50 shrink-0">
             अ
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-serif font-bold tracking-wide text-white/90 leading-tight">
+            <h1 className="text-xs sm:text-sm font-serif font-bold tracking-wide text-white/90 leading-tight">
               {t.appName}
             </h1>
-            <p className="text-[11px] text-gold-400/80 font-mono tracking-wider uppercase">
-              {t.display.wallSubtitle} • Standby Exhibition Mode
+            <p className="text-[10px] text-gold-400/70 font-mono tracking-wider">
+              {t.display.wallSubtitle}
             </p>
           </div>
         </div>
 
         {/* Right: Low-opacity unobtrusive controls for museum staff / attendants */}
-        <div className="flex items-center gap-3 opacity-30 hover:opacity-100 transition-opacity duration-300">
+        <div className="flex items-center gap-2.5 opacity-25 hover:opacity-100 transition-opacity duration-300">
           {/* Subtle Language Pills */}
-          <div className="inline-flex rounded-lg bg-white/10 p-0.5 border border-white/15 text-[11px]">
+          <div className="inline-flex rounded-lg bg-white/10 p-0.5 border border-white/15 text-[10px]">
             {(["en", "hi", "mr"] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setLanguage(l)}
-                className={`px-2 py-1 rounded font-bold transition-all cursor-pointer ${
+                className={`px-2 py-0.5 rounded font-bold transition-all cursor-pointer ${
                   language === l
                     ? "bg-gold-500 text-navy-950 shadow-xs"
                     : "text-white/70 hover:text-white"
@@ -292,7 +288,7 @@ export default function DisplayClient() {
             title={isFullscreen ? "Exit Fullscreen (F)" : "Enter Fullscreen (F)"}
             aria-label="Toggle Fullscreen"
           >
-            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>
 
           {/* Discreet Exit Link */}
@@ -302,40 +298,32 @@ export default function DisplayClient() {
             title="Return to Home Portal"
             aria-label="Return to Home Portal"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5" />
           </Link>
         </div>
       </header>
 
-      {/* Main Screen: Cinematic Quotation Standby Display */}
-      <main className="relative z-10 my-auto py-8 sm:py-12 max-w-5xl mx-auto text-center w-full px-4 flex flex-col items-center justify-center">
+      {/* Main Screen: Refined Proportion Standby Quotation */}
+      <main className="relative z-10 my-auto py-6 sm:py-8 max-w-3xl mx-auto text-center w-full px-4 flex flex-col items-center justify-center">
         <div
           className={`transition-all duration-500 ease-in-out w-full flex flex-col items-center ${
-            fadeState === "in" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            fadeState === "in" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
           }`}
         >
-          {/* Category Badge & Historic Date strictly in DD/MM/YYYY */}
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold-300 bg-gold-950/70 border border-gold-500/40 px-5 py-1.5 rounded-full mb-8 shadow-md">
-            <Sparkles className="w-3.5 h-3.5 text-gold-400" />
-            <span>{localizedCategory}</span>
-            <span className="text-gold-500/60">•</span>
-            <span className="font-mono text-white/90">{current.year}</span>
-          </div>
-
-          {/* The Hero Quotation */}
-          <blockquote className="text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-serif font-normal text-stone-100 leading-snug sm:leading-tight tracking-tight min-h-[160px] sm:min-h-[220px] flex items-center justify-center max-w-4xl mx-auto drop-shadow-sm">
+          {/* The Quotation: Elegantly sized & readable */}
+          <blockquote className="text-lg sm:text-2xl md:text-3xl font-serif font-normal text-stone-100 leading-relaxed sm:leading-relaxed tracking-normal min-h-[90px] sm:min-h-[120px] flex items-center justify-center max-w-2xl sm:max-w-3xl mx-auto drop-shadow-sm">
             {localizedQuote}
           </blockquote>
 
-          {/* Author & Citational Source */}
-          <div className="mt-8 sm:mt-10 space-y-2">
-            <div className="text-2xl sm:text-3xl font-serif font-bold text-gold-400 tracking-wide">
+          {/* Author & Source Attribution without bulky badge tags */}
+          <div className="mt-6 sm:mt-8 space-y-1.5">
+            <div className="text-base sm:text-lg font-serif font-bold text-gold-400 tracking-wide">
               {localizedAuthor}
             </div>
-            <div className="text-sm sm:text-base text-stone-300 font-mono tracking-wide">
-              {localizedSource}
+            <div className="text-xs sm:text-sm text-stone-300/85 font-mono">
+              {localizedSource} • {current.year}
             </div>
-            <div className="text-xs sm:text-sm text-stone-400/90 max-w-2xl mx-auto mt-2 italic font-sans leading-relaxed">
+            <div className="text-[11px] sm:text-xs text-stone-400/75 max-w-lg mx-auto mt-1 italic font-sans leading-relaxed">
               {localizedContext}
             </div>
           </div>
@@ -343,9 +331,9 @@ export default function DisplayClient() {
       </main>
 
       {/* Bottom Screen: Quiet Auto-Rotation Progress Line & Indicator */}
-      <footer className="relative z-10 flex flex-col items-center justify-center gap-3 pt-4 border-t border-white/10">
+      <footer className="relative z-10 flex flex-col items-center justify-center gap-2 pt-3 border-t border-white/10">
         {/* Subtle, Minimal Progress Bar */}
-        <div className="w-full max-w-xs sm:max-w-md bg-white/10 h-1 rounded-full overflow-hidden">
+        <div className="w-full max-w-xs bg-white/10 h-0.5 rounded-full overflow-hidden">
           <div
             className={`bg-gold-400 h-full transition-all duration-100 ease-linear rounded-full ${
               isPaused ? "opacity-40" : "opacity-100"
@@ -355,21 +343,16 @@ export default function DisplayClient() {
         </div>
 
         {/* Subtle Slide Indicator Dots */}
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex items-center gap-1.5 pt-0.5">
           {EXHIBITION_QUOTES.map((_, i) => (
             <span
               key={i}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                activeIdx === i ? "w-6 bg-gold-400" : "w-1.5 bg-white/20"
+              className={`h-1 rounded-full transition-all duration-500 ${
+                activeIdx === i ? "w-4 bg-gold-400" : "w-1 bg-white/20"
               }`}
             />
           ))}
         </div>
-
-        {/* Subdued Standby Attribution */}
-        <p className="text-[10px] text-stone-500 font-mono tracking-wider uppercase">
-          National Digital Heritage Archive • Continuous Exhibition Stream
-        </p>
       </footer>
     </div>
   );
