@@ -234,15 +234,13 @@ export default function DisplayClient() {
     language === "hi" ? current.author_hi : language === "mr" ? current.author_mr : current.author;
   const localizedSource =
     language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source;
-  const localizedContext =
-    language === "hi" ? current.historicalContext_hi : language === "mr" ? current.historicalContext_mr : current.historicalContext;
 
   return (
     <div className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-hidden select-none">
-      {/* Background Radial Glow & Slow Ambient Watermark */}
+      {/* Background Radial Glow & Centered Ambient Watermark */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0A2663]/40 via-[#040D21] to-[#020713] opacity-95 pointer-events-none" />
-      <div className="absolute -right-28 -bottom-32 opacity-[0.03] pointer-events-none">
-        <AshokaChakra size={640} className="text-white" animate={true} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none">
+        <AshokaChakra size={560} className="text-gold-400" animate={true} />
       </div>
 
       {/* Top Standby Header: Compact, Dignified & Discreet */}
@@ -331,9 +329,6 @@ export default function DisplayClient() {
               </div>
               <div className="text-xs sm:text-sm text-stone-300/85 font-mono">
                 {localizedSource} • {current.year}
-              </div>
-              <div className="text-[11px] sm:text-xs text-stone-400/75 max-w-lg mx-auto mt-1 italic font-sans leading-relaxed">
-                {localizedContext}
               </div>
             </div>
           </div>
