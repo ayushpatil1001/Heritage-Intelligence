@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
-import { Maximize2, Minimize2, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { Maximize2, Minimize2, ArrowLeft, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 interface DisplayQuoteCard {
   quote: string;
@@ -215,6 +215,22 @@ export default function DisplayClient() {
     }, 250);
   };
 
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) advanceQuote(1);
+      else advanceQuote(-1);
+    }
+    setTouchStartX(null);
+  };
+
   const toggleFullscreen = () => {
     if (typeof document === "undefined") return;
     if (!document.fullscreenElement) {
@@ -236,7 +252,11 @@ export default function DisplayClient() {
     language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source;
 
   return (
-    <div className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-hidden select-none">
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="min-h-screen bg-[#040D21] text-white flex flex-col justify-between p-4 sm:p-6 lg:p-8 relative overflow-hidden select-none"
+    >
       {/* Background Radial Glow & Centered Ambient Watermark */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0A2663]/40 via-[#040D21] to-[#020713] opacity-95 pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.05] pointer-events-none">
@@ -275,6 +295,16 @@ export default function DisplayClient() {
               </button>
             ))}
           </div>
+
+          {/* Pause / Resume Rotation Toggle */}
+          <button
+            onClick={() => setIsPaused((p) => !p)}
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors border border-white/15 cursor-pointer"
+            title={isPaused ? "Resume auto-rotation (Space)" : "Pause auto-rotation (Space)"}
+            aria-label={isPaused ? "Resume auto-rotation" : "Pause auto-rotation"}
+          >
+            {isPaused ? <Play className="w-3.5 h-3.5 text-gold-400" /> : <Pause className="w-3.5 h-3.5" />}
+          </button>
 
           {/* Fullscreen Toggle */}
           <button
@@ -357,16 +387,24 @@ export default function DisplayClient() {
           />
         </div>
 
-        {/* Subtle Slide Indicator Dots */}
-        <div className="flex items-center gap-1.5 pt-0.5">
-          {EXHIBITION_QUOTES.map((_, i) => (
-            <span
-              key={i}
-              className={`h-1 rounded-full transition-all duration-500 ${
-                activeIdx === i ? "w-4 bg-gold-400" : "w-1 bg-white/20"
-              }`}
-            />
-          ))}
+        {/* Subtle Slide Indicator Dots & Optional Paused Indicator */}
+        <div className="flex items-center gap-2 pt-0.5">
+          <div className="flex items-center gap-1.5">
+            {EXHIBITION_QUOTES.map((_, i) => (
+              <span
+                key={i}
+                className={`h-1 rounded-full transition-all duration-500 ${
+                  activeIdx === i ? "w-4 bg-gold-400" : "w-1 bg-white/20"
+                }`}
+              />
+            ))}
+          </div>
+
+          {isPaused && (
+            <span className="text-[9px] font-mono tracking-widest text-gold-400/80 uppercase animate-pulse">
+              PAUSED
+            </span>
+          )}
         </div>
       </footer>
     </div>
