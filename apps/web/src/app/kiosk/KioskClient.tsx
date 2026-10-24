@@ -8,8 +8,9 @@ import { AshokaChakra, LionCapital } from "@/components/HeritageSymbols";
 import {
   BookOpen, Search, MessageSquare, ShieldCheck, Compass,
   Clock, Sparkles, QrCode, Volume2, Eye, RefreshCw,
-  Globe, ArrowRight, Hand, Calendar, CheckCircle2, ChevronRight,
-  X, Filter, FileText, ExternalLink, Bookmark, Layers
+  Globe, ArrowRight, ArrowLeft, Hand, Calendar, CheckCircle2, ChevronRight,
+  X, Filter, FileText, ExternalLink, Bookmark, Layers,
+  Maximize2, Minimize2
 } from "lucide-react";
 import OnScreenKeyboard from "@/components/OnScreenKeyboard";
 import QRCodeModal from "@/components/QRCodeModal";
@@ -74,11 +75,23 @@ export default function KioskClient() {
   const [heartbeatStatus, setHeartbeatStatus] = useState<string>("connected");
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Original Works Catalog Browser States
   const [isWorksModalOpen, setIsWorksModalOpen] = useState(false);
   const [worksCategory, setWorksCategory] = useState<"all" | "book" | "debate" | "speech" | "editorial">("all");
   const [worksSearch, setWorksSearch] = useState("");
+
+  const toggleFullscreen = () => {
+    if (typeof document === "undefined") return;
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen().catch(() => {});
+      setIsFullscreen(false);
+    }
+  };
 
   // Activate kiosk mode when mounted; keep kiosk mode active across page visits
   useEffect(() => {
@@ -261,6 +274,28 @@ export default function KioskClient() {
             <Eye className="w-4 h-4 text-accent" />
             <span className="hidden xs:inline">{t.kiosk.highContrast}</span>
           </button>
+
+          {/* Fullscreen Toggle */}
+          <button
+            onClick={toggleFullscreen}
+            className="h-12 w-12 rounded-2xl bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center justify-center font-bold transition-colors border border-white/20 cursor-pointer shrink-0"
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+            aria-label="Toggle Fullscreen"
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4 text-accent" /> : <Maximize2 className="w-4 h-4 text-accent" />}
+          </button>
+
+          {/* Return to Main Web Portal */}
+          <Link
+            href="/"
+            onClick={() => setKioskMode(false)}
+            className="h-12 px-3 sm:px-4 rounded-2xl bg-white/10 hover:bg-white/20 active:bg-white/30 text-white flex items-center gap-1.5 font-bold text-xs transition-colors border border-white/20 cursor-pointer shrink-0"
+            title="Return to Main Portal"
+            aria-label="Return to Main Portal"
+          >
+            <ArrowLeft className="w-4 h-4 text-accent" />
+            <span className="hidden sm:inline">Portal</span>
+          </Link>
         </div>
       </header>
 
