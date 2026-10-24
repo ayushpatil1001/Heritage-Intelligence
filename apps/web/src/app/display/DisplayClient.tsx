@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
 import { AshokaChakra } from "@/components/HeritageSymbols";
-import { Maximize2, Minimize2, ArrowLeft, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { Maximize2, Minimize2, ArrowLeft, ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 interface DisplayQuoteCard {
   quote: string;
@@ -160,11 +160,12 @@ export default function DisplayClient() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [fadeState, setFadeState] = useState<"in" | "out">("in");
 
-  // Auto-advance quote card every 10 seconds with smooth progress tick
+  // Auto-advance quote card every 10 seconds with smooth progress tick (pauses when user pauses or listens)
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || isSpeaking) return;
 
     const interval = 100;
     const total = 10000;
@@ -207,6 +208,10 @@ export default function DisplayClient() {
   }, []);
 
   const advanceQuote = (direction: number) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
     setProgress(0);
     setFadeState("out");
     setTimeout(() => {
@@ -250,6 +255,42 @@ export default function DisplayClient() {
     language === "hi" ? current.author_hi : language === "mr" ? current.author_mr : current.author;
   const localizedSource =
     language === "hi" ? current.source_hi : language === "mr" ? current.source_mr : current.source;
+
+  // Web Speech API for Ambient Quote Narration in selected language
+  const toggleSpeech = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      window.speechSynthesis.cancel();
+      const textToRead = `${localizedQuote}. ${localizedAuthor}.`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.rate = 0.92;
+      utterance.lang = language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
+  };
+
+  // Cancel speech on active quote index change or language change
+  useEffect(() => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    }
+  }, [activeIdx, language]);
+
+  // Cancel speech on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -295,6 +336,24 @@ export default function DisplayClient() {
               </button>
             ))}
           </div>
+
+          {/* Audio Speech Narration Toggle */}
+          <button
+            onClick={toggleSpeech}
+            className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+              isSpeaking
+                ? "bg-gold-500/20 text-gold-400 border-gold-400/50"
+                : "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border-white/15"
+            }`}
+            title={isSpeaking ? "Stop quote narration" : "Listen to quote narration"}
+            aria-label={isSpeaking ? "Stop quote narration" : "Listen to quote narration"}
+          >
+            {isSpeaking ? (
+              <Volume2 className="w-3.5 h-3.5 text-gold-400 animate-pulse" />
+            ) : (
+              <Volume2 className="w-3.5 h-3.5" />
+            )}
+          </button>
 
           {/* Pause / Resume Rotation Toggle */}
           <button
