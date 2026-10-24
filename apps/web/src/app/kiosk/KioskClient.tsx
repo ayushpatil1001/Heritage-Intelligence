@@ -8,7 +8,7 @@ import { AshokaChakra, LionCapital } from "@/components/HeritageSymbols";
 import {
   BookOpen, Search, MessageSquare, ShieldCheck, Compass,
   Clock, Sparkles, QrCode, Volume2, Eye, RefreshCw,
-  Globe, ArrowRight, ArrowLeft, Hand, Calendar, CheckCircle2, ChevronRight,
+  Globe, ArrowRight, ArrowLeft, Hand, Calendar, CheckCircle2, ChevronLeft, ChevronRight,
   X, Filter, FileText, ExternalLink, Bookmark, Layers,
   Maximize2, Minimize2
 } from "lucide-react";
@@ -76,6 +76,7 @@ export default function KioskClient() {
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isQuotePaused, setIsQuotePaused] = useState(false);
 
   // Original Works Catalog Browser States
   const [isWorksModalOpen, setIsWorksModalOpen] = useState(false);
@@ -98,13 +99,14 @@ export default function KioskClient() {
     setKioskMode(true);
   }, [setKioskMode]);
 
-  // Rotate quotes every 8 seconds for kiosk attract mode
+  // Rotate quotes every 8 seconds for kiosk attract mode (pauses when user interacts or listens)
   useEffect(() => {
+    if (isQuotePaused || isSpeaking) return;
     const timer = setInterval(() => {
       setActiveQuoteIdx((idx) => (idx + 1) % ROTATING_QUOTES.length);
     }, 8000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isQuotePaused, isSpeaking]);
 
   // Web Speech API for Kiosk Attract Quote Narration in selected language
   const toggleSpeech = () => {
@@ -300,12 +302,18 @@ export default function KioskClient() {
       </header>
 
       {/* Attract Hero Section: Rotating Quotation with Date formatted in DD/MM/YYYY */}
-      <section className="bg-white border border-stone-300 rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
+      <section
+        onMouseEnter={() => setIsQuotePaused(true)}
+        onMouseLeave={() => setIsQuotePaused(false)}
+        className="bg-white border border-stone-300 rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden"
+      >
         <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent bg-accent/15 px-3.5 py-1 rounded-full border border-accent/30 mb-3">
           <Sparkles className="w-3.5 h-3.5 text-accent" />
           <span>{t.kiosk.interactiveMode}</span>
           <span className="text-zinc-400">•</span>
           <span className="font-mono text-primary font-bold">{currentQuote.date}</span>
+          <span className="text-zinc-400">•</span>
+          <span className="font-mono text-zinc-600 font-semibold">{activeQuoteIdx + 1}/{ROTATING_QUOTES.length}</span>
         </div>
 
         <blockquote className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-primary max-w-3xl mx-auto leading-relaxed">
@@ -316,7 +324,7 @@ export default function KioskClient() {
           — {language === "hi" ? currentQuote.context_hi : language === "mr" ? currentQuote.context_mr : currentQuote.context}
         </p>
 
-        {/* Audio Narration & Slide Dots */}
+        {/* Audio Narration & Manual Slide Controls */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
           <button
             onClick={toggleSpeech}
@@ -327,17 +335,56 @@ export default function KioskClient() {
             <span>{isSpeaking ? t.kiosk.stopSpeech : t.kiosk.listenSpeech}</span>
           </button>
 
-          <div className="flex items-center gap-1.5">
-            {ROTATING_QUOTES.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveQuoteIdx(i)}
-                className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  activeQuoteIdx === i ? "w-8 bg-primary" : "w-2.5 bg-stone-300 hover:bg-stone-400"
-                }`}
-                aria-label={`Show quote ${i + 1}`}
-              />
-            ))}
+          {/* Quote Carousel Navigation Arrows & Dots */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                  window.speechSynthesis.cancel();
+                  setIsSpeaking(false);
+                }
+                setActiveQuoteIdx((prev) => (prev - 1 + ROTATING_QUOTES.length) % ROTATING_QUOTES.length);
+              }}
+              className="w-8 h-8 rounded-lg bg-stone-100 hover:bg-stone-200 active:bg-stone-300 text-primary flex items-center justify-center border border-stone-300 cursor-pointer transition-colors"
+              title="Previous Quote"
+              aria-label="Previous Quote"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-1.5">
+              {ROTATING_QUOTES.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                      window.speechSynthesis.cancel();
+                      setIsSpeaking(false);
+                    }
+                    setActiveQuoteIdx(i);
+                  }}
+                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                    activeQuoteIdx === i ? "w-8 bg-primary" : "w-2.5 bg-stone-300 hover:bg-stone-400"
+                  }`}
+                  aria-label={`Show quote ${i + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                  window.speechSynthesis.cancel();
+                  setIsSpeaking(false);
+                }
+                setActiveQuoteIdx((prev) => (prev + 1) % ROTATING_QUOTES.length);
+              }}
+              className="w-8 h-8 rounded-lg bg-stone-100 hover:bg-stone-200 active:bg-stone-300 text-primary flex items-center justify-center border border-stone-300 cursor-pointer transition-colors"
+              title="Next Quote"
+              aria-label="Next Quote"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </section>
